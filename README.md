@@ -10,7 +10,8 @@ run Apache Web Server and MySQL Database.
 
 Download the project.
 
-replace `htdocs` folder content with our project.
+replace `htdocs` folder's content with our project.
+- the folder should be named `htdocs`, keep this in mind.
 
 ## Usage
 
