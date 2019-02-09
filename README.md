@@ -1,6 +1,8 @@
 
 # Hackathon System
 
+There is no Backend for now...
+
 ## Setup
 
 Install [Nodejs](http://nodejs.org)
@@ -21,8 +23,6 @@ $ npm start
 ## Usage
 
 You can see the project now at `localhost:8080`
-
-There is no Backend for now
 
 ## Things to do
 - Connect frontend with backend
