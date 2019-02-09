@@ -1,46 +1,34 @@
+
 # Hackathon System
 
+## Setup
 
-## Installation
+Install [Nodejs](http://nodejs.org)
 
-Install [XAMPP](https://www.apachefriends.org/download.html).
- - DO NOT install the XAMPP-VM version (unless you know what you are doing)
+Download the project or use this commend:
+```bash
+$ git clone git@github.com:techbench-sa/hackathon-system.git
+```
 
-run Apache Web Server and MySQL Database.
+Open Terminal on the same directory of the project
+```bash
+$ npm install
+$ npm start
+```
 
-Download the project.
-
-replace `htdocs` folder's content with our project.
-- the folder should be named `htdocs`, keep this in mind.
+* Check the package.json for scripts.
 
 ## Usage
 
-You can see the project now at `localhost`
+You can see the project now at `localhost:8080`
 
-To acces the database visit `localhost/phpmyadmin`, our database is 202db.
-
-
-#### Creating a user
-To create a new user, go to the database (202db), click on `players` table.
-
-click `Insert` and a new page will show up with a form.
-
-fill the `name` and `pass` feild and click `Go`, (click `Go` again).
-
-Check the `id` of your new player (user) by clicking on `players` table located in the sidebar,
-
-you need the id for logging in.
-
-
-#### Creating new question
-To create new question, go to `localhost/addQuestion.php`
-
-In the main method you should print the score of the player,`System.out.println(10);`
-You dont have to create the question in both languages (if you are testing).
+There is no Backend for now
 
 ## Things to do
+- Connect frontend with backend
 - Make a proper authentication
 - Add new languages
 - Improve the new design
 - Create a structure for writing questions (independent from any language syntax)
+
 - ~~A new design for the system~~
