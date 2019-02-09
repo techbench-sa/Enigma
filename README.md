@@ -41,7 +41,8 @@ You dont have to create the question in both languages (if you are testing).
 ## Things to do
 - Make a proper authentication
 - Add new languages
-- A new design for the system
+- Improve the new design
 - Create a structure for writing questions (independent from any language syntax)
+- ~~A new design for the system~~
 
 
