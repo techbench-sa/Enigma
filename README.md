@@ -29,5 +29,7 @@ You can see the project now at `localhost:8080`
 - Add new languages
 - Improve the new design
 - Create a structure for writing questions (independent from any language syntax)
-
+- Design database structure
+- Clean the project (Start using ESLint correctly)
+- Make it mobile-friendly!
 - ~~A new design for the system~~
