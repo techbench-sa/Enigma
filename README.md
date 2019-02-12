@@ -24,12 +24,15 @@ $ npm start
 You can see the project now at `localhost:8080`
 
 ## Things to do
-- Connect frontend with backend
+- CLEAN THE PROJECT (to upload it to github)
 - Make a proper authentication
 - Add new languages
 - Improve the new design
-- Create a structure for writing questions (independent from any language syntax)
 - Design database structure
-- Clean the project (Start using ESLint correctly)
 - Make it mobile-friendly!
+- Start using ESLint correctly
+- Add form validations (for creating new question a new user pages)
+- sanitize and validate players submissions
+- ~~Connect frontend with backend~~
 - ~~A new design for the system~~
+- ~~Create a structure for writing questions (independent from any language syntax)~~
