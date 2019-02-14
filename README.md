@@ -1,10 +1,16 @@
 # Hackathon System
 
-There is no Backend for now...
+Finally... the project in up to date.
+
+## Prerequests
+
+MySQL Database.
 
 ## Setup
 
 Install [Nodejs](http://nodejs.org)
+
+Import `hackathon_system.sql` to your database
 
 Download the project or use this commend:
 ```bash
@@ -14,6 +20,7 @@ $ git clone git@github.com:techbench-sa/hackathon-system.git
 Open Terminal on the same directory of the project
 ```bash
 $ npm install
+$ npm build
 $ npm start
 ```
 
@@ -21,7 +28,11 @@ $ npm start
 
 ## Usage
 
-You can see the project now at `localhost:8080`
+You can see the project now at `localhost:3000`
+
+Use these credentials:
+- username test
+- password test
 
 ## Things to do
 - ~~CLEAN THE PROJECT (to upload it to github)~~
