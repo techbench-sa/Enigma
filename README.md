@@ -24,13 +24,13 @@ $ npm start
 You can see the project now at `localhost:8080`
 
 ## Things to do
-- CLEAN THE PROJECT (to upload it to github)
+- ~~CLEAN THE PROJECT (to upload it to github)~~
 - Make a proper authentication
 - Add new languages
 - Improve the new design
 - Design database structure
 - Make it mobile-friendly!
-- Start using ESLint correctly
+- ~~Start using ESLint correctly~~
 - Add form validations (for creating new question a new user pages)
 - sanitize and validate players submissions
 - ~~Connect frontend with backend~~
