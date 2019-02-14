@@ -1,6 +1,6 @@
 # Hackathon System
 
-Finally... the project in up to date.
+Finally... the project is up to date.
 
 ## Prerequests
 
