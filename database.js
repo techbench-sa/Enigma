@@ -34,16 +34,16 @@ module.exports = {
 getScore: (id) => {
     return new Promise((resolve, reject) => {
         db.query(`SELECT SUM(score) FROM submissions WHERE playerID=${id}`, (err, res) => {
-            resolve(res[0]['SUM(score)'])
+            resolve(res[0]['SUM(score)'] || 0)
         })
     })
 },
 
-    getChallenges: () => {
+    getChallenges: (id) => {
         return new Promise((resolve, reject) => {
             db.query(`
                 SELECT * FROM challenges
-                LEFT JOIN (SELECT * FROM submissions WHERE playerID = ${17}) AS submissions
+                LEFT JOIN (SELECT * FROM submissions WHERE playerID = ${id}) AS submissions
                 ON number = submissions.challengeNumber;
             `, (err, res) => {
                 if (err) {

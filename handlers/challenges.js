@@ -1,7 +1,8 @@
 const database = require('../database')
 
 module.exports = (req, res, next) => {
-  database.getChallenges().then(challenges => {
+  const id = req.user.id
+  database.getChallenges(id).then(challenges => {
     res.json(challenges)
   })
 }

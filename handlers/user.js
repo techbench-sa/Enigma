@@ -5,7 +5,6 @@ module.exports = (req, res, next) => {
     const id = req.user.id
     database.getUserByID(id).then(user => {
       database.getScore(id).then(score => {
-        console.log(score)
         res.json({id, username: user.username, score})
       })
     })
