@@ -12,7 +12,7 @@ Install [Nodejs](http://nodejs.org)
 
 Import `hackathon_system.sql` to your database
 
-Download the project or use this commend:
+Download the project or use this command:
 ```bash
 $ git clone git@github.com:techbench-sa/hackathon-system.git
 ```
@@ -20,7 +20,7 @@ $ git clone git@github.com:techbench-sa/hackathon-system.git
 Open Terminal on the same directory of the project
 ```bash
 $ npm install
-$ npm build
+$ npm run build
 $ npm start
 ```
 
