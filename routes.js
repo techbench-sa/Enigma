@@ -1,11 +1,10 @@
 const express = require('express')
 const router = express.Router()
 
-
 const fs = require('fs')
 const path = require('path')
-
 const database = require('./database')
+const passport = require('./passport')
 
 const userHandler = require('./handlers/user')
 const challengesHandler = require('./handlers/challenges')
@@ -31,6 +30,24 @@ function isUserAuthenticated(req, res, next) {
 
 router.get('/', isUserAuthenticated, (req, res) => {
     console.log('tests')
+})
+
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', (err, user, info) => {
+    if (err) { return next(err) }
+    if (!user) { return res.redirect(303, '/login?message=' + info.message) }
+    req.logIn(user, (err) => {
+      if (err) { return next(err) }
+      return res.redirect(303, '/')
+    })
+  })(req, res, next)
+})
+
+router.get('/logout', (req, res) => {
+  if (req.logout) {
+    req.logout()
+  }
+  res.redirect('/')
 })
 
 router.get('/api/user', userHandler)

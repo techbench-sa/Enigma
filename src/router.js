@@ -35,13 +35,20 @@ const router = new Router({
       path: '/login',
       name: 'login',
       component: () => import('./views/Login.vue')
+    },
+    {
+      path: '/challenges',
+      name: 'challenge',
+      meta: {
+        requiresAuth: true
+      },
+      component: () => import('./views/Challenges.vue')
     }
   ]
 })
 
 router.beforeEach((to, from, next) => {
   const username = store.getters.user.username || ''
-  console.log(username)
   if (username === '' && to.matched.some(record => record.meta.requiresAuth)) {
     next({ name: 'login' })
   } else {

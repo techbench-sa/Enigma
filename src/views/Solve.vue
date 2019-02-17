@@ -63,6 +63,7 @@ export default {
   methods: {
     submit () {
       this.error = ''
+      this.results = []
       const { id, lang } = this.$route.params
       const submission = this.value.split('\n').slice(3, -3).join('\n')
       api.submit(id, lang, submission).then(res => {

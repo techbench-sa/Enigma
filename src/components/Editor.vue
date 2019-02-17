@@ -38,15 +38,14 @@ export default {
     this.editor = CodeMirror.fromTextArea(textarea, {
       mode: this.$route.params.lang === 'python' ? 'python' : 'text/x-java',
       theme: 'monokai',
-      styleActiveLine: true,
+      // styleActiveLine: true,
       lineNumbers: true,
-      matchBrackets: true,
-      indentUnit: 1,
-      indentWithTabs: false,
-      autoCloseTags: true,
-      autoCloseBrackets: true,
-      matchTags: false,
-      extraKeys: { 'Ctrl-Space': 'autocomplete' }
+      indentUnit: 4,
+      spellcheck: true,
+      indentWithTabs: true,
+      autoCloseBrackets: true
+      // matchTags: false,
+      // extraKeys: { 'Ctrl-d': 'autocomplete' }
     })
     this.editor.setSize('100%', '100%')
     this.setValue(this.value)
