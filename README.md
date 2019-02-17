@@ -1,3 +1,5 @@
+<!-- markdownlint-disable MD001 MD014 -->
+
 # Hackathon System
 
 Finally... the project is up to date.
