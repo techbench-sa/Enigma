@@ -13,28 +13,32 @@ Install [Nodejs](http://nodejs.org)
 Import `hackathon_system.sql` to your database
 
 Download the project or use this command:
+
 ```bash
 $ git clone git@github.com:techbench-sa/hackathon-system.git
 ```
 
 Open Terminal on the same directory of the project
+
 ```bash
 $ npm install
 $ npm run build
 $ npm start
 ```
 
-* Check the package.json for scripts.
+- Check the package.json for scripts.
 
 ## Usage
 
 You can see the project now at `localhost:3000`
 
 Use these credentials:
+
 - username test
 - password test
 
 ## Things to do
+
 - ~~CLEAN THE PROJECT (to upload it to github)~~
 - Make a proper authentication
 - Add new languages
@@ -47,3 +51,16 @@ Use these credentials:
 - ~~Connect frontend with backend~~
 - ~~A new design for the system~~
 - ~~Create a structure for writing questions (independent from any language syntax)~~
+
+```bash
+$ brew install postgres
+$ brew services start postgres
+$ psql postgres
+$ CREATE ROLE admin WITH LOGIN PASSWORD 'admin';
+$ ALTER ROLE admin CREATEDB;
+$ \q
+$ psql -d postgres -U admin
+$ CREATE DATABASE hackathon;
+$ \c hackathon
+$ \i <path to seed.sql file>
+```
