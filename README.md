@@ -52,15 +52,10 @@ Use these credentials:
 - ~~A new design for the system~~
 - ~~Create a structure for writing questions (independent from any language syntax)~~
 
-```bash
-$ brew install postgres
-$ brew services start postgres
-$ psql postgres
-$ CREATE ROLE admin WITH LOGIN PASSWORD 'admin';
-$ ALTER ROLE admin CREATEDB;
-$ \q
-$ psql -d postgres -U admin
-$ CREATE DATABASE hackathon;
-$ \c hackathon
-$ \i <path to seed.sql file>
-```
+1- Install [Homebrew](https://brew.sh/)
+if you dont have it, paste the following line on the terminal
+`bash $ /usr/bin/ruby -e "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/master/install)"`
+2- Install and Configure Postgres
+`bash $ brew install postgres $ brew services start postgres $ psql postgres $ CREATE ROLE admin WITH LOGIN PASSWORD 'admin'; $ ALTER ROLE admin CREATEDB; $ \q $ psql -d postgres -U admin $ CREATE DATABASE hackathon; $ \c hackathon $ \i <path to seed.sql file in your machine>`
+
+3-
