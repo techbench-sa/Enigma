@@ -4,15 +4,10 @@
 -- Hackathon
 -- Database
 --
-
-SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
-
-SET AUTOCOMMIT = 0;
-
-START TRANSACTION;
-
-SET time_zone = "+00:00";
-
+-- SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
+-- SET AUTOCOMMIT = 0;
+-- START TRANSACTION;
+-- SET time_zone = "+00:00";
 --
 -- Table structure for table "challenge"
 --
@@ -65,7 +60,7 @@ $$;
 CREATE TRIGGER submission_time_modtime
     BEFORE UPDATE ON submission
     FOR EACH ROW
-    EXECUTE PROCEDURE update_updated_at_column ();
+    EXECUTE PROCEDURE update_time_column ();
 
 --
 -- Table structure for table "users"
