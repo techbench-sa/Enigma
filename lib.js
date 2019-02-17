@@ -6,7 +6,7 @@ module.exports = {
     createFolder: async dir => {
         try {
             await fs.statSync(dir)
-        } catch {
+        } catch(e) {
             await fs.mkdirSync(dir)
         }
     },

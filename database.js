@@ -1,13 +1,17 @@
 const mysql = require('mysql')
 const db = mysql.createConnection({
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'root',
-    password : '',
+    password : 'root',
     database : 'hackathon_system'
 })
 
 db.connect(err => {
-    console.log('Connected to Database')
+    if(err)
+        console.log(err)
+    else{
+        console.log('Connected to Database!')
+    }
 })
 
 module.exports = {
