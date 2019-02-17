@@ -58,4 +58,5 @@ if you dont have it, paste the following line on the terminal
 2- Install and Configure Postgres
 `bash $ brew install postgres $ brew services start postgres $ psql postgres $ CREATE ROLE admin WITH LOGIN PASSWORD 'admin'; $ ALTER ROLE admin CREATEDB; $ \q $ psql -d postgres -U admin $ CREATE DATABASE hackathon; $ \c hackathon $ \i <path to seed.sql file in your machine>`
 
-3-
+3- Go to the hackathon-system folder in terminal
+`bash $ npm install $ npm run build $ npm start`
