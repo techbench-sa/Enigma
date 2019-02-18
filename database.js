@@ -54,8 +54,9 @@ module.exports = {
   getChallenges: id => {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT * FROM "challenge" LEFT JOIN (SELECT * FROM "submission" WHERE "playerID"=${id}) AS submissions ON challenge.id = submissions."challengeID";`,
+        `SELECT * FROM "challenge" LEFT JOIN (SELECT score, "challengeID" FROM "submission" WHERE "playerID"=1) AS submissions ON challenge.id =  submissions."challengeID";`,
         (err, res) => {
+          console.log(res.rows)
           if (err) {
             reject('ERROR: 04')
           } else {
@@ -75,7 +76,9 @@ module.exports = {
 
   getChallenge: id => {
     return new Promise((resolve, reject) => {
+      console.log('id' + ' <=> ' + id)
       pool.query(`SELECT * FROM "challenge" WHERE id=${id}`, (err, res) => {
+        console.log('challenge' + ' <=> ' + res)
         if (err) reject('ERROR: 03')
         else if (res.rows[0]) {
           resolve(res.rows[0])
