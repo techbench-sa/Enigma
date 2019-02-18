@@ -13,7 +13,7 @@
 --
 
 CREATE TABLE "challenge" (
-    "id" SERIAL PRIMARY KEY,
+    "id" SERIAL PRIMARY KEY NOT NULL,
     "name" VARCHAR(100) NOT NULL,
     "description" TEXT NOT NULL,
     "method_name" TEXT NOT NULL,

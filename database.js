@@ -12,7 +12,7 @@ const pool = new pg.Pool({
 pool.connect(err => {
   if (err) console.log(err)
   else {
-    console.log('[pg] connected .')
+    console.log('[pg] connected')
   }
 })
 
@@ -42,9 +42,10 @@ module.exports = {
   getScore: id => {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT SUM(score) FROM "submission" WHERE playerID=${id}`,
+        `SELECT sum(score) FROM "submission" WHERE "playerID"=${id};`,
         (err, res) => {
-          resolve(res.rows[0]['SUM(score)'] || 0)
+          if (err) console.log(err)
+          resolve(0)
         }
       )
     })
@@ -53,17 +54,13 @@ module.exports = {
   getChallenges: id => {
     return new Promise((resolve, reject) => {
       pool.query(
-        `
-                SELECT * FROM "challenge"
-                LEFT JOIN (SELECT * FROM "submission" WHERE playerID = ${id}) AS submissions
-                ON number = submissions.challengeNumber;
-            `,
+        `SELECT * FROM "challenge" LEFT JOIN (SELECT * FROM "submission" WHERE "playerID"=${id}) AS submissions ON challenge.id = submissions."challengeID";`,
         (err, res) => {
           if (err) {
             reject('ERROR: 04')
           } else {
-            const challenges = res.map(challenge => ({
-              number: challenge.number,
+            const challenges = res.rows.map(challenge => ({
+              number: challenge.id,
               name: challenge.name,
               description: challenge.description,
               points: challenge.points,
@@ -78,7 +75,7 @@ module.exports = {
 
   getChallenge: id => {
     return new Promise((resolve, reject) => {
-      pool.query(`SELECT * FROM challenges WHERE number=${id}`, (err, res) => {
+      pool.query(`SELECT * FROM "challenge" WHERE id=${id}`, (err, res) => {
         if (err) reject('ERROR: 03')
         else if (res.rows[0]) {
           resolve(res.rows[0])
@@ -99,7 +96,7 @@ module.exports = {
       const parameters = JSON.stringify(data.params)
       const points = data.challenge.score
       pool.query(
-        `INSERT INTO challenges (name, description, method_name, method_type, tests, parameters, points) VALUES ('${name}', '${description}', '${method_name}', '${method_type}', '${tests}', '${parameters}', ${points})`,
+        `INSERT INTO "challenge" (name, description, method_name, method_type, tests, parameters, points) VALUES ('${name}', '${description}', '${method_name}', '${method_type}', '${tests}', '${parameters}', ${points})`,
         (err, res) => {
           if (err) reject('ERROR: 01')
           else resolve(res.insertId)
@@ -111,13 +108,13 @@ module.exports = {
   addSubmission: ({ id, number, code, score }) => {
     return new Promise((resolve, reject) => {
       pool.query(
-        `UPDATE submissions SET score=${score} WHERE playerID=${id} and challengeNumber=${number}`,
+        `UPDATE "submission" SET score=${score} WHERE playerID=${id} and challengeID=${number}`,
         (err, res) => {
           if (err) {
             reject()
-          } else if (res.affectedRows == 0) {
+          } else if (res.affectedRows === 0) {
             pool.query(
-              `INSERT INTO submissions (playerID, challengeNumber, code, score) VALUES (${id}, ${number}, '${code}', ${score})`,
+              `INSERT INTO "submission" (playerID, challengeID, code, score) VALUES (${id}, ${number}, '${code}', ${score})`,
               (err, res) => {
                 if (err) reject('ERROR: 02')
                 else resolve()

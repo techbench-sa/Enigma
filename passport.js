@@ -23,7 +23,6 @@ passport.use(
     database
       .getUserByUsername(username)
       .then(res => {
-        console.log(password + ' -- ' + res.password)
         if (password !== res.password) {
           return done(null, false, {
             message: 'You have entered an invalid username or password.'
