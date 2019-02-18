@@ -2,6 +2,7 @@
   "extends": "standard",
   "rules": {
     "no-console": "off",
-    "indent": ["warn", 2]
+    "indent": ["warn", 2],
+    "camelcase": "off"
   }
 }
