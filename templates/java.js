@@ -23,6 +23,7 @@ import java.util.Arrays;
 import java.io.OutputStream;
 import java.io.PrintStream;
 class Challenge_${challenge.id} {
+console.log(check(submission))
 
   public static void main (String[] args) {
 
