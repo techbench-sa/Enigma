@@ -16,10 +16,7 @@ We are using postgres for storing data.
 ```bash
 $ brew install postgres
 $ brew services start postgres
-$ createuser -d admin
-$ psql postgres -U admin
-$ \i "/Full/path/to/seed.sql"
-$ \q
+$ psql -d postgres -f /path/to/seed.sql
 ```
 
 you'll find `seed.sql` file inside the project's folder.

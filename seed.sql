@@ -12,6 +12,11 @@
 
 DROP DATABASE hackathon;
 
+DROP ROLE admin;
+
+CREATE ROLE admin WITH CREATEDB LOGIN PASSWORD 'hadi';
+
+\c postgres admin
 CREATE DATABASE hackathon;
 
 \c hackathon;
