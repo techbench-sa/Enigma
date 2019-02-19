@@ -8,9 +8,6 @@
 -- SET AUTOCOMMIT = 0;
 -- START TRANSACTION;
 -- SET time_zone = "+00:00";
---
--- Table structure for table "challenge"
---
 -- <init>
 
 DROP DATABASE hackathon;
@@ -19,6 +16,9 @@ CREATE DATABASE hackathon;
 
 \c hackathon;
 -- </init>
+--
+-- Table structure for table "challenge"
+--
 
 CREATE TABLE "challenge" (
     "id" SERIAL PRIMARY KEY NOT NULL,
