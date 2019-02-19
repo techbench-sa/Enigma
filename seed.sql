@@ -60,12 +60,12 @@ CREATE TABLE "submission" (
 -- provided the field is named the same thing in
 -- all tables that use this, you can use a centralized function
 
-CREATE FUNCTION update_time_column ()
+CREATE FUNCTION update_submission_time ()
     RETURNS TRIGGER
     LANGUAGE plpgsql
     AS $$
 BEGIN
-    NEW.updated_at = NOW();
+    NEW.time = NOW();
     RETURN NEW;
 END;
 $$;
@@ -73,7 +73,7 @@ $$;
 CREATE TRIGGER submission_time_modtime
     BEFORE UPDATE ON submission
     FOR EACH ROW
-    EXECUTE PROCEDURE update_time_column ();
+    EXECUTE PROCEDURE update_submission_time ();
 
 --
 -- Table structure for table "users"
