@@ -1,31 +1,40 @@
 <template lang="pug">
-.Alert
-  Icon highlight_off
-  | {{ message }}
+.Alert(:class="type")
+  Icon {{type === 'error' ? 'highlight_off' : type === 'success' ? 'check' : 'info_outline'}}
+  slot
 </template>
 
 <script>
 export default {
   name: 'Alert',
-  props: ['message']
+  props: ['type']
 }
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="sass" scoped>
 .Alert
-  background: red
   width: 100%
   height: 4.8rem
   display: flex
   align-items: center
   padding: 0 1.2rem
   margin-bottom: 2.4rem
-  background: rgba(#f03e3e, .1)
-  border: 1px solid rgba(#ff6b6b, .3)
+  background: rgba(#1c7ed6, .1)
+  border: 1px solid rgba(#339af0, .3)
   border-radius: .4rem
   .Icon
-    color: #ff6b6b
+    color: #339af0
     font-size: 2.4rem
     margin-right: 1.2rem
+  &.error
+    background: rgba(#f03e3e, .1)
+    border: 1px solid rgba(#ff6b6b, .3)
+    .Icon
+      color: #ff6b6b
+  &.success
+    background: rgba(#37b24d, .1)
+    border: 1px solid rgba(#51cf66, .3)
+    .Icon
+      color: #51cf66
 </style>
