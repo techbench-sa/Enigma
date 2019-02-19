@@ -43,7 +43,7 @@ INSERT INTO "challenge" ("name", "description", "method_name", "method_type", "t
 --
 
 CREATE TABLE "submission" (
-    "id" SERIAL PRIMARY KEY,
+    "id" SERIAL PRIMARY KEY NOT NULL,
     "time" TIMESTAMP DEFAULT 'now' ::timestamp,
     "playerID" INTEGER NOT NULL,
     "challengeID" INTEGER NOT NULL,
@@ -75,7 +75,7 @@ CREATE TRIGGER submission_time_modtime
 --
 
 CREATE TABLE "user" (
-    "id" SERIAL PRIMARY KEY,
+    "id" SERIAL PRIMARY KEY NOT NULL,
     "name" VARCHAR(20) NOT NULL,
     "username" VARCHAR(40) NOT NULL,
     "points" INTEGER DEFAULT '0',
