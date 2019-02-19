@@ -3,9 +3,8 @@
   form.container(style='padding-top:100px')
     h1 Create New Challenge
     .row
-      .alert(v-if="error")
-        Icon highlight_off
-        | {{error}}
+      Alert(v-if="submitted" type="success") A new challenge has been created successfully.
+      Alert(v-if="error" type="error") {{ error }}
     .row
       .column
         .row
@@ -87,7 +86,8 @@ export default {
       params: [{ name: '', type: 'Integer' }],
       output: [''],
       tests: [['']],
-      error: ''
+      error: '',
+      submitted: false
     }
   },
   methods: {
@@ -106,6 +106,7 @@ export default {
     },
     submit (e) {
       this.error = ''
+      this.submitted = false
       const data = {
         challenge: this.challenge,
         method: this.method,
@@ -116,11 +117,27 @@ export default {
         params: this.params
       }
       api.addChallenge(data).then(_ => {
-        console.log('Challenge Should be added!')
+        this.submitted = true
+        this.emptyForm()
       }).catch(err => {
         this.error = err.response.data.message[0].message
       })
       e.preventDefault()
+    },
+
+    emptyForm () {
+      this.challenge = {
+        name: '',
+        description: '',
+        score: 1
+      }
+      this.method = {
+        name: '',
+        type: 'Integer'
+      }
+      this.params = [{ name: '', type: 'Integer' }]
+      this.output = ['']
+      this.tests = [['']]
     }
   }
 }
