@@ -11,7 +11,7 @@
 
 export default {
   name: 'Card',
-  props: ['number', 'name', 'description', 'points', 'score'],
+  props: ['id', 'name', 'description', 'points', 'score'],
   computed: {
     color () {
       return this.score >= this.points ? 'green' : this.score > 0 ? 'yellow' : ''
@@ -19,7 +19,7 @@ export default {
   },
   methods: {
     solveWith (lang) {
-      this.$router.history.push(`solve/${lang}/${this.number}`)
+      this.$router.history.push(`solve/${lang}/${this.id}`)
     }
   }
 }

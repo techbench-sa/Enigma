@@ -53,7 +53,7 @@ export default {
   computed: {
     ...mapGetters(['challenges']),
     challenge () {
-      const challenge = this.challenges.find(c => c.number === +this.$route.params.id)
+      const challenge = this.challenges.find(c => c.id === +this.$route.params.id)
       return challenge || {}
     },
     tests () {

@@ -10,8 +10,9 @@ const pool = new pg.Pool({
 })
 
 pool.connect(err => {
-  if (err) console.log(err)
-  else {
+  if (err) {
+    console.error(err)
+  } else {
     console.log('[pg] connected')
   }
 })
@@ -22,8 +23,11 @@ module.exports = {
       pool.query(
         `SELECT * FROM "user" WHERE username='${username}';`,
         (err, res) => {
-          if (err) reject('ERROR: 06')
-          else resolve({ ...res.rows[0] })
+          if (err) {
+            reject('ERROR: getUserByUsername')
+          } else {
+            resolve({ ...res.rows[0] })
+          }
         }
       )
     })
@@ -32,9 +36,11 @@ module.exports = {
   getUserByID: id => {
     return new Promise((resolve, reject) => {
       pool.query(`SELECT * FROM "user" WHERE id=${id};`, (err, res) => {
-        // if (err) reject('ERROR: 05')
-        if (err) resolve({})
-        else resolve({ ...res.rows[0] })
+        if (err) {
+          resolve({})
+        } else {
+          resolve({ ...res.rows[0] })
+        }
       })
     })
   },
@@ -44,8 +50,11 @@ module.exports = {
       pool.query(
         `SELECT sum(score) FROM "submission" WHERE "playerID"=${id};`,
         (err, res) => {
-          if (err) console.log(err)
-          resolve(0)
+          if (err) {
+            reject('ERROR: getScore')  
+          } else {
+            resolve(0)
+          }
         }
       )
     })
@@ -56,12 +65,12 @@ module.exports = {
       pool.query(
         `SELECT * FROM "challenge" LEFT JOIN (SELECT score, "challengeID" FROM "submission" WHERE "playerID"=1) AS submissions ON challenge.id =  submissions."challengeID";`,
         (err, res) => {
-          console.log(res.rows)
           if (err) {
             reject('ERROR: 04')
           } else {
+            console.log(res.rows)
             const challenges = res.rows.map(challenge => ({
-              number: challenge.id,
+              id: challenge.id,
               name: challenge.name,
               description: challenge.description,
               points: challenge.points,
@@ -76,11 +85,10 @@ module.exports = {
 
   getChallenge: id => {
     return new Promise((resolve, reject) => {
-      console.log('id' + ' <=> ' + id)
       pool.query(`SELECT * FROM "challenge" WHERE id=${id}`, (err, res) => {
-        console.log('challenge' + ' <=> ' + res)
-        if (err) reject('ERROR: 03')
-        else if (res.rows[0]) {
+        if (err) {
+          reject('ERROR: getChallenge')
+        } else if (res.rows[0]) {
           resolve(res.rows[0])
         } else {
           resolve({})
@@ -108,16 +116,16 @@ module.exports = {
     })
   },
 
-  addSubmission: ({ id, number, code, score }) => {
+  addSubmission: ({ playerID, challengeID, code, score }) => {
     return new Promise((resolve, reject) => {
       pool.query(
-        `UPDATE "submission" SET score=${score} WHERE playerID=${id} and challengeID=${number}`,
+        `UPDATE "submission" SET score=${score} WHERE playerID=${playerID} and challengeID=${challengeID}`,
         (err, res) => {
           if (err) {
             reject()
           } else if (res.affectedRows === 0) {
             pool.query(
-              `INSERT INTO "submission" (playerID, challengeID, code, score) VALUES (${id}, ${number}, '${code}', ${score})`,
+              `INSERT INTO "submission" (playerID, challengeID, code, score) VALUES (${playerID}, ${challengeID}, '${code}', ${score})`,
               (err, res) => {
                 if (err) reject('ERROR: 02')
                 else resolve()
@@ -130,5 +138,4 @@ module.exports = {
       )
     })
   }
-  // INSERT INTO submissions (playerID, challengeNumber, code, score) VALUES (${playerID}, ${challengeNumber}, '${code}', ${score})
 }

@@ -23,7 +23,7 @@ export default new Vuex.Store({
     'USER_FAILURE': () => {},
     'CHALLENGE_REQUEST': () => {},
     'CHALLENGE_SUCCESS': (state, payload) => {
-      const i = state.challenges.findIndex(challenge => challenge.number === payload.number)
+      const i = state.challenges.findIndex(challenge => challenge.id === payload.id)
       const challenge = state.challenges[i]
       if (i !== -1) {
         state.challenges.splice(i, 1, { ...challenge, ...payload })

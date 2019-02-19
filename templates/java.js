@@ -22,7 +22,7 @@ return `
 import java.util.Arrays;
 import java.io.OutputStream;
 import java.io.PrintStream;
-class Challenge_${challenge.number} {
+class Challenge_${challenge.id} {
 
   public static void main (String[] args) {
 

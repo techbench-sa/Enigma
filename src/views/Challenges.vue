@@ -10,14 +10,14 @@
         col(width="0%")
       thead
         tr
-          th Number
+          th ID
           th Title
           th Description
           th Points
           th Visibility
       tbody
         tr(v-for="challenge in challenges")
-          td.center {{challenge.number}}
+          td.center {{challenge.id}}
           td {{challenge.name}}
           td(style="max-width: 1px") {{challenge.description}}
           td.center {{challenge.points}}
