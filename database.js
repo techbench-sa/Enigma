@@ -51,7 +51,7 @@ module.exports = {
         `SELECT sum(score) FROM "submission" WHERE "playerID"=${id};`,
         (err, res) => {
           if (err) {
-            reject('ERROR: getScore')  
+            reject('ERROR: getScore')
           } else {
             resolve(0)
           }
@@ -63,7 +63,7 @@ module.exports = {
   getChallenges: id => {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT * FROM "challenge" LEFT JOIN (SELECT score, "challengeID" FROM "submission" WHERE "playerID"=1) AS submissions ON challenge.id =  submissions."challengeID";`,
+        `SELECT * FROM "challenge" LEFT JOIN (SELECT score, "challengeID" FROM "submission" WHERE "playerID"=${id}) AS submissions ON challenge.id =  submissions."challengeID";`,
         (err, res) => {
           if (err) {
             reject('ERROR: 04')
