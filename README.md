@@ -20,13 +20,13 @@ $ CREATE DATABASE hackathon;
 $ \c hackathon
 $ \i "/Full/path/to/seed.sql"
 ```
-you`ll find `seed.sql` inside the project's folder.
+you'll find `seed.sql` inside the project's folder.
 ### (for Windows Users):
 We are not sure how to setup the database on windows.
 
 ## Installing and setting up the project
 - Install and Setup [Nodejs](http://nodejs.org)
-- Go to the hackathon-system folder in terminal and execute these commands:
+- Go to the `hackathon-system` folder in terminal and execute these commands:
 ```bash
 $ npm install
 $ npm run build
