@@ -1,32 +1,37 @@
 <!-- markdownlint-disable MD001 MD014 -->
 
 # Hackathon System
-**Hackathon System** *(Temporary name)* is an automated system to upload, compile and judge players submissions of programming problems. Currently, it's supporting Java and Python for solving problems.
+
+**Hackathon System** _(Temporary name)_ is an automated system to upload, compile and judge players submissions of programming problems. Currently, it's supporting Java and Python for solving problems.
 
 ## Setting up the database
+
 We are using postgres for storing data.
-### (for MacOs users):
+
+### (For Mac OS Users)
+
 - First install [Homebrew](https://brew.sh/)
 - Now install and configure Postgres using Homebrew
+
 ```bash
 $ brew install postgres
 $ brew services start postgres
-$ psql postgres
-$ CREATE ROLE admin WITH LOGIN PASSWORD 'admin';
-$ ALTER ROLE admin CREATEDB;
-$ \q
-$ psql -d postgres -U admin
-$ CREATE DATABASE hackathon;
-$ \c hackathon
+$ createuser -d admin
+$ psql postgres -U admin
 $ \i "/Full/path/to/seed.sql"
 ```
+
 you'll find `seed.sql` inside the project's folder.
-### (for Windows Users):
+
+### (For Windows Users)
+
 We are not sure how to setup the database on windows.
 
 ## Installing and setting up the project
+
 - Install and Setup [Nodejs](http://nodejs.org)
 - Go to the `hackathon-system` folder in terminal and execute these commands:
+
 ```bash
 $ npm install
 $ npm run build
@@ -38,6 +43,7 @@ $ npm start
 You can see the project now at `localhost:3000`
 
 **Use these credentials:**
+
 - username: "admin"
 - password: "hadi"
 

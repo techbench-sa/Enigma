@@ -4,14 +4,14 @@ const pg = require('pg')
 const pool = new pg.Pool({
   database: 'hackathon',
   host: 'localhost',
-  password: 'admin',
+  password: 'hadi',
   port: 5432,
   user: 'admin'
 })
 
 pool.connect(err => {
   if (err) {
-    console.log('[pg] couldn\'nt connect')
+    console.log("[pg] couldn't connect")
     console.error(err)
   } else {
     console.log('[pg] connected')
