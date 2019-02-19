@@ -19,9 +19,10 @@ $ brew services start postgres
 $ createuser -d admin
 $ psql postgres -U admin
 $ \i "/Full/path/to/seed.sql"
+$ \q
 ```
 
-you'll find `seed.sql` inside the project's folder.
+you'll find `seed.sql` file inside the project's folder.
 
 ### (For Windows Users)
 
