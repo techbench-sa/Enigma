@@ -118,20 +118,23 @@ module.exports = {
 
   addSubmission: ({ playerID, challengeID, code, score }) => {
     return new Promise((resolve, reject) => {
-      console.log(playerID, challengeID)
       pool.query(
         `UPDATE "submission" SET score=${score} WHERE "playerID"=${playerID} and "challengeID"=${challengeID};`,
         (err, res) => {
+          console.log(res)
           if (err) {
             console.error(err)
             reject('ERROR: addSubmission UPDATE')
-          } else if (res.affectedRows === 0) {
-            console.log('test ====')
+          } else if (res.rowCount === 0) {
             pool.query(
-              `INSERT INTO "submission" ("playerID", "challengeID", code, score) VALUES (${playerID}, ${challengeID}, '${code}', ${score})`,
+              `INSERT INTO "submission" ("playerID", "challengeID", code, score, language) VALUES (${playerID}, ${challengeID}, '${code}', ${score}, 'Java');`,
               (err, res) => {
-                if (err) reject('ERROR: addSubmission INSERT')
-                else resolve()
+                if (err) {
+                  console.log(err)
+                  reject('ERROR: addSubmission INSERT')
+                } else {
+                  resolve()
+                }
               }
             )
           } else {
