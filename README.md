@@ -1,17 +1,13 @@
 <!-- markdownlint-disable MD001 MD014 -->
 
 # Hackathon System
+**Hackathon System** *(Temporary name)* is an automated system to upload, compile and judge players submissions of programming problems. Currently, it's supporting Java and Python for solving problems.
 
-## Setup
-
-1- Install [Nodejs](http://nodejs.org)
-
-2- Install [Homebrew](https://brew.sh/)
-
-3- Clone the project
-
-4- Install and Configure Postgres using Homebrew
-
+## Setting up the database
+We are using postgres for storing data.
+### (for MacOs users):
+- First install [Homebrew](https://brew.sh/)
+- Now install and configure Postgres using Homebrew
 ```bash
 $ brew install postgres
 $ brew services start postgres
@@ -22,11 +18,15 @@ $ \q
 $ psql -d postgres -U admin
 $ CREATE DATABASE hackathon;
 $ \c hackathon
-$ \i "Put the path to seed.sql from the project folder in your machine"
+$ \i "/Full/path/to/seed.sql"
 ```
+you`ll find `seed.sql` inside the project's folder.
+### (for Windows Users):
+We are not sure how to setup the database on windows.
 
-5- Go to the hackathon-system folder in terminal
-
+## Installing and setting up the project
+- Install and Setup [Nodejs](http://nodejs.org)
+- Go to the hackathon-system folder in terminal and execute these commands:
 ```bash
 $ npm install
 $ npm run build
@@ -37,22 +37,20 @@ $ npm start
 
 You can see the project now at `localhost:3000`
 
-Use these credentials:
-
-- username "admin"
-- password "hadi"
+**Use these credentials:**
+username: "admin"
+password: "hadi"
 
 ## Things to do
 
-- ~~CLEAN THE PROJECT (to upload it to github)~~
 - Make a proper authentication
 - Add new languages
 - Improve the new design
-- Design database structure
 - Make it mobile-friendly!
-- ~~Start using ESLint~~
-- Add form validations (for creating new question a new user pages)
 - sanitize and validate players submissions
+- ~~Design database structure~~
+- ~~Start using ESLint~~
+- ~~Add form validations~~
 - ~~Connect frontend with backend~~
 - ~~A new design for the system~~
 - ~~Create a structure for writing questions (independent from any language syntax)~~
