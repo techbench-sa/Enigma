@@ -10,12 +10,10 @@
             .result.wrong(v-if="error")
               .content {{ error }}
                 icon
-            .result(v-for="result in results" :class="result.payload.value ? 'correct':'wrong'")
-              .content
-                | {{ challenge.method_name }}({{ `${tests.inputs.map(v => v[result.payload.test])}` }})
-                | ==> {{ tests.outputs[result.payload.test] }}
+            .result(v-for="result in results" :class="result.type")
+              .content {{ result.message }}
               Icon
-          Button(@click="submit") submit
+          Button(@click="submit" :disabled="checking") {{ checking ? 'checking...' : 'submit' }}
 </template>
 
 <script>
@@ -28,7 +26,8 @@ export default {
     return {
       results: [],
       value: '',
-      error: ''
+      error: '',
+      checking: false
     }
   },
   watch: {
@@ -64,14 +63,32 @@ export default {
     submit () {
       this.error = ''
       this.results = []
+      this.checking = true
       const { id, lang } = this.$route.params
       const submission = this.value.split('\n').slice(3, -3).join('\n')
       api.submit(id, lang, submission).then(res => {
+        this.checking = false
         const { error, results, code } = res.data
         if (code === 0) {
-          this.results = results.filter(r => r.type === 'test')
+          this.results = results.map(({ type, payload }) => {
+            switch (type) {
+              case 'test':
+                const method = this.challenge.method_name
+                const { inputs, outputs } = this.tests
+                return {
+                  message: `${method}(${inputs.map(v => v[payload.test])}) ==> ${outputs[payload.test]}`,
+                  type: payload.value ? 'correct' : 'wrong'
+                }
+              default:
+                return {
+                  message: payload.message,
+                  type: 'warning'
+                }
+            }
+          })
         }
         if (code === 1) {
+          console.log(results)
           this.error = error
           console.warn('Error: Please print a presentable message here!')
         }
@@ -132,8 +149,8 @@ export default {
           white-space: inherit
           .result
             font-size: 14px
-            line-height: 48px
-            padding: 0 12px
+            line-height: 24px
+            padding: 12px 12px
             position: relative
             padding-right: 32px
             .Icon
@@ -156,6 +173,11 @@ export default {
               .Icon::before
                 content: "close"
                 color: #ff6b6b
+            &.warning
+              border-left: 2px solid  #e67700
+              .Icon::before
+                content: "error_outline"
+                color: #fcc419
             &:not(:last-of-type)
               border-bottom: 1px solid rgba(#fff, .1)
 </style>

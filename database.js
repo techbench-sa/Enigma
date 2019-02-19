@@ -11,6 +11,7 @@ const pool = new pg.Pool({
 
 pool.connect(err => {
   if (err) {
+    console.log('[pg] couldn\'nt connect')
     console.error(err)
   } else {
     console.log('[pg] connected')
@@ -68,7 +69,6 @@ module.exports = {
           if (err) {
             reject('ERROR: 04')
           } else {
-            console.log(res.rows)
             const challenges = res.rows.map(challenge => ({
               id: challenge.id,
               name: challenge.name,
@@ -119,15 +119,15 @@ module.exports = {
   addSubmission: ({ playerID, challengeID, code, score }) => {
     return new Promise((resolve, reject) => {
       pool.query(
-        `UPDATE "submission" SET score=${score} WHERE playerID=${playerID} and challengeID=${challengeID}`,
+        `UPDATE "submission" SET score=${score} WHERE "playerID"=${playerID} and "challengeID"=${challengeID};`,
         (err, res) => {
           if (err) {
-            reject()
+            reject('ERROR: addSubmission UPDATE')
           } else if (res.affectedRows === 0) {
             pool.query(
-              `INSERT INTO "submission" (playerID, challengeID, code, score) VALUES (${playerID}, ${challengeID}, '${code}', ${score})`,
+              `INSERT INTO "submission" ("playerID", "challengeID", code, score) VALUES (${playerID}, ${challengeID}, '${code}', ${score})`,
               (err, res) => {
-                if (err) reject('ERROR: 02')
+                if (err) reject('ERROR: addSubmission INSERT')
                 else resolve()
               }
             )

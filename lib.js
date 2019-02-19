@@ -55,8 +55,8 @@ const process = async (command, args)  => {
         ls.stderr.on('data', d => response += d)
     
         ls.on('close', (code) => {
-            if (code == 0) resolve({result: response, code})
-            else reject({error: response, code})
+            if (code == 0) resolve({ response, code })
+            else reject({ response, code })
         })
 
     })

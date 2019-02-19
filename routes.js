@@ -28,9 +28,9 @@ function isUserAuthenticated(req, res, next) {
   }
 }
 
-router.get('/', isUserAuthenticated, (req, res) => {
-    console.log('tests')
-})
+// router.get('/', isUserAuthenticated, (req, res) => {
+//     console.log('tests')
+// })
 
 router.post('/login', (req, res, next) => {
   passport.authenticate('local', (err, user, info) => {

@@ -12,7 +12,7 @@ export default {
   mounted () {
     this.$store.dispatch('fetchUser').then(res => {
       const meta = this.$router.history.meta
-      if (meta && meta.requiresAuth || res.id) {
+      if ((meta && meta.requiresAuth) || res.id) {
         this.$router.history.push(`/`)
       }
     })

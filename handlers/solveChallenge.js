@@ -5,7 +5,6 @@ const { createFolder, generateSubmission, getExtension, compile } = require('../
 const database = require('../database')
 
 module.exports = (req, res, next) => {
-
   const Joi = require('joi')
   const data = req.body
   const schema = Joi.object().keys({
@@ -30,12 +29,13 @@ module.exports = (req, res, next) => {
       const container = path.join(directory, `${req.user.id}`)
       await createFolder(container)
     
-      const file = path.join(container, `/Challenge_${challenge.number}.${getExtension(lang)}`)
-    
-      await fs.writeFileSync(file, generateSubmission(lang, challenge, submission))
-
-      const { result: response, code } = await compile(lang, file).catch(err => console.log(err))
-      console.log(code, response)
+      const file = path.join(container, `/Challenge_${challenge.id}.${getExtension(lang)}`)
+      try {
+        await fs.writeFileSync(file, generateSubmission(lang, challenge, submission))
+      } catch {
+        res.json({ error: "Unexpected Error...", code: 1 })
+      }
+      const { response, code } = await compile(lang, file).catch(err => console.log(err))
       if (code === 0) {
         const results = JSON.parse('[' + response.trim().replace(/\n/g, ',') + ']')
         await database.addSubmission({
@@ -46,7 +46,7 @@ module.exports = (req, res, next) => {
         })
         res.json({ results, code })
       } else if (code == 1) {
-        res.json({ error: "unknown error.", code })
+        res.json({ error: response.replace(/\/.*\//g, ''), code })
       }
     }
   })

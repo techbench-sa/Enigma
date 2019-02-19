@@ -1,5 +1,10 @@
 <template lang="pug">
-.Button(@click="$emit('click', $event)" :class="{hover}" @mouseenter="onMouseEnter" @mouseleave="onMouseLeave")
+.Button(
+    @click="$emit('click', $event)"
+    :class="{hover}"
+    @mouseenter="onMouseEnter"
+    @mouseleave="onMouseLeave"
+    :disabled="disabled")
   Icon {{icon}}
   | {{hover ? hoverMessage : ''}}
   slot(v-if="!hoverMessage || !hover")
@@ -8,7 +13,7 @@
 <script>
 export default {
   name: 'Button',
-  props: ['hoverMessage', 'name', 'icon'],
+  props: ['hoverMessage', 'name', 'icon', 'disabled'],
   data () {
     return {
       hover: false
@@ -16,7 +21,9 @@ export default {
   },
   methods: {
     onMouseEnter () {
-      this.hover = true
+      if (!this.disabled) {
+        this.hover = true
+      }
     },
     onMouseLeave () {
       this.hover = false
@@ -44,8 +51,12 @@ export default {
   background-color: rgba(127, 127, 127, .4)
   border: 1px solid $color-primary
   border-radius: 4px
+  user-select: none
   &:hover
     background-color: $color-secondary
+  &[disabled="disabled"]
+    opacity: .7
+    pointer-events: none
   .Icon
     opacity: .75
     font-size: 16px

@@ -14,14 +14,19 @@ const type = type => {
 }
 
 const generateSubmission = (challenge, submission) => {
-
+console.log(challenge)
 const { method_name, method_type } = challenge
 const params = JSON.parse(challenge.parameters)
 const tests = JSON.parse(challenge.tests)
-return `
-def ${method_name} (${params.map(param => param.name).join(', ')}):
-${submission.split('\n').map(s => s[0] == '\t' ? s : '\t' + s).join('\n') || ''}
+return `# Reversea String.py
 
+
+def ${method_name} (${params.map(param => param.name).join(', ')}):
+${
+  check(submission) ? submission.split('\n').map(s => s[0] == '\t' ? s : '\t' + s).join('\n') || ''
+  : '\treturn None\nprint("{\\"error\\":\\"test\\",\\"payload\\":{\\"message\\":\\"You didn\'t write anything!\\"}}")'
+}
+#### please write above this line ####
 
 ${tests.inputs.map((values, n) => array(type(params[n].type), 'args' + n, values)).join('\n')}
 ${array(type(method_type), 'outputs', tests.outputs)}
@@ -39,6 +44,12 @@ const getSignature = challenge => {
   const { method_name, method_type } = challenge
   const params = JSON.parse(challenge.parameters)
   return `def ${method_name} (${params.map(param => param.name).join(', ')})`
+}
+
+const check = submission => {
+  if (submission.replace(/#.*\n/g, '').trim() === '')
+    return false
+  return true
 }
 
 module.exports = { generateSubmission, getSignature }

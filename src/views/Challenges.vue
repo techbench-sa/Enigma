@@ -24,7 +24,6 @@
           td.center {{challenge.isHidden}}
               //- .add(@click="addCourse(section.crn)" v-if="!isInTable(section.crn)")
               //- .remove(@click="removeCourse(section.crn)" v-if="isInTable(section.crn)")
-  
 </template>
 
 <script>
@@ -80,10 +79,8 @@ export default {
       color: rgba(255, 255, 255, .7)
 .c
   background: red
-
 .table
   background: red
-  
 .grid
   display: grid
   grid-template-columns: repeat(5, auto)
@@ -110,7 +107,6 @@ export default {
     &:nth-child(5n)
       border-right: 0
       //background-color: green
-
 
 .ChallengeCard
   display: flex
