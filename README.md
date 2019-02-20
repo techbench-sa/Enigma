@@ -34,6 +34,7 @@ Port [5432]: 5432             <You can just click Enter>
 Username [postgres]: postgres <You can just click Enter>
 Password for user postgres:   <The password you wrote during the setup proccess>
 postgres=# \i '/path/to/seed.sql'
+Password for user admin: hadi
 ```
 - you'll find `seed.sql` file inside the project's folder.
 - Note that you have to use 'normal' slashes ( / ) instead of backslashes ( \\ ).
