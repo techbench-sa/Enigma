@@ -33,7 +33,7 @@ CREATE TABLE "challenge" (
     "method_type" TEXT NOT NULL,
     "tests" TEXT NOT NULL,
     "parameters" TEXT DEFAULT NULL,
-    "points" INTEGER NOT NULL DEFAULT '10',
+    "points" INTEGER NOT NULL DEFAULT 10,
     "hidden" SMALLINT NOT NULL DEFAULT '0'
 );
 
@@ -50,10 +50,10 @@ INSERT INTO "challenge" ("name", "description", "method_name", "method_type", "t
 CREATE TABLE "submission" (
     "id" SERIAL PRIMARY KEY NOT NULL,
     "time" TIMESTAMP DEFAULT 'now' ::timestamp,
-    "playerID" INTEGER NOT NULL,
-    "challengeID" INTEGER NOT NULL,
+    "playerid" INTEGER NOT NULL,
+    "challengeid" INTEGER NOT NULL,
     "code" TEXT NOT NULL,
-    "score" NUMERIC(6, 3) DEFAULT '0.000',
+    "score" INTEGER DEFAULT 0,
     "language" VARCHAR(5) NOT NULL
 );
 
@@ -83,7 +83,7 @@ CREATE TABLE "user" (
     "id" SERIAL PRIMARY KEY NOT NULL,
     "name" VARCHAR(20) NOT NULL,
     "username" VARCHAR(40) NOT NULL,
-    "points" INTEGER DEFAULT '0',
+    "points" INTEGER DEFAULT 0,
     "password" TEXT NOT NULL
 );
 

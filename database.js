@@ -24,11 +24,8 @@ module.exports = {
       pool.query(
         `SELECT * FROM "user" WHERE username='${username}';`,
         (err, res) => {
-          if (err) {
-            reject('ERROR: getUserByUsername')
-          } else {
-            resolve({ ...res.rows[0] })
-          }
+          if (err) reject(err)
+          else resolve({ ...res.rows[0] })
         }
       )
     })
@@ -37,11 +34,8 @@ module.exports = {
   getUserByID: id => {
     return new Promise((resolve, reject) => {
       pool.query(`SELECT * FROM "user" WHERE id=${id};`, (err, res) => {
-        if (err) {
-          resolve({})
-        } else {
-          resolve({ ...res.rows[0] })
-        }
+        if (err) resolve({})
+        else resolve({ ...res.rows[0] })
       })
     })
   },
@@ -49,13 +43,10 @@ module.exports = {
   getScore: id => {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT sum(score) FROM "submission" WHERE "playerID"=${id};`,
+        `SELECT sum(score) FROM "submission" WHERE playerid=${id};`,
         (err, res) => {
-          if (err) {
-            reject('ERROR: getScore')
-          } else {
-            resolve(0)
-          }
+          if (err) reject(err)
+          else resolve(res.rows[0].sum || 0)
         }
       )
     })
@@ -64,20 +55,12 @@ module.exports = {
   getChallenges: id => {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT * FROM "challenge" LEFT JOIN (SELECT score, "challengeID" FROM "submission" WHERE "playerID"=${id}) AS submissions ON challenge.id =  submissions."challengeID";`,
+        `SELECT id, name, description, points, COALESCE(s.score,0) AS score
+        FROM "challenge" c LEFT JOIN (SELECT  score, challengeid FROM "submission" WHERE playerid=${id}) AS s
+        ON c.id =  s.challengeid;`,
         (err, res) => {
-          if (err) {
-            reject('ERROR: 04')
-          } else {
-            const challenges = res.rows.map(challenge => ({
-              id: challenge.id,
-              name: challenge.name,
-              description: challenge.description,
-              points: challenge.points,
-              score: +challenge.score
-            }))
-            resolve(challenges)
-          }
+          if (err) reject(err)
+          else resolve(res.rows)
         }
       )
     })
@@ -86,13 +69,8 @@ module.exports = {
   getChallenge: id => {
     return new Promise((resolve, reject) => {
       pool.query(`SELECT * FROM "challenge" WHERE id=${id}`, (err, res) => {
-        if (err) {
-          reject('ERROR: getChallenge')
-        } else if (res.rows[0]) {
-          resolve(res.rows[0])
-        } else {
-          resolve({})
-        }
+        if (err) reject(err)
+        else resolve(res.rows[0])
       })
     })
   },
@@ -109,7 +87,7 @@ module.exports = {
       pool.query(
         `INSERT INTO "challenge" (name, description, method_name, method_type, tests, parameters, points) VALUES ('${name}', '${description}', '${method_name}', '${method_type}', '${tests}', '${parameters}', ${points})`,
         (err, res) => {
-          if (err) reject('ERROR: 01')
+          if (err) reject(err)
           else resolve(res.insertId)
         }
       )
@@ -119,27 +97,19 @@ module.exports = {
   addSubmission: ({ playerID, challengeID, code, score }) => {
     return new Promise((resolve, reject) => {
       pool.query(
-        `UPDATE "submission" SET score=${score} WHERE "playerID"=${playerID} and "challengeID"=${challengeID};`,
+        `UPDATE "submission" SET score=${score} WHERE playerid=${playerID} and challengeid=${challengeID};`,
         (err, res) => {
-          console.log(res)
-          if (err) {
-            console.error(err)
-            reject('ERROR: addSubmission UPDATE')
-          } else if (res.rowCount === 0) {
+          if (err) reject(err)
+          if (res.rowCount === 0) {
             pool.query(
-              `INSERT INTO "submission" ("playerID", "challengeID", code, score, language) VALUES (${playerID}, ${challengeID}, '${code}', ${score}, 'Java');`,
+              `INSERT INTO "submission" (playerid, challengeid, code, score, language) VALUES (${playerID}, ${challengeID}, '${code}', ${score}, 'Java');`,
               (err, res) => {
-                if (err) {
-                  console.log(err)
-                  reject('ERROR: addSubmission INSERT')
-                } else {
-                  resolve()
-                }
+                if (err) reject(err)
+                else resolve()
               }
             )
-          } else {
-            resolve()
           }
+          resolve()
         }
       )
     })
