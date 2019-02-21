@@ -8,7 +8,7 @@
 
 We are using postgres for storing data.
 
-### (For Mac OS Users)
+### (For MacOS or Linux Users)
 
 - First install [Homebrew](https://brew.sh/)
 - Now install and configure Postgres using Homebrew
@@ -27,6 +27,7 @@ you'll find `seed.sql` file inside the project's folder.
 - Run the installer and go through the setup proccess.
 - Before finishing it will ask you if you want to download additional tools, uncheck the box (if you don't need it).
 - Launch `SQL Shell (psql)`.
+
 ```bash
 Server [localhost]: localhost <You can just click Enter>
 Database [postgres]: postgres <You can just click Enter>
@@ -36,6 +37,7 @@ Password for user postgres:   <The password you wrote during the setup proccess>
 postgres=# \i '/path/to/seed.sql'
 Password for user admin: hadi
 ```
+
 - you'll find `seed.sql` file inside the project's folder.
 - Note that you have to use 'normal' slashes ( / ) instead of backslashes ( \\ ).
 
