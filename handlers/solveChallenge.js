@@ -43,9 +43,10 @@ module.exports = (req, res, next) => {
           file,
           generateSubmission(lang, challenge, submission)
         )
-      } catch {
+      } catch (err) {
         res.json({ error: 'Unexpected Error...', code: 1 })
       }
+
       const { response, code } = await compile(lang, file).catch(err =>
         console.log(err)
       )
@@ -60,7 +61,7 @@ module.exports = (req, res, next) => {
           score: results.filter(result => result.payload.value).length
         })
         res.json({ results, code })
-      } else if (code == 1) {
+      } else if (code === 1) {
         res.json({ error: response.replace(/\/.*\//g, ''), code })
       }
     }
