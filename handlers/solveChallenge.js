@@ -18,6 +18,7 @@ module.exports = (req, res, next) => {
     submission: Joi.string().required()
   })
   Joi.validate(data, schema, async (err, value) => {
+    console.log(err)
     if (err) {
       res.status(422).json({
         status: 'error',
@@ -44,6 +45,7 @@ module.exports = (req, res, next) => {
           generateSubmission(lang, challenge, submission)
         )
       } catch (err) {
+        console.log(err)
         res.json({ error: 'Unexpected Error...', code: 1 })
       }
 
