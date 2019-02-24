@@ -14,7 +14,6 @@ const type = type => {
 }
 
 const generateSubmission = (challenge, submission) => {
-console.log(challenge)
 const { method_name, method_type } = challenge
 const params = JSON.parse(challenge.parameters)
 const tests = JSON.parse(challenge.tests)
@@ -47,7 +46,7 @@ const getSignature = challenge => {
 }
 
 const check = submission => {
-  if (submission.replace(/#.*\n/g, '').trim() === '')
+  if (submission.replace(/#.*\n/g, '').replace(/"""(.|\n)*?"""/g, '').trim() === '')
     return false
   return true
 }

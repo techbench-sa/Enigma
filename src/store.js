@@ -61,7 +61,6 @@ export default new Vuex.Store({
       context.commit('LOGIN_REQUEST')
       return api.login({ username, password })
         .then(res => {
-          console.log(res)
           context.commit('LOGIN_SUCCESS', res.data)
           return res.data
         }).catch(err => {

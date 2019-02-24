@@ -11,7 +11,7 @@ const pool = new pg.Pool({
 
 pool.connect(err => {
   if (err) {
-    console.log("[pg] couldn't connect")
+    console.log('[pg] couldn\'t connect')
     console.error(err)
   } else {
     console.log('[pg] connected')

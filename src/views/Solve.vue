@@ -88,7 +88,6 @@ export default {
           })
         }
         if (code === 1) {
-          console.log(results)
           this.error = error
           console.warn('Error: Please print a presentable message here!')
         }
@@ -98,12 +97,6 @@ export default {
   mounted () {
     const id = this.$route.params.id
     this.$store.dispatch('fetchChallenge', id)
-    // api.getChallenge(id).then(res => {
-    //   console.log(res.data)
-    //   this.challenge = res.data
-    //   console.log('test')
-
-    // })
   }
 }
 </script>
