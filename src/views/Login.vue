@@ -3,10 +3,9 @@
   .container
     header
       h1 Login
-    //- TODO: Change to action="login"
     form(action="login" method="POST").row
       .column.column-33.column-offset-33
-        Alert(v-if="error") {{ error }}
+        Alert(v-if="error" type="error") {{ error }}
         label username
         input(type="text" name="username")
         br

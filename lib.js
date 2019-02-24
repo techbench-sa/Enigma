@@ -3,63 +3,73 @@ const path = require('path')
 const { spawn } = require('child_process')
 
 module.exports = {
-    createFolder: async dir => {
-        try {
-            await fs.statSync(dir)
-        } catch(e) {
-            await fs.mkdirSync(dir)
-        }
-    },
-    
-    generateSubmission:  (lang, ...args) => {
-        return require('./templates/' + lang).generateSubmission(...args)
-    },
-
-    getExtension: lang => {
-        switch (lang) {
-            case 'java': return 'java'
-            case 'python': return 'py'
-        }
-    },
-
-    getSignatures: challenge => {
-        return {
-            java: `${require('./templates/java').getSignature(challenge)}`,
-            python: `${require('./templates/python').getSignature(challenge)}`
-        }
-    },
-
-    compile: (lang, file) => {
-        switch (lang) {
-            case 'java':
-                return process('javac', [file]).then(res => {
-                    const dir = path.join(file.split('/').slice(0, -1).join('/'))
-                    const fileName = file.split('/').pop().split('.')[0]
-                    return process('java', ['-cp', dir, fileName])
-                }).catch(err => err)
-            case 'python':
-                return process('python', [file]).catch(err => err)
-        }
+  createFolder: async dir => {
+    try {
+      await fs.statSync(dir)
+    } catch (e) {
+      await fs.mkdirSync(dir)
     }
+  },
+
+  generateSubmission: (lang, ...args) => {
+    return require('./templates/' + lang).generateSubmission(...args)
+  },
+
+  getExtension: lang => {
+    switch (lang) {
+    case 'java':
+      return 'java'
+    case 'python':
+      return 'py'
+    }
+  },
+
+  getSignatures: challenge => {
+    return {
+      java: `${require('./templates/java').getSignature(challenge)}`,
+      python: `${require('./templates/python').getSignature(challenge)}`
+    }
+  },
+
+  compile: (lang, file) => {
+    switch (lang) {
+    case 'java':
+      return process('javac', [file])
+        .then(res => {
+          const dir = path.join(
+            file
+              .split('/')
+              .slice(0, -1)
+              .join('/')
+          )
+          const fileName = file
+            .split('/')
+            .pop()
+            .split('.')[0]
+          return process('java', ['-cp', dir, fileName])
+        })
+        .catch(err => err)
+    case 'python':
+      return process('python', [file]).catch(err => err)
+    }
+  }
 }
 
+const process = async (command, args) => {
+  const ls = spawn(command, args)
 
-const process = async (command, args)  => {
-    const ls = spawn(command, args)
+  return new Promise((resolve, reject) => {
+    let response = []
 
-    return new Promise((resolve, reject) => {
-        let response = []
+    ls.stdout.on('data', d => (response += d))
 
-        ls.stdout.on('data', d => response += d)
-    
-        ls.stderr.on('data', d => response += d)
-    
-        ls.on('close', (code) => {
-            if (code == 0) resolve({ response, code })
-            else reject({ response, code })
-        })
+    ls.stderr.on('data', d => (response += d))
 
+    ls.on('close', code => {
+      if (code === 0) resolve({ response, code })
+      else reject({ response, code })
     })
+  })
 }
 
 /*
@@ -97,13 +107,13 @@ const process = async (command, args)  => {
             for (int i = 0; i < results.length; i++)
                 if (results[i])
                     correct++;
-                
+
             System.out.println("Score is: " + correct);
         `
     },
 */
 
-        /*
+/*
             a == 1 ? 'A' :
             a == 2 ? 'B' :
             a == 3 ? 'C' :

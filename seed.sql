@@ -12,6 +12,11 @@
 
 DROP DATABASE hackathon;
 
+DROP ROLE admin;
+
+CREATE ROLE admin WITH CREATEDB LOGIN PASSWORD 'hadi';
+
+\c postgres admin
 CREATE DATABASE hackathon;
 
 \c hackathon;
@@ -28,7 +33,7 @@ CREATE TABLE "challenge" (
     "method_type" TEXT NOT NULL,
     "tests" TEXT NOT NULL,
     "parameters" TEXT DEFAULT NULL,
-    "points" INTEGER NOT NULL DEFAULT '10',
+    "points" INTEGER NOT NULL DEFAULT 10,
     "hidden" SMALLINT NOT NULL DEFAULT '0'
 );
 
@@ -45,22 +50,22 @@ INSERT INTO "challenge" ("name", "description", "method_name", "method_type", "t
 CREATE TABLE "submission" (
     "id" SERIAL PRIMARY KEY NOT NULL,
     "time" TIMESTAMP DEFAULT 'now' ::timestamp,
-    "playerID" INTEGER NOT NULL,
-    "challengeID" INTEGER NOT NULL,
+    "playerid" INTEGER NOT NULL,
+    "challengeid" INTEGER NOT NULL,
     "code" TEXT NOT NULL,
-    "score" NUMERIC(6, 3) DEFAULT '0.000',
+    "score" INTEGER DEFAULT 0,
     "language" VARCHAR(5) NOT NULL
 );
 
 -- provided the field is named the same thing in
 -- all tables that use this, you can use a centralized function
 
-CREATE FUNCTION update_time_column ()
+CREATE FUNCTION update_submission_time ()
     RETURNS TRIGGER
     LANGUAGE plpgsql
     AS $$
 BEGIN
-    NEW.updated_at = NOW();
+    NEW.time = NOW();
     RETURN NEW;
 END;
 $$;
@@ -68,7 +73,7 @@ $$;
 CREATE TRIGGER submission_time_modtime
     BEFORE UPDATE ON submission
     FOR EACH ROW
-    EXECUTE PROCEDURE update_time_column ();
+    EXECUTE PROCEDURE update_submission_time ();
 
 --
 -- Table structure for table "users"
@@ -78,7 +83,7 @@ CREATE TABLE "user" (
     "id" SERIAL PRIMARY KEY NOT NULL,
     "name" VARCHAR(20) NOT NULL,
     "username" VARCHAR(40) NOT NULL,
-    "points" INTEGER DEFAULT '0',
+    "points" INTEGER DEFAULT 0,
     "password" TEXT NOT NULL
 );
 

@@ -30,11 +30,11 @@ passport.use(
         }
         return done(null, { id: res.id, username })
       })
-      .catch(err => {
-        return done(null, false, {
+      .catch(err =>
+        done(null, false, {
           message: 'Failed to connect to the server.'
         })
-      })
+      )
   })
 )
 

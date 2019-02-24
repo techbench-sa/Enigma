@@ -1,6 +1,6 @@
 module.exports = (req, res, next) => {
   res.json({
-      status: 'success',
-      data: req.body
-  });
-};
+    status: 'success',
+    data: req.body
+  })
+}
