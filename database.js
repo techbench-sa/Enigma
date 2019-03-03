@@ -97,7 +97,7 @@ module.exports = {
   addSubmission: ({ player_id, challenge_id, code, score }) => {
     return new Promise((resolve, reject) => {
       pool.query(
-        `UPDATE "submission" SET score=${score} WHERE player_id=${player_id} and challenge_id=${challenge_id};`,
+        `UPDATE "submission" SET code='${code}', score=${score} WHERE player_id=${player_id} AND challenge_id=${challenge_id};`,
         (err, res) => {
           if (err) reject(err)
           if (res.rowCount === 0) {
