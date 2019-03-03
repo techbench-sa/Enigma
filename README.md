@@ -56,11 +56,6 @@ $ npm start
 
 You can see the project now at http://localhost:3000
 
-**Use these credentials:**
-
-- username: "admin"
-- password: "hadi"
-
 ## Things to do
 
 - Make a proper authentication
