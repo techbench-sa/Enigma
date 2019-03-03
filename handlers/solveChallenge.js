@@ -29,19 +29,19 @@ module.exports = (req, res, next) => {
       const userID = req.user.id
       const { id, lang, submission } = value
       const challenge = await database.getChallenge(id)
-      const directory = path.join(__dirname, '../users')
-      await createFolder(directory)
+      const usersFolderDirectory = path.join(__dirname, '../users')
+      await createFolder(usersFolderDirectory)
 
-      const container = path.join(directory, `${req.user.id}`)
-      await createFolder(container)
+      const userFolderDirectory = path.join(usersFolderDirectory, `${req.user.id}`)
+      await createFolder(userFolderDirectory)
 
-      const file = path.join(
-        container,
+      const submissionFileDirectory = path.join(
+        userFolderDirectory,
         `/Challenge_${challenge.id}.${getExtension(lang)}`
       )
       try {
         await fs.writeFileSync(
-          file,
+          submissionFileDirectory,
           generateSubmission(lang, challenge, submission)
         )
       } catch (err) {
@@ -49,7 +49,7 @@ module.exports = (req, res, next) => {
         res.json({ error: 'Unexpected Error...', code: 1 })
       }
 
-      const { response, code } = await compile(lang, file).catch(err =>
+      const { response, code } = await compile(lang, submissionFileDirectory).catch(err =>
         console.log(err)
       )
       if (code === 0) {
