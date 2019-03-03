@@ -11,7 +11,7 @@ const pool = new pg.Pool({
 
 pool.connect(err => {
   if (err) {
-    console.log('[pg] couldn\'t connect')
+    console.log("[pg] couldn't connect")
     console.error(err)
   } else {
     console.log('[pg] connected')
@@ -43,7 +43,7 @@ module.exports = {
   getScore: id => {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT sum(score) FROM "submission" WHERE playerid=${id};`,
+        `SELECT sum(score) FROM "submission" WHERE player_id=${id};`,
         (err, res) => {
           if (err) reject(err)
           else resolve(res.rows[0].sum || 0)
@@ -56,8 +56,8 @@ module.exports = {
     return new Promise((resolve, reject) => {
       pool.query(
         `SELECT id, name, description, points, COALESCE(s.score,0) AS score
-        FROM "challenge" c LEFT JOIN (SELECT  score, challengeid FROM "submission" WHERE playerid=${id}) AS s
-        ON c.id =  s.challengeid;`,
+        FROM "challenge" c LEFT JOIN (SELECT  score, challenge_id FROM "submission" WHERE player_id=${id}) AS s
+        ON c.id =  s.challenge_id;`,
         (err, res) => {
           if (err) reject(err)
           else resolve(res.rows)
@@ -94,15 +94,15 @@ module.exports = {
     })
   },
 
-  addSubmission: ({ playerID, challengeID, code, score }) => {
+  addSubmission: ({ player_id, challenge_id, code, score }) => {
     return new Promise((resolve, reject) => {
       pool.query(
-        `UPDATE "submission" SET score=${score} WHERE playerid=${playerID} and challengeid=${challengeID};`,
+        `UPDATE "submission" SET score=${score} WHERE player_id=${player_id} and challenge_id=${challenge_id};`,
         (err, res) => {
           if (err) reject(err)
           if (res.rowCount === 0) {
             pool.query(
-              `INSERT INTO "submission" (playerid, challengeid, code, score, language) VALUES (${playerID}, ${challengeID}, '${code}', ${score}, 'Java');`,
+              `INSERT INTO "submission" (player_id, challenge_id, code, score, language) VALUES (${player_id}, ${challenge_id}, '${code}', ${score}, 'Java');`,
               (err, res) => {
                 if (err) reject(err)
                 else resolve()
