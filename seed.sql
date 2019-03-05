@@ -22,19 +22,38 @@ CREATE DATABASE hackathon;
 \c hackathon;
 -- </init>
 --
+-- Table structure for table "users"
+--
+
+CREATE TABLE "user" (
+    "id" SERIAL,
+    "name" VARCHAR(40) NOT NULL,
+    "username" VARCHAR(40) NOT NULL,
+    "password" TEXT NOT NULL,
+    PRIMARY KEY (id)
+);
+
+--
+-- Dumping data for table "users"
+--
+
+INSERT INTO "user" ("name", "username", "password")
+        VALUES ('Mohammed Alobaidi', 'mohalobaidi', '123456'), ('Hadi Albinsaad', 'hadi', 'hadi'), ('Admin', 'admin', 'hadi');
+--
 -- Table structure for table "challenge"
 --
 
 CREATE TABLE "challenge" (
-    "id" SERIAL PRIMARY KEY NOT NULL,
-    "name" VARCHAR(100) NOT NULL,
+    "id" SERIAL,
+    "name" VARCHAR(20) NOT NULL,
     "description" TEXT NOT NULL,
-    "method_name" TEXT NOT NULL,
-    "method_type" TEXT NOT NULL,
+    "method_name" VARCHAR(40) NOT NULL,
+    "method_type" VARCHAR(20) NOT NULL,
+    "parameters" TEXT NOT NULL,
     "tests" TEXT NOT NULL,
-    "parameters" TEXT DEFAULT NULL,
     "points" INTEGER NOT NULL DEFAULT 10,
-    "hidden" SMALLINT NOT NULL DEFAULT '0'
+    "hidden" SMALLINT NOT NULL DEFAULT 0,
+    PRIMARY KEY (id)
 );
 
 --
@@ -48,24 +67,27 @@ INSERT INTO "challenge" ("name", "description", "method_name", "method_type", "t
 --
 
 CREATE TABLE "submission" (
-    "id" SERIAL PRIMARY KEY NOT NULL,
-    "time" TIMESTAMP DEFAULT 'now' ::timestamp,
-    "playerid" INTEGER NOT NULL,
-    "challengeid" INTEGER NOT NULL,
+    "id" SERIAL,
+    "timestamp" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "code" TEXT NOT NULL,
-    "score" INTEGER DEFAULT 0,
-    "language" VARCHAR(5) NOT NULL
+    "score" INTEGER NOT NULL,
+    "language" VARCHAR(10) NOT NULL,
+    "player_id" INTEGER NOT NULL,
+    "challenge_id" INTEGER NOT NULL,
+    FOREIGN KEY (player_id) REFERENCES "user" (id),
+    FOREIGN KEY (challenge_id) REFERENCES "challenge" (id),
+    PRIMARY KEY (id)
 );
 
 -- provided the field is named the same thing in
 -- all tables that use this, you can use a centralized function
 
-CREATE FUNCTION update_submission_time ()
+CREATE FUNCTION update_submission_timestamp ()
     RETURNS TRIGGER
     LANGUAGE plpgsql
     AS $$
 BEGIN
-    NEW.time = NOW();
+    NEW.timestamp = CURRENT_TIMESTAMP;
     RETURN NEW;
 END;
 $$;
@@ -73,23 +95,5 @@ $$;
 CREATE TRIGGER submission_time_modtime
     BEFORE UPDATE ON submission
     FOR EACH ROW
-    EXECUTE PROCEDURE update_submission_time ();
+    EXECUTE PROCEDURE update_submission_timestamp ();
 
---
--- Table structure for table "users"
---
-
-CREATE TABLE "user" (
-    "id" SERIAL PRIMARY KEY NOT NULL,
-    "name" VARCHAR(20) NOT NULL,
-    "username" VARCHAR(40) NOT NULL,
-    "points" INTEGER DEFAULT 0,
-    "password" TEXT NOT NULL
-);
-
---
--- Dumping data for table "users"
---
-
-INSERT INTO "user" ("name", "username", "password")
-        VALUES ('Mohammed Alobaidi', 'mohalobaidi', '123456'), ('Hadi Albinsaad', 'hadi', 'hadi'), ('Admin', 'admin', 'hadi');
