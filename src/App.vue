@@ -3,6 +3,7 @@
     Navbar
     transition(name="fade")
       router-view.view(:key="$route.fullPath")
+    tb-footer
 </template>
 
 <script>
@@ -23,8 +24,8 @@ export default {
 <style lang="sass">
 @import '@/assets/sass/main.sass'
 #app
-  height: calc(100% - 7.2rem)
+  height: calc(100% - 4.8rem)
   .view
     padding-top: 7.2rem
-    min-height: calc(100% - 7.2rem)
+    min-height: calc(100% - 4.8rem)
 </style>

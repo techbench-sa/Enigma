@@ -104,6 +104,7 @@ export default {
 <style lang="sass">
 #Solve
   height: 100%
+  padding-bottom: 24px
   .container
     height: 100%
   .wrapper

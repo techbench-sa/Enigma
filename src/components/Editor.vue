@@ -70,7 +70,7 @@ export default {
 
 <style lang="sass">
 .Editor
-  height: 100%1px
+  height: 100%
   width: 100%
   .CodeMirror
     flex: 1

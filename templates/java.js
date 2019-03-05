@@ -16,8 +16,13 @@ const type = type => {
 const generateSubmission = (challenge, submission) => {
 
 const { method_name, method_type } = challenge
-const params = JSON.parse(challenge.parameters)
-const tests = JSON.parse(challenge.tests)
+let params, tests
+try {
+  params = JSON.parse(challenge.parameters)
+  tests = JSON.parse(challenge.tests)
+} catch (e) {
+  throw "Invalid challenge syntax ID: " + challenge.id;
+}
 
 return `class Challenge_${challenge.id} {
 
