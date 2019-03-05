@@ -10,11 +10,26 @@
 -- SET time_zone = "+00:00";
 -- <init>
 
-DROP DATABASE hackathon;
 
-DROP ROLE admin;
+-- Drop if database exists
+\c postgres;
 
-CREATE ROLE admin WITH CREATEDB LOGIN PASSWORD 'hadi';
+select exists(SELECT datname FROM pg_catalog.pg_database WHERE datname = 'hackathon') AS datexists \gset
+
+\if :datexists
+    \echo '\033[0;32mOverriding hackathon database..\033[0m'
+    DROP DATABASE hackathon;
+\else
+    \echo '\033[0;32mCreating hackathon database..\033[0m'
+\endif
+
+-- Create admin role if it doesn't exists
+select not exists(SELECT rolname FROM pg_catalog.pg_roles WHERE rolname = 'admin') AS rolexists \gset
+
+\if :rolexists
+    \echo '\033[0;32mCreating admin role..\033[0m'
+    CREATE ROLE admin WITH CREATEDB LOGIN PASSWORD 'hadi'
+\endif
 
 \c postgres admin
 CREATE DATABASE hackathon;
@@ -30,6 +45,7 @@ CREATE TABLE "user" (
     "name" VARCHAR(40) NOT NULL,
     "username" VARCHAR(40) NOT NULL,
     "password" TEXT NOT NULL,
+    "type" SMALLINT NOT NULL DEFAULT 0,
     PRIMARY KEY (id)
 );
 
@@ -37,8 +53,13 @@ CREATE TABLE "user" (
 -- Dumping data for table "users"
 --
 
-INSERT INTO "user" ("name", "username", "password")
-        VALUES ('Mohammed Alobaidi', 'mohalobaidi', '123456'), ('Hadi Albinsaad', 'hadi', 'hadi'), ('Admin', 'admin', 'hadi');
+INSERT INTO "user" ("name", "username", "password", "type")
+    VALUES
+        ('Mohammed Alobaidi', 'mohalobaidi', 'qwertyqwerty', 2),
+        ('Hadi Albinsaad', 'hadi', 'hadi', 1),
+        ('Admin', 'admin', 'hadi', 2),
+        ('player', 'John Smith', 0, 0)
+    ;
 --
 -- Table structure for table "challenge"
 --
@@ -96,4 +117,3 @@ CREATE TRIGGER submission_time_modtime
     BEFORE UPDATE ON submission
     FOR EACH ROW
     EXECUTE PROCEDURE update_submission_timestamp ();
-

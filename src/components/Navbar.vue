@@ -3,13 +3,12 @@
   .container
     router-link.brand(:to="'/'") Hackathon System
     .list(v-if="$store.state.user.id")
-      router-link.item(:to="'/challenges'")
+      router-link.item(:to="'/challenges'" v-if="$store.state.user.type == 2")
         Icon assignment
         | Challenges
-      router-link.item(:to="'/create'")
+      router-link.item(:to="'/create'"  v-if="$store.state.user.type == 2")
         Icon add
         | Create
-      .item (Showed for testing)
     .list(v-if="$store.state.user.id")
       a.item(href="/logout")
         Icon power_settings_new

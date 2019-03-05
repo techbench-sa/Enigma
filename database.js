@@ -55,7 +55,7 @@ module.exports = {
   getChallenges: id => {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT id, name, description, points, COALESCE(s.score,0) AS score
+        `SELECT id, name, description, points, COALESCE(s.score,0) AS score, hidden
         FROM "challenge" c LEFT JOIN (SELECT  score, challenge_id FROM "submission" WHERE player_id=${id}) AS s
         ON c.id =  s.challenge_id;`,
         (err, res) => {
@@ -91,6 +91,15 @@ module.exports = {
           else resolve(res.insertId)
         }
       )
+    })
+  },
+
+  changeVisibility: (id, hidden) => {
+    return new Promise((resolve, reject) => {
+      pool.query(`UPDATE "challenge" SET hidden=${+!!hidden} WHERE id=${+id}`, (err, res) => {
+        if (err) reject(err)
+        else resolve(res)
+      })
     })
   },
 

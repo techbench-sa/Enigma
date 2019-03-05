@@ -11,6 +11,7 @@ const challengesHandler = require('./handlers/challenges')
 const challengeHandler = require('./handlers/challenge')
 const solveChallengeHandler = require('./handlers/solveChallenge')
 const addChallengeHandler = require('./handlers/addChallenge')
+const changeVisibilityHandler = require('./handlers/changeVisibility')
 
 // generic route handler
 const genericHandler = (req, res, next) => {
@@ -65,5 +66,7 @@ router.get('/api/challenge/:id', isUserAuthenticated, challengeHandler)
 router.post('/api/submit', isUserAuthenticated, solveChallengeHandler)
 
 router.post('/api/addChallenge', isUserAuthenticated, addChallengeHandler)
+
+router.post('/api/changeVisibility', isUserAuthenticated, changeVisibilityHandler)
 
 module.exports = router

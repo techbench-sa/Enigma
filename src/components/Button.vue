@@ -1,7 +1,7 @@
 <template lang="pug">
 .Button(
     @click="$emit('click', $event)"
-    :class="{hover}"
+    :class="{hover, 'no-icon': !icon}"
     @mouseenter="onMouseEnter"
     @mouseleave="onMouseLeave"
     :disabled="disabled")
@@ -52,6 +52,8 @@ export default {
   border: 1px solid $color-primary
   border-radius: 4px
   user-select: none
+  &.no-icon
+    grid-column-gap: 0
   &:hover
     background-color: $color-secondary
   &[disabled="disabled"]
