@@ -1,5 +1,5 @@
 <template lang="pug">
-.Footer Copyright © 2019 Hackathon System&ensp;&mdash;&ensp;Developed by
+.Footer Copyright © 2019 Enigma &ensp;&mdash;&ensp;Developed with ❤️ by
     a(href="http://www.twitter.com/tech_bench") TechBench
 </template>
 
