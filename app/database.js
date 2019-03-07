@@ -2,7 +2,7 @@ const pg = require('pg')
 // const fs = require('fs')
 
 const pool = new pg.Pool({
-  database: 'hackathon',
+  database: 'enigma',
   host: 'localhost',
   password: 'hadi',
   port: 5432,
@@ -55,7 +55,7 @@ module.exports = {
   getChallenges: id => {
     return new Promise((resolve, reject) => {
       pool.query(
-        `SELECT id, name, description, points, COALESCE(s.score,0) AS score, hidden
+        `SELECT id, name, description, points, COALESCE(s.score,0) AS score, type
         FROM "challenge" c LEFT JOIN (SELECT  score, challenge_id FROM "submission" WHERE player_id=${id}) AS s
         ON c.id =  s.challenge_id;`,
         (err, res) => {
@@ -94,18 +94,20 @@ module.exports = {
     })
   },
 
-  changeVisibility: (id, hidden) => {
+  changeVisibility: (id, type) => {
     return new Promise((resolve, reject) => {
-      pool.query(`UPDATE "challenge" SET hidden=${+!!hidden} WHERE id=${+id}`, (err, res) => {
-        if (err) reject(err)
-        else resolve(res)
-      })
+      pool.query(
+        `UPDATE "challenge" SET type=${+!!type} WHERE id=${+id}`,
+        (err, res) => {
+          if (err) reject(err)
+          else resolve(res)
+        }
+      )
     })
   },
 
   addSubmission: ({ player_id, challenge_id, code, score, lang }) => {
     return new Promise((resolve, reject) => {
-      
       pool.query(
         `UPDATE "submission" SET code=$1::text, score=$2::int, language=$3::text WHERE player_id=$4::int AND challenge_id=$5::int;`,
         [code, score, lang, player_id, challenge_id],

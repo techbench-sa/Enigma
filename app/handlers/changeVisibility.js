@@ -1,8 +1,8 @@
 const database = require('../database')
 
 module.exports = (req, res, next) => {
-  const { id, hidden } = req.body
-  database.changeVisibility(id, hidden).then(user => {
+  const { id, type } = req.body
+  database.changeVisibility(id, type).then(user => {
     res.json({})
   })
 }

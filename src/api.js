@@ -26,7 +26,7 @@ export default {
   login (data) {
     return api.post(`/login`, data)
   },
-  changeVisibility (id, hidden) {
-    return api.post(`/changeVisibility`, { id, hidden })
+  changeVisibility (id, type) {
+    return api.post(`/changeVisibility`, { id, type })
   }
 }

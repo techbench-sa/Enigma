@@ -22,12 +22,12 @@
           td(style="max-width: 1px") {{challenge.description}}
           td.center {{challenge.points}}
           td.center
-            Button(v-if="challenge.hidden == 0" hoverMessage="Hide" @click="test(challenge.id, true)") visible
-            Button.red(v-if="challenge.hidden == 1"  hoverMessage="Unhide" @click="test(challenge.id, false)") Hidden
+            Button(v-if="challenge.type == 0" hoverMessage="Hide" @click="test(challenge.id, true)") visible
+            Button.red(v-if="challenge.type == 1"  hoverMessage="Unhide" @click="test(challenge.id, false)") Hidden
                   //- Button(v-if="!addedToLibrary" icon="bookmark" @click="addToLibrary") {{$lang.main.add_to_library}}
                   //- Button.red(v-if="addedToLibrary" icon="bookmark"  @click="removeFromLibrary" :hoverMessage="$lang.main.remove_from_library")
                   //-   | {{$lang.main.added_to_library}}
-          //- td.center {{challenge.hidden ? 'hidden' : 'visible'}}
+          //- td.center {{challenge.type ? 'type' : 'visible'}}
               //- .add(@click="addCourse(section.crn)" v-if="!isInTable(section.crn)")
               //- .remove(@click="removeCourse(section.crn)" v-if="isInTable(section.crn)")
 </template>
