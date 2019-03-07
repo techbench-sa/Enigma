@@ -1,8 +1,10 @@
 <template lang="pug">
-.ChallengeCard(:class="color")
-    .title {{ name }} - ({{ score }}/{{ points }})
+.ChallengeCard(:class="`${color} ${hidden ? 'hidden': ''}`")
+    .title {{ name }}
     .body {{ description }}
-    .actions
+    .actions(v-if="color == 'green'")
+      span solved
+    .actions(v-else)
         Button(@click="solveWith('java')") solve in java
         Button(@click="solveWith('python')") solve in python
 </template>
@@ -11,7 +13,7 @@
 
 export default {
   name: 'Card',
-  props: ['id', 'name', 'description', 'points', 'score'],
+  props: ['id', 'name', 'description', 'points', 'score', 'hidden'],
   computed: {
     color () {
       return this.score >= this.points ? 'green' : this.score > 0 ? 'yellow' : ''
@@ -42,6 +44,8 @@ export default {
   background-repeat: no-repeat
   background-size: 100%
   outline: none
+  &.hidden
+    opacity: .5
   &.green
     background: green
   &.yellow
@@ -75,6 +79,7 @@ export default {
     text-align: center
     font-weight: 400
     position: relative
+    mask-image: linear-gradient(to top, rgba(black, 0) .1rem, black 1.8rem)
     &::after
       content: ""
       display: block
@@ -89,9 +94,21 @@ export default {
     display: flex
     background: rgba(73,80,87, .2)
     border-top: 1px solid rgba(255, 255, 255, .1)
+    span
+      height: 100%
+      width: 100%
+      font-size: 16px
+      font-weight: 400
+      border: 0
+      border-radius: 0
+      padding: 0
+      background: transparent
+      text-transform: uppercase
+      display: flex
+      align-items: center
+      justify-content: center
     .Button
       width: 50%
-      background: red
       font-size: 14px
       font-weight: 400
       border: 0

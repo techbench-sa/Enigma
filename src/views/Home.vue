@@ -2,13 +2,14 @@
 #Home
   .container
     header
-      h1  Welcome, {{ user.username }}
+      h1  Welcome, {{ user.name }}
       h3 Your current score is
         span {{ user.score }}
         | points
       .row
         .column.column-33.column-offset-33
     Grid(:cols="4")
+      Card( v-for="(challenge, i) in challenges" :key="i" v-bind="challenge")
       Card( v-for="(challenge, i) in challenges" :key="i" v-bind="challenge")
 </template>
 

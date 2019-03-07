@@ -1,6 +1,9 @@
 const database = require('../database')
 
 module.exports = (req, res, next) => {
+  // FOR DEVELOPMENT
+  if (global.USER) req.user = global.USER
+  //////////////////
   const Joi = require('joi')
   const data = req.body
   const schema = Joi.object().keys({

@@ -40,7 +40,9 @@ results = []
 for i in range(len(outputs)):
   res = ${method_name}(${params.map((_, i) => `args${i}[i]`).join(', ')})
   results.append(res == outputs[i])
-  print("{\\"type\\":\\"test\\",\\"payload\\":{\\"test\\":"+str(i)+",\\"value\\":"+str(results[i]).lower()+"} }")
+  if (res == None):
+    res = ${method_type == 'String' ? '""' : '0'}
+  print("{\\"type\\":\\"test\\",\\"payload\\":{\\"test\\":"+str(i)+",\\"result\\":${method_type == 'String' ? '\\""+str(res)+"\\"' : '"+str(res)+"'},\\"value\\":"+str(results[i]).lower()+"} }")
 `
 
 }

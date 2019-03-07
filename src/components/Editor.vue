@@ -14,11 +14,6 @@ import 'codemirror/mode/python/python'
 export default {
   name: 'Editor',
   props: ['value'],
-  data () {
-    return {
-      canChange: false
-    }
-  },
   watch: {
     value (val) {
       this.setValue(val)
@@ -26,11 +21,9 @@ export default {
   },
   methods: {
     setValue (val) {
-      this.canChange = true
       if (val !== this.editor.getDoc().getValue()) {
         this.editor.getDoc().setValue(val)
       }
-      this.canChange = false
     }
   },
   mounted () {
@@ -38,29 +31,14 @@ export default {
     this.editor = CodeMirror.fromTextArea(textarea, {
       mode: this.$route.params.lang === 'python' ? 'python' : 'text/x-java',
       theme: 'monokai',
-      // styleActiveLine: true,
       lineNumbers: true,
       indentUnit: 4,
       spellcheck: true,
       indentWithTabs: true,
       autoCloseBrackets: true
-      // matchTags: false,
-      // extraKeys: { 'Ctrl-d': 'autocomplete' }
     })
     this.editor.setSize('100%', '100%')
     this.setValue(this.value)
-    this.editor.on('beforeChange', (cm, change) => {
-      if (this.canChange) {
-        return true
-      }
-      const readOnlyLines = [0, 1, 2, cm.doc.size - 3, cm.doc.size - 2, cm.doc.size - 1]
-      if (change.to.line === cm.doc.size - 3 && change.to.ch === 0) {
-        change.cancel()
-      }
-      if (~readOnlyLines.indexOf(change.from.line)) {
-        change.cancel()
-      }
-    })
     this.editor.on('change', cm => {
       this.$emit('update:value', cm.getValue())
     })
@@ -72,13 +50,13 @@ export default {
 .Editor
   height: 100%
   width: 100%
+  padding: 32px 0 0
+  box-shadow: inset 29px 0 0 #363636, inset 30px 0 0 #484848
   .CodeMirror
     flex: 1
     background: transparent
     &-scroll
-      padding: 32px 0
     &-linenumbers
       background: #363636
       border-right: 1px solid #484848
-      background-image: linear-gradient(90deg, transparent, rgba(#363636, .1))
 </style>

@@ -60,8 +60,8 @@ ${
               if (i == 0)
                 System.out.println("{\\"error\\":\\"test\\",\\"payload\\":{\\"message\\":\\"You didn\'t write anything!\\"}}");
               results[i] = false;
-            } 
-            System.out.println("{\\"type\\":\\"test\\",\\"payload\\":{\\"test\\":"+i+",\\"value\\":"+results[i]+"}}");
+            }
+            System.out.println("{\\"type\\":\\"test\\",\\"payload\\":{\\"test\\":"+i+",\\"result\\":${method_type == 'String' ? '\\""+res+"\\"' : '"+res+"'},\\"value\\":"+results[i]+"}}");
           } catch (Exception e) {
             System.setOut(originalStream);
             System.out.println("{\\"error\\":\\"test\\",\\"payload\\":{\\"message\\":\\""+e.toString()+"\\"}}");          

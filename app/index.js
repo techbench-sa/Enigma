@@ -9,6 +9,13 @@ const port = 3000
 
 const Routes = require('./routes')
 
+// FOR DEVELOPMENT
+if (process.argv[2] == 'dev') {
+  global.USER = { id: 1 }
+  console.log('[dev] logged in with id ' + global.USER.id)
+}
+//////////////////
+
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(
@@ -33,4 +40,4 @@ app.use('/', Routes)
 
 // app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/' }));
 
-app.listen(port, () => console.log(`[url] http://localhost:${port}`))
+app.listen(port, () => console.log('\033[0;32m' + `[url] http://localhost:${port}` + '\033[0m'))

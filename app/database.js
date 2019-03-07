@@ -11,10 +11,10 @@ const pool = new pg.Pool({
 
 pool.connect(err => {
   if (err) {
-    console.log("[pg] couldn't connect")
+    console.log("\033[0;31m[pg] couldn't connect\033[0m")
     console.error(err)
   } else {
-    console.log('[pg] connected')
+    console.log('\033[0;32m[pg] connected\033[0m')
   }
 })
 
@@ -103,15 +103,21 @@ module.exports = {
     })
   },
 
-  addSubmission: ({ player_id, challenge_id, code, score }) => {
+  addSubmission: ({ player_id, challenge_id, code, score, lang }) => {
     return new Promise((resolve, reject) => {
+      
       pool.query(
-        `UPDATE "submission" SET code='${code}', score=${score} WHERE player_id=${player_id} AND challenge_id=${challenge_id};`,
+        `UPDATE "submission" SET code=$1::text, score=$2::int, language=$3::text WHERE player_id=$4::int AND challenge_id=$5::int;`,
+        [code, score, lang, player_id, challenge_id],
         (err, res) => {
-          if (err) reject(err)
-          if (res.rowCount === 0) {
+          if (err) {
+            console.error('[err] database.js:114')
+            reject(err)
+          }
+          if (res && res.rowCount === 0) {
             pool.query(
-              `INSERT INTO "submission" (player_id, challenge_id, code, score, language) VALUES (${player_id}, ${challenge_id}, '${code}', ${score}, 'Java');`,
+              `INSERT INTO "submission" (player_id, challenge_id, code, score, language) VALUES ($1::int, $2::int, $3::text, $4::int, $5::text);`,
+              [player_id, challenge_id, code, score, lang],
               (err, res) => {
                 if (err) reject(err)
                 else resolve()

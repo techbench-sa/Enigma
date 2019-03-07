@@ -33,18 +33,18 @@
 </template>
 
 <script>
-import api from '../api'
 import { mapGetters } from 'vuex'
 
 export default {
   name: 'Home',
   computed: { ...mapGetters(['challenges', 'user']) },
-  methods: {test(id, state) {
-    api.changeVisibility(id, state)
-  }},
+  methods: {
+    test (id) {
+      this.$store.dispatch('changeVisibility', id)
+    }
+  },
   mounted () {
     this.$store.dispatch('fetchChallenges')
-    this.$store.dispatch('fetchUser')
   }
 }
 </script>

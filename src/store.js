@@ -1,8 +1,13 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import Toastify from 'toastify-js'
 import api from '@/api'
 
 Vue.use(Vuex)
+
+const createToast = (text, type) => Toastify({ text, duration: 3000, newWindow: true, close: true, className: type})
+
+const connectionLostToast = createToast('Connection lost!', 'error')
 
 export default new Vuex.Store({
   state: {
@@ -15,12 +20,12 @@ export default new Vuex.Store({
     'CHALLENGES_SUCCESS': (state, payload) => {
       state.challenges = payload
     },
-    'CHALLENGES_FAILURE': () => {},
+    'CHALLENGES_FAILURE': () => { connectionLostToast.showToast() },
     'USER_REQUEST': () => {},
     'USER_SUCCESS': (state, payload) => {
       state.user = payload
     },
-    'USER_FAILURE': () => {},
+    'USER_FAILURE': () => { connectionLostToast.showToast() },
     'CHALLENGE_REQUEST': () => {},
     'CHALLENGE_SUCCESS': (state, payload) => {
       const i = state.challenges.findIndex(challenge => challenge.id === payload.id)
@@ -31,7 +36,16 @@ export default new Vuex.Store({
         state.challenges.push(payload)
       }
     },
-    'CHALLENGE_FAILURE': () => {}
+    'CHALLENGE_FAILURE': () => { connectionLostToast.showToast() },
+    'CHANGE_VISIBILITY_REQUEST': () => {},
+    'CHANGE_VISIBILITY_SUCCESS': (state, payload) => {
+      const i = state.challenges.findIndex(challenge => challenge.id === payload)
+      const challenge = state.challenges[i]
+      if (i !== -1) {
+        state.challenges.splice(i, 1, { ...challenge, hidden: !challenge.hidden })
+      }
+    },
+    'CHANGE_VISIBILITY_FAILURE': () => { connectionLostToast.showToast() }
   },
   actions: {
     fetchChallenges: context => {
@@ -54,6 +68,19 @@ export default new Vuex.Store({
           return res.data
         }).catch(err => {
           context.commit('USER_FAILURE', err)
+          return {}
+        })
+    },
+    changeVisibility: (context, id) => {
+      context.commit('CHANGE_VISIBILITY_REQUEST', id)
+      const i = context.getters.challenges.findIndex(challenge => challenge.id === id)
+      const challenge = context.getters.challenges[i]
+      return api.changeVisibility(id, !challenge.hidden)
+        .then(res => {
+          context.commit('CHANGE_VISIBILITY_SUCCESS', id)
+          return res.data
+        }).catch(() => {
+          context.commit('CHANGE_VISIBILITY_FAILURE')
           return {}
         })
     },

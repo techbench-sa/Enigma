@@ -1,7 +1,9 @@
 <template lang="pug">
 .Navbar(:class="{collapsed}")
   .container
-    router-link.brand(:to="'/'") Hackathon System
+    router-link.brand(:to="'/'")
+      Icon.back(:class="{showBack}") arrow_back_ios
+      | Hackathon System
     .list(v-if="$store.state.user.id")
       router-link.item(:to="'/challenges'" v-if="$store.state.user.type == 2")
         Icon assignment
@@ -31,6 +33,9 @@ export default {
   computed: {
     collapsed () {
       return this.scrollTop > 64
+    },
+    showBack () {
+      return ['/', '/logout', '/login'].indexOf(this.$route.fullPath) == -1
     }
   },
   mounted () {
@@ -56,6 +61,15 @@ export default {
   height: 7.2rem
   background-color: $color-background
   box-shadow: 0 0 .4rem rgba(0, 0, 0, 0)
+  .back
+    opacity: 0
+    font-size: 1.8rem
+    margin-left: -0.6rem
+    margin-right: 0.6rem
+    transition: opacity .2s ease-in-out, margin .2s ease-in-out
+    &.showBack
+      opacity: 1
+      margin: 0
   &.collapsed
     height: 4.8rem
     background-color: #101010

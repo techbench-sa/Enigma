@@ -1,7 +1,7 @@
+const crypto = require('crypto');
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 const database = require('./database')
-
 passport.serializeUser(function (user, done) {
   done(null, user.id)
 })
@@ -20,10 +20,11 @@ passport.deserializeUser((id, done) => {
 passport.use(
   'local',
   new LocalStrategy((username, password, done) => {
+    const hashed = crypto.createHash('sha256').update(password).digest('base64')
     database
       .getUserByUsername(username)
       .then(res => {
-        if (password !== res.password) {
+        if (hashed !== res.password) {
           return done(null, false, {
             message: 'You have entered an invalid username or password.'
           })

@@ -6,6 +6,7 @@ const path = require('path')
 const database = require('./database')
 const passport = require('./passport')
 
+// require('./handlers') // TODO: fix this
 const userHandler = require('./handlers/user')
 const challengesHandler = require('./handlers/challenges')
 const challengeHandler = require('./handlers/challenge')
@@ -22,6 +23,9 @@ const genericHandler = (req, res, next) => {
 }
 
 function isUserAuthenticated (req, res, next) {
+  // FOR DEVELOPMENT
+  if (global.USER) req.user = global.USER
+  //////////////////
   if (req.user) {
     next()
   } else {

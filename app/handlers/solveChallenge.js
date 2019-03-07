@@ -10,6 +10,9 @@ const {
 const database = require('../database')
 
 module.exports = (req, res, next) => {
+  // FOR DEVELOPMENT
+  if (global.USER) req.user = global.USER
+  //////////////////
   const Joi = require('joi')
   const data = req.body
   const schema = Joi.object().keys({
@@ -18,8 +21,9 @@ module.exports = (req, res, next) => {
     submission: Joi.string().required()
   })
   Joi.validate(data, schema, async (err, value) => {
-    console.log(err)
     if (err) {
+      console.error('\033[0;31m[err] solveChallenge.js:24\033[0m')
+      console.log(err)
       res.status(422).json({
         status: 'error',
         message: 'Invalid request data',
@@ -48,6 +52,7 @@ module.exports = (req, res, next) => {
           generateSubmission(lang, challenge, submission)
         )
       } catch (err) {
+        console.error('\033[0;31m[err] solveChallenge.js:55\033[0m')
         console.log(err)
         res.json({ error: 'Unexpected Error...', code: 1 })
       }
@@ -55,7 +60,10 @@ module.exports = (req, res, next) => {
       const { response, code } = await compile(
         lang,
         submissionFileDirectory
-      ).catch(err => console.log(err))
+      ).catch(err => {
+        console.error('\033[0;31m[err] solveChallenge.js:64\033[0m')
+        console.log(err)
+      })
       if (code === 0) {
         const results = JSON.parse(
           '[' + response.trim().replace(/\n/g, ',') + ']'
@@ -64,10 +72,12 @@ module.exports = (req, res, next) => {
           player_id: userID,
           challenge_id: challenge.id,
           code: submission,
-          score: results.filter(result => result.payload.value).length
+          score: results.filter(result => result.payload.value).length,
+          lang
         })
         res.json({ results, code })
       } else if (code === 1) {
+
         res.json({ error: response.replace(/\/.*\//g, ''), code })
       }
     }

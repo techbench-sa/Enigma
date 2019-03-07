@@ -55,10 +55,10 @@ CREATE TABLE "user" (
 
 INSERT INTO "user" ("name", "username", "password", "type")
     VALUES
-        ('Mohammed Alobaidi', 'mohalobaidi', 'qwertyqwerty', 2),
-        ('Hadi Albinsaad', 'hadi', 'hadi', 1),
-        ('Admin', 'admin', 'hadi', 2),
-        ('player', 'John Smith', 0, 0)
+        ('Mohammed Alobaidi',   'mohalobaidi',  'HO5G7VT6BfPPBKop6EXSA+g+Xe/7GJ6EFVfkLdlILdo=', 1), -- qwertyqwerty
+        ('Hadi Albinsaad',      'hadi',         'fntZQTUb/h4j43/7BmWhBBpoLs0sgYkFTMyUsW06Ic0=', 1), -- hadi
+        ('Admin',               'admin',        'fntZQTUb/h4j43/7BmWhBBpoLs0sgYkFTMyUsW06Ic0=', 2), -- hadi
+        ('John Smith',          'player',       'X+zrZv/IbzjZUnhsbWlsecLbwjndTpG0ZynXOif7V+k=', 0)  -- 0
     ;
 --
 -- Table structure for table "challenge"

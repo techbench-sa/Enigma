@@ -35,5 +35,3 @@ if (typeof require.context === 'undefined') {
 }
 
 const handlers = require.context('./', true, /^(?!index\.js).*\.js$/)
-
-console.log(handlers.keys())
