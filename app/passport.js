@@ -22,7 +22,7 @@ passport.use(
   new LocalStrategy((username, password, done) => {
     const hashed = crypto.createHash('sha256').update(password).digest('base64')
     database
-      .getUserByUsername(username)
+      .getUserByUsername(username.trim().toLowerCase())
       .then(res => {
         if (hashed !== res.password) {
           return done(null, false, {
