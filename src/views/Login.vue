@@ -11,7 +11,7 @@
         br
         br
         label password
-        input(type="text" name="password")
+        input(type="password" name="password")
         br
         br
         br
