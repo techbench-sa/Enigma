@@ -44,7 +44,7 @@ Password for user admin: hadi
 ## Installing and setting up the project
 
 - Install and Setup [Nodejs](http://nodejs.org)
-- Go to the `hackathon-system` folder in terminal and execute these commands:
+- Go to the `enigma` folder in terminal and execute these commands:
 
 ```bash
 $ npm install
