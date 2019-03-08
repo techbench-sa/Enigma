@@ -5,6 +5,9 @@
       Icon.back(:class="{showBack}") arrow_back_ios
       | Enigma
     .list(v-if="$store.state.user.id")
+      router-link.item(:to="'/users'" v-if="$store.state.user.type == 0")
+        Icon assignment
+        | Users
       router-link.item(:to="'/challenges'" v-if="$store.state.user.type == 0")
         Icon assignment
         | Challenges
