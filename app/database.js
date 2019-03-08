@@ -99,6 +99,18 @@ module.exports = {
     })
   },
 
+  changeVisibilityForAll: (type) => {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `UPDATE "challenge" SET type=${+type}`,
+        (err, res) => {
+          if (err) reject(err)
+          else resolve(res)
+        }
+      )
+    })
+  },
+
   changeVisibility: (id, type) => {
     return new Promise((resolve, reject) => {
       pool.query(
