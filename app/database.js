@@ -7,6 +7,7 @@ const getChallengesQuery = id => `
   (SELECT score, challenge_id FROM "submission" WHERE player_id=${id}) AS s
   ON challenge.id =  s.challenge_id
   WHERE type IN (SELECT type FROM "user" WHERE id=${id}) OR 0 IN (SELECT type FROM "user" WHERE id=${id})
+  ORDER BY id
   ;
 `
 
@@ -101,7 +102,7 @@ module.exports = {
   changeVisibility: (id, type) => {
     return new Promise((resolve, reject) => {
       pool.query(
-        `UPDATE "challenge" SET type=${+!!type} WHERE id=${+id}`,
+        `UPDATE "challenge" SET type=${+type} WHERE id=${+id}`,
         (err, res) => {
           if (err) reject(err)
           else resolve(res)
