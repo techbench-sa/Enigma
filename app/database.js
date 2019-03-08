@@ -99,6 +99,18 @@ module.exports = {
     })
   },
 
+  changeAllUsersType: (type) => {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `UPDATE "user" SET type=${+type} WHERE type <> 0`,
+        (err, res) => {
+          if (err) reject(err)
+          else resolve(res)
+        }
+      )
+    })
+  },
+
   changeVisibilityForAll: (type) => {
     return new Promise((resolve, reject) => {
       pool.query(
