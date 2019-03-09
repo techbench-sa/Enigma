@@ -11,6 +11,12 @@
       router-link.item(:to="'/challenges'" v-if="$store.state.user.type == 0")
         Icon assignment
         | Challenges
+      router-link.item(:to="'/users'" v-if="$store.state.user.type == 0")
+        Icon people
+        | users
+      router-link.item(:to="'/leaderboard'" v-if="$store.state.user.type == 0")
+        Icon show_chart
+        | leaderbaord
       router-link.item(:to="'/create'"  v-if="$store.state.user.type == 0")
         Icon add
         | Create
@@ -20,9 +26,9 @@
         | Logout
     .list(v-if="!$store.state.user.id")
     .list(v-if="!$store.state.user.id")
-      .item
+      .item(@click="$router.history.push($route.name == 'login' ? '/register' : '/login')")
         Icon power_settings_new
-        | Register
+        | {{ $route.name == 'login' ? 'Register' : 'Login' }}
 </template>
 
 <script>
@@ -38,7 +44,7 @@ export default {
       return this.scrollTop > 64
     },
     showBack () {
-      return ['/', '/logout', '/login'].indexOf(this.$route.fullPath) == -1
+      return ['/', '/logout', '/login', '/register'].indexOf(this.$route.fullPath) === -1
     }
   },
   mounted () {

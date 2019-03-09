@@ -4,7 +4,7 @@
     header
       h1 Login
     form(action="login" method="POST").row
-      .column.column-33.column-offset-33
+      .column.column-33.column-offset-33.column-sm-50.column-sm-offset-25.column-xs-80.column-xs-offset-10
         Alert(v-if="error" type="error") {{ error }}
         label username
         input(type="text" name="username")

@@ -38,7 +38,7 @@
 import { mapGetters } from 'vuex'
 
 export default {
-  name: 'Home',
+  name: 'Challenges',
   computed: { ...mapGetters(['challenges', 'user']) },
   methods: {
     test (id) {

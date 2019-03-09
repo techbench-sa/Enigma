@@ -10,7 +10,7 @@ passport.deserializeUser((id, done) => {
   database
     .getUserByID(id)
     .then(res => {
-      done(null, { id, username: res.username })
+      done(null, { id, username: res.username, type: res.type })
     })
     .catch(err => {
       done({})

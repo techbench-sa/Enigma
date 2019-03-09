@@ -26,4 +26,10 @@ export default {
   grid-template-columns: repeat(var(--cols), 1fr)
   grid-column-gap: 24px
   grid-row-gap: 24px
+  @media (max-width: 80.0rem)
+    grid-template-columns: repeat(3, 1fr)
+  @media (max-width: 60.0rem)
+    grid-template-columns: repeat(2, 1fr)
+  @media (max-width: 40.0rem)
+    grid-template-columns: repeat(1, 1fr)
 </style>

@@ -48,6 +48,8 @@ CREATE TABLE "user" (
     "id" SERIAL,
     "name" VARCHAR(40) NOT NULL,
     "username" VARCHAR(40) NOT NULL,
+    "email" VARCHAR(40),
+    "phone_number" VARCHAR(40),
     "password" TEXT NOT NULL,
     "type" SMALLINT NOT NULL DEFAULT 2,
     PRIMARY KEY (id)

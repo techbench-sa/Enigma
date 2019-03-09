@@ -27,9 +27,9 @@ app.use(
 app.use('/', express.static('./dist'))
 app.use(
   session({
-    secret: 'passport-tutorial',
+    secret: '6NwMtfKpv7OZyUdAlkZ6',
     resave: false,
-    saveUninitialized: false
+    saveUninitialized: false,
   })
 )
 app.use(passport.initialize())

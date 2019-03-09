@@ -7,7 +7,10 @@ const database = require('./database')
 const passport = require('./passport')
 
 // require('./handlers') // TODO: fix this
+const registereHandler = require('./handlers/register')
 const userHandler = require('./handlers/user')
+const usersHandler = require('./handlers/users')
+const changeUserTypeHandler = require('./handlers/changeUserType')
 const challengesHandler = require('./handlers/challenges')
 const challengeHandler = require('./handlers/challenge')
 const solveChallengeHandler = require('./handlers/solveChallenge')
@@ -30,6 +33,20 @@ function isUserAuthenticated (req, res, next) {
     next()
   } else {
     res.status(401).json({ error: 'not logged in!' })
+  }
+}
+
+function isUserAdmin (req, res, next) {
+  // FOR DEVELOPMENT
+  if (global.USER) {
+    req.user = global.USER
+    next()
+  }
+  //////////////////
+  else if (req.user && req.user.type === 0) {
+    next()
+  } else {
+    res.status(401).json({ error: 'not admin!' })
   }
 }
 
@@ -61,16 +78,25 @@ router.get('/logout', (req, res) => {
   res.redirect('/')
 })
 
+// For anyone
+router.post('/register', registereHandler)
+
 router.get('/api/user', userHandler)
 
+// For players only
 router.get('/api/challenges', isUserAuthenticated, challengesHandler)
 
 router.get('/api/challenge/:id', isUserAuthenticated, challengeHandler)
 
 router.post('/api/submit', isUserAuthenticated, solveChallengeHandler)
 
-router.post('/api/addChallenge', isUserAuthenticated, addChallengeHandler)
+// For admins only
+router.get('/api/users', isUserAdmin, usersHandler)
 
-router.post('/api/changeVisibility', isUserAuthenticated, changeVisibilityHandler)
+router.post('/api/changeUserType', isUserAdmin, changeUserTypeHandler)
+
+router.post('/api/addChallenge', isUserAdmin, addChallengeHandler)
+
+router.post('/api/changeVisibility', isUserAdmin, changeVisibilityHandler)
 
 module.exports = router

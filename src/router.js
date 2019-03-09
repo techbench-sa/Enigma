@@ -37,12 +37,33 @@ const router = new Router({
       component: () => import('./views/Login.vue')
     },
     {
+      path: '/register',
+      name: 'register',
+      component: () => import('./views/Register.vue')
+    },
+    {
       path: '/challenges',
-      name: 'challenge',
+      name: 'challenges',
       meta: {
         requiresAuth: true
       },
       component: () => import('./views/Challenges.vue')
+    },
+    {
+      path: '/users',
+      name: 'users',
+      meta: {
+        requiresAuth: true
+      },
+      component: () => import('./views/Users.vue')
+    },
+    {
+      path: '/leaderboard',
+      name: 'leaderboard',
+      meta: {
+        requiresAuth: true
+      },
+      component: () => import('./views/Leaderboard.vue')
     }
   ]
 })
