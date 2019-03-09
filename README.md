@@ -58,11 +58,11 @@ You can see the project now at http://localhost:3000
 
 ## Things to do
 
-- Make a proper authentication
 - Add new languages
 - Improve the new design
 - Make it mobile-friendly!
 - sanitize and validate players submissions
+- ~~Make a proper authentication~~
 - ~~Design database structure~~
 - ~~Start using ESLint~~
 - ~~Add form validations~~
