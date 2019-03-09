@@ -1,8 +1,18 @@
 const pg = require('pg')
 // const fs = require('fs')
 
+const getChallengesQuery = id => `
+  SELECT id, name, description, points, COALESCE(s.score,0) score, type FROM "challenge"  
+  LEFT JOIN 
+  (SELECT score, challenge_id FROM "submission" WHERE player_id=${id}) AS s
+  ON challenge.id =  s.challenge_id
+  WHERE type IN (SELECT type FROM "user" WHERE id=${id}) OR 0 IN (SELECT type FROM "user" WHERE id=${id})
+  ORDER BY id
+  ;
+`
+
 const pool = new pg.Pool({
-  database: 'hackathon',
+  database: 'enigma',
   host: 'localhost',
   password: 'hadi',
   port: 5432,
@@ -11,10 +21,10 @@ const pool = new pg.Pool({
 
 pool.connect(err => {
   if (err) {
-    console.log("\033[0;31m[pg] couldn't connect\033[0m")
+    console.log("[pg] couldn't connect")
     console.error(err)
   } else {
-    console.log('\033[0;32m[pg] connected\033[0m')
+    console.log('\033[0;32m' +'[pg] connected' + '\033[0m')
   }
 })
 
@@ -54,15 +64,10 @@ module.exports = {
 
   getChallenges: id => {
     return new Promise((resolve, reject) => {
-      pool.query(
-        `SELECT id, name, description, points, COALESCE(s.score,0) AS score, hidden
-        FROM "challenge" c LEFT JOIN (SELECT  score, challenge_id FROM "submission" WHERE player_id=${id}) AS s
-        ON c.id =  s.challenge_id;`,
-        (err, res) => {
-          if (err) reject(err)
-          else resolve(res.rows)
-        }
-      )
+      pool.query(getChallengesQuery(id), (err, res) => {
+        if (err) reject(err)
+        else resolve(res.rows)
+      })
     })
   },
 
@@ -94,30 +99,51 @@ module.exports = {
     })
   },
 
-  changeVisibility: (id, hidden) => {
+  changeAllUsersType: (type) => {
     return new Promise((resolve, reject) => {
-      pool.query(`UPDATE "challenge" SET hidden=${+!!hidden} WHERE id=${+id}`, (err, res) => {
-        if (err) reject(err)
-        else resolve(res)
-      })
+      pool.query(
+        `UPDATE "user" SET type=${+type} WHERE type <> 0`,
+        (err, res) => {
+          if (err) reject(err)
+          else resolve(res)
+        }
+      )
     })
   },
 
-  addSubmission: ({ player_id, challenge_id, code, score, lang }) => {
+  changeVisibilityForAll: (type) => {
     return new Promise((resolve, reject) => {
-      
       pool.query(
-        `UPDATE "submission" SET code=$1::text, score=$2::int, language=$3::text WHERE player_id=$4::int AND challenge_id=$5::int;`,
-        [code, score, lang, player_id, challenge_id],
+        `UPDATE "challenge" SET type=${+type}`,
         (err, res) => {
-          if (err) {
-            console.error('[err] database.js:114')
-            reject(err)
-          }
-          if (res && res.rowCount === 0) {
+          if (err) reject(err)
+          else resolve(res)
+        }
+      )
+    })
+  },
+
+  changeVisibility: (id, type) => {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `UPDATE "challenge" SET type=${+type} WHERE id=${+id}`,
+        (err, res) => {
+          if (err) reject(err)
+          else resolve(res)
+        }
+      )
+    })
+  },
+
+  addSubmission: ({ player_id, challenge_id, code, score }) => {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `UPDATE "submission" SET code='${code}', score=${score} WHERE player_id=${player_id} AND challenge_id=${challenge_id};`,
+        (err, res) => {
+          if (err) reject(err)
+          if (res.rowCount === 0) {
             pool.query(
-              `INSERT INTO "submission" (player_id, challenge_id, code, score, language) VALUES ($1::int, $2::int, $3::text, $4::int, $5::text);`,
-              [player_id, challenge_id, code, score, lang],
+              `INSERT INTO "submission" (player_id, challenge_id, code, score, language) VALUES (${player_id}, ${challenge_id}, '${code}', ${score}, 'Java');`,
               (err, res) => {
                 if (err) reject(err)
                 else resolve()

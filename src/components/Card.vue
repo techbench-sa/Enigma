@@ -1,5 +1,5 @@
 <template lang="pug">
-.ChallengeCard(:class="`${color} ${hidden ? 'hidden': ''}`")
+.ChallengeCard(:class="`${color} ${type ? 'type': ''}`")
     .title {{ name }}
     .body {{ description }}
     .actions(v-if="color == 'green'")
@@ -13,7 +13,7 @@
 
 export default {
   name: 'Card',
-  props: ['id', 'name', 'description', 'points', 'score', 'hidden'],
+  props: ['id', 'name', 'description', 'points', 'score', 'type'],
   computed: {
     color () {
       return this.score >= this.points ? 'green' : this.score > 0 ? 'yellow' : ''

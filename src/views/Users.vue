@@ -1,5 +1,5 @@
 <template lang="pug">
-#Challenges
+#Users
   .container
     table
       colgroup
@@ -7,22 +7,20 @@
         col(width="0%")
         col(width="100%")
         col(width="0%")
-        // col(width="0%")
+        col(width="0%")
       thead
         tr
           th ID
-          th Title
-          th Description
-          // th Points
-          th Visibility
+          th Name
+          th Points
+          th Active Inactive
       tbody
         // Button(@click="test(0, true)") Show All
         // Button.red(@click="test(-1, false)") Hide All
-        tr(v-for="challenge in challenges")
-          td.center {{challenge.id}}
-          td {{challenge.name}}
-          td(style="max-width: 1px") {{challenge.description}}
-          // td.center {{challenge.points}}
+        tr(v-for="user in users")
+          td.center {{user.id}}
+          td {{user.name}}
+          // td.center {{user.points}}
           td.center
             Button(v-if="challenge.type == 1" hoverMessage="Hide" @click="test(challenge.id, true)") Visible
             Button.red(v-if="challenge.type == 0"  hoverMessage="Show" @click="test(challenge.id, false)") Hidden

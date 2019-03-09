@@ -1,8 +1,8 @@
 <!-- markdownlint-disable MD001 MD014 -->
 
-# Hackathon System
+# Enigma (Hackathon System)
 
-**Hackathon System** _(Temporary name)_ is an automated system to upload, compile and judge players submissions of programming problems. Currently, it's supporting Java and Python for solving problems.
+**Enigma** is an automated system to upload, compile and judge players submissions of programming problems. Currently, it's supporting Java and Python for solving problems.
 
 ## Setting up the database
 
@@ -44,7 +44,7 @@ Password for user admin: hadi
 ## Installing and setting up the project
 
 - Install and Setup [Nodejs](http://nodejs.org)
-- Go to the `hackathon-system` folder in terminal and execute these commands:
+- Go to the `enigma` folder in terminal and execute these commands:
 
 ```bash
 $ npm install

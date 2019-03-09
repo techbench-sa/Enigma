@@ -3,12 +3,12 @@
   .container
     router-link.brand(:to="'/'")
       Icon.back(:class="{showBack}") arrow_back_ios
-      | Hackathon System
+      | Enigma
     .list(v-if="$store.state.user.id")
-      router-link.item(:to="'/challenges'" v-if="$store.state.user.type == 2")
+      router-link.item(:to="'/challenges'" v-if="$store.state.user.type == 0")
         Icon assignment
         | Challenges
-      router-link.item(:to="'/create'"  v-if="$store.state.user.type == 2")
+      router-link.item(:to="'/create'"  v-if="$store.state.user.type == 0")
         Icon add
         | Create
     .list(v-if="$store.state.user.id")
