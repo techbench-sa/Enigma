@@ -17,9 +17,9 @@
         | Logout
     .list(v-if="!$store.state.user.id")
     .list(v-if="!$store.state.user.id")
-      .item
+      .item(@click="$router.history.push($route.name == 'login' ? '/register' : '/login')")
         Icon power_settings_new
-        | Register
+        | {{ $route.name == 'login' ? 'Register' : 'Login' }}
 </template>
 
 <script>
@@ -35,7 +35,7 @@ export default {
       return this.scrollTop > 64
     },
     showBack () {
-      return ['/', '/logout', '/login'].indexOf(this.$route.fullPath) == -1
+      return ['/', '/logout', '/login', '/register'].indexOf(this.$route.fullPath) == -1
     }
   },
   mounted () {

@@ -7,6 +7,7 @@ const database = require('./database')
 const passport = require('./passport')
 
 // require('./handlers') // TODO: fix this
+const registereHandler = require('./handlers/register')
 const userHandler = require('./handlers/user')
 const challengesHandler = require('./handlers/challenges')
 const challengeHandler = require('./handlers/challenge')
@@ -61,6 +62,8 @@ router.get('/logout', (req, res) => {
   res.redirect('/')
 })
 
+router.post('/register', registereHandler)
+
 router.get('/api/user', userHandler)
 
 router.get('/api/challenges', isUserAuthenticated, challengesHandler)
@@ -72,5 +75,6 @@ router.post('/api/submit', isUserAuthenticated, solveChallengeHandler)
 router.post('/api/addChallenge', isUserAuthenticated, addChallengeHandler)
 
 router.post('/api/changeVisibility', isUserAuthenticated, changeVisibilityHandler)
+
 
 module.exports = router

@@ -128,5 +128,22 @@ module.exports = {
         }
       )
     })
+  },
+
+  registerUser: ({ name, username, email, phoneNumber, password }) => {
+    return new Promise((resolve, reject) => {
+      pool.query(
+        `INSERT INTO "user" (name, username, email, phone_number, password) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text);`,
+        [name, username, email, phoneNumber, password],
+        (err, res) => {
+          if (err) {
+            console.log(err)
+            reject(err)
+          } else {
+            resolve()
+          }
+        }
+      )
+    })
   }
 }
