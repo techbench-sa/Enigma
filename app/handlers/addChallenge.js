@@ -49,14 +49,20 @@ module.exports = (req, res, next) => {
       )
       .error(err => 'Paremeters are required.')
   })
-
   Joi.validate(data, schema, async (err, value) => {
-    if (err) {
+    if (JSON.stringify(value) === '{}') {
       res.status(422).json({
         status: 'error',
-        message: err.details
+        message: [{ message: 'You didn\'t write anything!'}]
+      })
+    } else if (err) {
+      console.log(err)
+      res.status(422).json({
+        status: 'error',
+        message: err.details[0].message
       })
     } else {
+      console.log('========================================')
       database.addChallenge(value).then(id => res.json(id))
     }
   })
