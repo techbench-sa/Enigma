@@ -8,6 +8,12 @@
       router-link.item(:to="'/challenges'" v-if="$store.state.user.type == 0")
         Icon assignment
         | Challenges
+      router-link.item(:to="'/users'" v-if="$store.state.user.type == 0")
+        Icon people
+        | users
+      router-link.item(:to="'/leaderboard'" v-if="$store.state.user.type == 0")
+        Icon show_chart
+        | leaderbaord
       router-link.item(:to="'/create'"  v-if="$store.state.user.type == 0")
         Icon add
         | Create
@@ -35,7 +41,7 @@ export default {
       return this.scrollTop > 64
     },
     showBack () {
-      return ['/', '/logout', '/login', '/register'].indexOf(this.$route.fullPath) == -1
+      return ['/', '/logout', '/login', '/register'].indexOf(this.$route.fullPath) === -1
     }
   },
   mounted () {

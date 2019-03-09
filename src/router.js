@@ -43,11 +43,27 @@ const router = new Router({
     },
     {
       path: '/challenges',
-      name: 'challenge',
+      name: 'challenges',
       meta: {
         requiresAuth: true
       },
       component: () => import('./views/Challenges.vue')
+    },
+    {
+      path: '/users',
+      name: 'users',
+      meta: {
+        requiresAuth: true
+      },
+      component: () => import('./views/Users.vue')
+    },
+    {
+      path: '/leaderboard',
+      name: 'leaderboard',
+      meta: {
+        requiresAuth: true
+      },
+      component: () => import('./views/Leaderboard.vue')
     }
   ]
 })

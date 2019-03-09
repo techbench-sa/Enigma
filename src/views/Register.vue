@@ -4,7 +4,7 @@
     header
       h1 Register
     form(action="register" method="POST").row
-      .column.column-33.column-offset-33
+      .column.column-33.column-offset-33.column-sm-60.column-sm-offset-20.column-xs-80.column-xs-offset-10
         Alert(v-if="error" :type="this.$route.query.type") {{ error }}
         .row
           .column

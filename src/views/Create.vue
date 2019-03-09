@@ -8,7 +8,7 @@
     .row
       .column
         .row
-          .column.column-60
+          .column.column-50
               label Challenge Title
               input(type="text" v-model="challenge.name" required)
           .column.column-40

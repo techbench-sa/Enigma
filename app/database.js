@@ -11,15 +11,17 @@ const GET_CHALLENGES = `
   ORDER BY id
   ;
 `
-const ADD_CHALLENGE = `INSERT INTO "challenge" (name, description, method_name, method_type, tests, parameters, points) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text, $6::text, $7::int)`
-const CHANGE_CHALLENGE_VISIBILITY = 'UPDATE "challenge" SET type=$1::int WHERE id=$2::int'
-const CHANGE_CHALLENGES_VISIBILITY = 'UPDATE "challenge" SET type=$1::int'
+const ADD_CHALLENGE = `INSERT INTO "challenge" (name, description, method_name, method_type, tests, parameters, points) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text, $6::text, $7::int);`
+const CHANGE_CHALLENGE_VISIBILITY = 'UPDATE "challenge" SET type=$1::int WHERE id=$2::int;'
+const CHANGE_CHALLENGES_VISIBILITY = 'UPDATE "challenge" SET type=$1::int;'
 
 const ADD_USER = 'INSERT INTO "user" (name, username, email, phone_number, password) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text);'
 const GET_USER_BY_USERNAME = 'SELECT * FROM "user" WHERE username=$1::text;'
 const GET_USER_BY_ID = 'SELECT * FROM "user" WHERE id=$1::int;'
+const GET_USERS = 'SELECT * FROM "user";'
 const GET_USER_SCORE = 'SELECT sum(score) FROM "submission" WHERE player_id=$1::int;'
-const ACTIVATE_USERS = 'UPDATE "user" SET type=$1::int WHERE type <> 0'
+const CHANGE_USER_TYPE_BY_ID = 'UPDATE "user" SET type=$2::int WHERE id=$1::int;'
+const CHANGE_USERS_TYPE = 'UPDATE "user" SET type=$1::int WHERE type <> 0;'
 
 const ADD_SUBMISSION = 'INSERT INTO "submission" (player_id, challenge_id, code, score, language) VALUES ($1::int, $2::int, $3::text, $4::int, $5::text);'
 const UPDATE_SUBMISSION = 'UPDATE "submission" SET code=$3::text, score=$4::int, language=$5::text WHERE player_id=$1::int AND challenge_id=$2::int;'
@@ -54,6 +56,12 @@ module.exports = {
     }).catch(() => {})
   },
 
+  getUsers: () => {
+    return pool.query(GET_USERS).then(res => {
+      return res.rows
+    })
+  },
+
   getScore: id => {
     return pool.query(GET_USER_SCORE, [id]).then(res => {
       return res.rows[0].sum || 0
@@ -84,8 +92,12 @@ module.exports = {
     ]).then(res => res.insertId)
   },
 
-  changeAllUsersType: type => {
-    return pool.query(ACTIVATE_USERS, [+type])
+  changeUserType: (id, type) => {
+    return pool.query(CHANGE_USER_TYPE_BY_ID, [id, +type])
+  },
+
+  changeUsersType: type => {
+    return pool.query(CHANGE_USERS_TYPE, [+type])
   },
 
   changeVisibilityForAll: type => {

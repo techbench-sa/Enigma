@@ -10,7 +10,6 @@
         .column.column-33.column-offset-33
     Grid(:cols="4")
       Card( v-for="(challenge, i) in challenges" :key="i" v-bind="challenge")
-      Card( v-for="(challenge, i) in challenges" :key="i" v-bind="challenge")
 </template>
 
 <script>

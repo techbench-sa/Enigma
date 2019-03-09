@@ -1,41 +1,29 @@
 <template lang="pug">
 #Users
   .container
+    header
+      h1  Leaderboard
     table
       colgroup
         col(width="0%")
-        col(width="25%")
-        col(width="25%")
-        col(width="20%")
-        col(width="20%")
+        col(width="90%")
         col(width="10%")
       thead
         tr
-          th ID
-          th Name
-          th Username
-          th Email
-          th Phone number
-          th.center state
+          th.center RANK
+          th NAME
       tbody
         //- Button(@click="test(0, true)") Show All
         //- Button.red(@click="test(-1, false)") Hide All
         tr(v-for="user in users")
-          td.center {{user.id}}
+          td.center(style="font-size: 3.2rem") {{user.id}}
           td {{user.name}}
-          td {{user.username}}
-          td {{user.email}}
-          td {{user.phone_number}}
-          td.center
-            Button(v-if="user.type == 0" disabled) Admin
-            Button(v-if="user.type == 1" hoverMessage="disable" @click="changeUserType(user.id, 2)") Active
-            Button.red(v-if="user.type == 2" hoverMessage="activate" @click="changeUserType(user.id, 1)") Disabled
 </template>
 
 <script>
 import api from '../api'
 export default {
-  name: 'Users',
+  name: 'Leaderboard',
   data () {
     return {
       users: {}
@@ -65,6 +53,14 @@ export default {
 #Users
   .container
     padding: 64px 36px
+    header
+      text-align: center
+      padding: 24px 0
+      h3
+        color: rgba(#fff, .7)
+        span
+          color: #fff
+          padding: 0 12px
   table
     width: 100%
     margin: 64px 0
@@ -72,9 +68,7 @@ export default {
     border-radius: 4px
     overflow: hidden
     box-shadow: 0 2px 8px rgba(0, 0, 0, .2)
-    background-image: linear-gradient(#282828, #242424)
     thead
-      background-color: rgba(73, 80, 87, 0.2)
     th, td
       padding-left: 16px !important
       padding-right: 16px !important
@@ -89,6 +83,8 @@ export default {
       text-align: center
     th
       color: rgba(255, 255, 255, .7)
+    td
+      font-size: 2rem
   .Button
     //width: 50%
     font-size: 14px

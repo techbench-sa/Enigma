@@ -20,7 +20,6 @@
 <script>
 import api from '@/api'
 import { mapGetters } from 'vuex'
-import { timeout } from 'q';
 
 export default {
   name: 'Challenge',
@@ -53,8 +52,8 @@ export default {
       }
     },
     results (results) {
-      const errors = results.filter(res => res.type == 'warning' || res.type == 'wrong').length
-      const correct = results.filter(res => res.type == 'correct').length
+      const errors = results.filter(res => res.type === 'warning' || res.type === 'wrong').length
+      const correct = results.filter(res => res.type === 'correct').length
       this.solved = !errors && !!correct
       if (this.solved) {
         setTimeout(() => { this.$router.history.push(`/`) }, 1000)
@@ -94,18 +93,19 @@ export default {
                 const { inputs, outputs } = this.tests
                 const { test, result, value } = payload
                 const t = i => parameters[i].type
-                const args = inputs.map((v, i) => `<span class="${t(i)}">${t(i) == 'String' ? `"${v[test]}"` : v[test]}</span>`)
-                const out = val => `<span class="${outputType}">${outputType == 'String' ? `"${val}"` : val}</span>`
-                if (payload.value)
+                const args = inputs.map((v, i) => `<span class="${t(i)}">${t(i) === 'String' ? `"${v[test]}"` : v[test]}</span>`)
+                const out = val => `<span class="${outputType}">${outputType === 'String' ? `"${val}"` : val}</span>`
+                if (value) {
                   return {
                     message: `${method}(${args.join(', ')}) <i>returns</i> ${out(result)}`,
                     type: 'correct'
                   }
-                else
+                } else {
                   return {
                     message: `${method}(${args.join(', ')}) <i>should return</i> ${out(outputs[test])} <i>but it returns</i> ${out(result)}`,
                     type: 'wrong'
                   }
+                }
               default:
                 return {
                   message: payload.message,
@@ -236,8 +236,6 @@ export default {
         padding: 24px
         color: rgba(#fff, .87)
         font-weight: 300
-        
-
   &.solved
     .container
       > .wrapper

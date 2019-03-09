@@ -5,7 +5,7 @@ import api from '@/api'
 
 Vue.use(Vuex)
 
-const createToast = (text, type) => Toastify({ text, duration: 3000, newWindow: true, close: true, className: type})
+const createToast = (text, type) => Toastify({ text, duration: 3000, newWindow: true, close: true, className: type })
 
 const connectionLostToast = createToast('Connection lost!', 'error')
 
@@ -97,7 +97,7 @@ export default new Vuex.Store({
     }
   },
   getters: {
-    challenges: state => state.challenges,
+    challenges: state => state.challenges.sort((a, b) => a.id - b.id),
     user: state => state.user
   }
 })
