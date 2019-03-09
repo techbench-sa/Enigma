@@ -34,6 +34,17 @@ function isUserAuthenticated (req, res, next) {
   }
 }
 
+function isUserAdmin (req, res, next) {
+  // FOR DEVELOPMENT
+  if (global.USER) req.user = global.USER
+  //////////////////
+  if (req.user && req.user.type === 0) {
+    next()
+  } else {
+    res.status(401).json({ error: 'not admin!' })
+  }
+}
+
 // router.get('/', isUserAuthenticated, (req, res) => {
 //     console.log('tests')
 // })
@@ -62,19 +73,23 @@ router.get('/logout', (req, res) => {
   res.redirect('/')
 })
 
+// For anyone
 router.post('/register', registereHandler)
 
 router.get('/api/user', userHandler)
 
+// For players only
 router.get('/api/challenges', isUserAuthenticated, challengesHandler)
 
 router.get('/api/challenge/:id', isUserAuthenticated, challengeHandler)
 
 router.post('/api/submit', isUserAuthenticated, solveChallengeHandler)
 
-router.post('/api/addChallenge', isUserAuthenticated, addChallengeHandler)
+// For admins only
+router.get('/api/users', isUserAdmin, challengesHandler)
 
-router.post('/api/changeVisibility', isUserAuthenticated, changeVisibilityHandler)
+router.post('/api/addChallenge', isUserAdmin, addChallengeHandler)
 
+router.post('/api/changeVisibility', isUserAdmin, changeVisibilityHandler)
 
 module.exports = router
