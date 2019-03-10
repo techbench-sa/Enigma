@@ -16,8 +16,8 @@
           // th Points
           th Visibility
       tbody
-        Button.center(@click="test(0, true)") Show All
-        Button.red.center(@click="test(-1, false)") Hide All
+        // Button.center(@click="test(0, true)") Show All
+        // Button.red.center(@click="test(-1, false)") Hide All
         tr(v-for="challenge in challenges")
           td.center {{challenge.id}}
           td {{challenge.name}}

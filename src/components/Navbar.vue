@@ -10,10 +10,10 @@
         | Challenges
       router-link.item(:to="'/users'" v-if="$store.state.user.type == 0")
         Icon people
-        | users
+        | Users
       router-link.item(:to="'/leaderboard'" v-if="$store.state.user.type == 0")
         Icon show_chart
-        | leaderbaord
+        | Leaderbaord
       router-link.item(:to="'/create'"  v-if="$store.state.user.type == 0")
         Icon add
         | Create
