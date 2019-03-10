@@ -16,8 +16,7 @@ export default {
   props: ['id', 'name', 'description', 'points', 'is_solved', 'type'],
   computed: {
     color () {
-      console.log(this.is_solved)
-      return this.is_solved ? 'green' : this.score > 0 ? 'yellow' : ''
+      return +this.is_solved ? 'green' : this.score > 0 ? 'yellow' : ''
     }
   },
   methods: {
