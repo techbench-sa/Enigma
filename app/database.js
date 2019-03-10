@@ -36,6 +36,7 @@ pool.connect(err => {
     console.error(err)
   } else {
     console.log('\x1B[0;32m' + '[pg] connected' + '\x1B[0m')
+    //pool.query(ADD_SUBMISSION, [2, 1, '', 0, 'java', true]) 
   }
 })
 
