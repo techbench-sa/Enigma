@@ -45,6 +45,7 @@ pool.connect(err => {
 
 module.exports = {
   getUserByUsername: username => {
+    console.log("hey hadi")
     return pool.query(GET_USER_BY_USERNAME, [username]).then(res => {
       return { ...res.rows[0] }
     })
