@@ -17,6 +17,8 @@
           th Name
           th Username
           th Email
+          th Phone number
+          th submissions
           th score
           th.center state
       tbody
@@ -25,6 +27,8 @@
           td {{user.name}}
           td {{user.username}}
           td {{user.email}}
+          td {{user.phone_number}}
+          td {{user.submissions}}
           td {{user.score}}
           td.center
             Button(v-if="user.type == 0" disabled) Admin
