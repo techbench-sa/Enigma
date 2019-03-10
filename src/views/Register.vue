@@ -9,18 +9,18 @@
         .row
           .column
             label Full Name
-            input(type="text" placeholder="Hadi Albinsaad" name="name" minlength="4" maxlength="25" required)
+            input(type="text" placeholder="John Smith" name="name" minlength="4" maxlength="25" required)
         .row
           .column
             label Email
-            input(type="email" placeholder="example@gmail.com" name="email" required)
+            input(type="email" placeholder="JohnSmith@example.com" name="email" required)
           .column
             label Phone number
-            input(type="text" placeholder="0512345678" name="phoneNumber" minlength="9" maxlength="21" required)
+            input(type="text" placeholder="05XXXXXXXX" name="phoneNumber" minlength="9" maxlength="21" required)
         .row
           .column
             label Username
-            input(type="text" placeholder="hadi" name="username" minlength="4" maxlength="16" required)
+            input(type="text" placeholder="johnSmith" name="username" minlength="4" maxlength="16" required)
         .row
           .column
             label Password
