@@ -55,11 +55,11 @@ module.exports = {
 
   getUsers: async () => {
     const users = await pool.query(GET_USERS).then(res => res.rows)
-    const submissions = await pool.query(GET_USERS_SUBMISSIONS).then(res => res.rows)
+    const usersSubmissions = await pool.query(GET_USERS_SUBMISSIONS).then(res => res.rows)
     return users.map(user => {
-      let submission = submissions.filter(submission => submission.player_id === user.id)
+      let submissions = usersSubmissions.filter(submission => submission.player_id === user.id)
       if (submission.length == 0)
-        return {...user, score: 0}
+        return {...user, score: 0, submissions: 0}
       const map = submission.reduce((map, {challenge_id: id, is_solved, timestamp}) => {
         const challenge = map.get(id)
 
@@ -84,7 +84,7 @@ module.exports = {
         const sec = time / 1000 | 0;
         return score + (attempts + sec) * is_solved
       }, 0)
-      return {...user, score}
+      return {...user, score, submissions: submissions.length}
     })
   },
 
