@@ -58,7 +58,7 @@ module.exports = {
     return users.map(user => {
       let submissions = usersSubmissions.filter(submission => submission.player_id === user.id)
       if (submissions.length == 0)
-        return {...user, score: 0, submissions: 0}
+        return {...user, score: 0, submissions: 0, solved: 0}
       const map = submissions.reduce((map, {challenge_id: id, is_solved, timestamp}) => {
         const challenge = map.get(id)
 
@@ -83,7 +83,9 @@ module.exports = {
         const sec = time / 1000 | 0
         return score + (attempts + sec) * is_solved
       }, 0)
-      return {...user, score, submissions: submissions.length}
+
+      let solved = new Set(submissions.filter(submission => submissions.is_solved).map(submission => submission.challenge_id)).length
+      return {...user, score, submissions: submissions.length, solved}
     })
   },
 
