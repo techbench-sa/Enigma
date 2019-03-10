@@ -13,10 +13,11 @@
 
 export default {
   name: 'Card',
-  props: ['id', 'name', 'description', 'points', 'score', 'type'],
+  props: ['id', 'name', 'description', 'points', 'is_solved', 'type'],
   computed: {
     color () {
-      return this.score >= this.points ? 'green' : this.score > 0 ? 'yellow' : ''
+      console.log(this.is_solved)
+      return this.is_solved ? 'green' : this.score > 0 ? 'yellow' : ''
     }
   },
   methods: {
