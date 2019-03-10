@@ -18,7 +18,7 @@
 -- Drop if database exists
 \c postgres;
 
-select exists(SELECT datname FROM pg_catalog.pg_database WHERE datname = 'enigma') AS datexists \gset
+select exists(SELECT datname FROM pg_catalog.pg_database WHERE datname = 'enigma') AS datexists; \gset
 
 \if :datexists
     \echo '\033[0;32mOverriding enigma database..\033[0m'
@@ -28,11 +28,11 @@ select exists(SELECT datname FROM pg_catalog.pg_database WHERE datname = 'enigma
 \endif
 
 -- Create admin role if it doesn't exists
-select not exists(SELECT rolname FROM pg_catalog.pg_roles WHERE rolname = 'admin') AS rolexists \gset
+select not exists(SELECT rolname FROM pg_catalog.pg_roles WHERE rolname = 'admin') AS rolexists; \gset
 
 \if :rolexists
     \echo '\033[0;32mCreating admin role..\033[0m'
-    CREATE ROLE admin WITH CREATEDB LOGIN PASSWORD 'hadi'
+    CREATE ROLE admin WITH CREATEDB LOGIN PASSWORD 'hadi';
 \endif
 
 \c postgres admin
