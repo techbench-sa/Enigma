@@ -70,11 +70,7 @@ module.exports = {
         map.set(id, { attempts, is_solved, time })
         return map
       }, new Map)].reduce((score, [id, { attempts, is_solved, time }]) => {
-<<<<<<< HEAD
         return score + Math.max((attempts - 1 + (time / 1000 | 0)) * is_solved, 0)
-=======
-        return score + (attempts - 1 + (time / 1000 | 0)) * is_solved
->>>>>>> b345d5cbf4bf1deef29abf11bee8c5a36dd9dbd4
       }, 0)
     })
   },
