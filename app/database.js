@@ -20,7 +20,6 @@ const DELETE_USER = 'DELETE FROM "user" WHERE id=$1::int;'
 // select id, s.is_solved, s.timestamp from challenge as c  join (select is_solved, timestamp, challenge_id from submission where player_id = 2) as s ON c.id = s.challenge_id
 const ADD_SUBMISSION = 'INSERT INTO "submission" (player_id, challenge_id, code, score, language, is_solved) VALUES ($1::int, $2::int, $3::text, $4::int, $5::text, $6::boolean);'
 
-
 const START_TIME = new Date('2019-03-10T13:00:00')
 
 const pool = new pg.Pool({
@@ -58,9 +57,8 @@ module.exports = {
     const submissions = await pool.query(GET_USERS_SUBMISSIONS).then(res => res.rows)
     return users.map(user => {
       let submission = submissions.filter(submission => submission.player_id === user.id)
-      if (submission.length == 0)
-        return {...user, score: 0}
-      const map = submission.reduce((map, {challenge_id: id, is_solved, timestamp}) => {
+      if (submission.length === 0) return { ...user, score: 0 }
+      const map = submission.reduce((map, { challenge_id: id, is_solved, timestamp }) => {
         const challenge = map.get(id)
 
         map.set(id, {
@@ -80,11 +78,11 @@ module.exports = {
         return map
       }, new Map)
 
-      const score = [...map].reduce((score, [id, {attempts, is_solved, time}]) => {
-        const sec = time / 1000 | 0;
+      const score = [...map].reduce((score, [id, { attempts, is_solved, time }]) => {
+        const sec = time / 1000 | 0
         return score + (attempts + sec) * is_solved
       }, 0)
-      return {...user, score}
+      return { ...user, score }
     })
   },
 
@@ -111,8 +109,8 @@ module.exports = {
         return map
       }, new Map)
 
-      const score = [...map].reduce((score, [id, {attempts, is_solved, time}]) => {
-        const sec = time / 1000 | 0;
+      const score = [...map].reduce((score, [id, { attempts, is_solved, time }]) => {
+        const sec = time / 1000 | 0
         return score + (attempts + sec) * is_solved
       }, 0)
 
@@ -175,9 +173,5 @@ module.exports = {
 
   deleteUser: ({ id }) => {
     return pool.query(DELETE_USER, [id])
-  },
-
-  deleteChallenge: ({ id }) => {
-    return pool.query(DELETE_CHALLENGE, [id])
   }
 }
