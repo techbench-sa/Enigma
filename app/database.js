@@ -19,6 +19,8 @@ const DELETE_USER = 'DELETE FROM "user" WHERE id=$1::int;'
 // select id, s.is_solved, s.timestamp from challenge as c  join (select is_solved, timestamp, challenge_id from submission where player_id = 2) as s ON c.id = s.challenge_id
 const ADD_SUBMISSION = 'INSERT INTO "submission" (player_id, challenge_id, code, score, language, is_solved) VALUES ($1::int, $2::int, $3::text, $4::int, $5::text, $6::boolean);'
 
+const START_TIME = new Date() - (1000 * 60 * 60)
+
 const pool = new pg.Pool({
   database: 'enigma',
   host: 'localhost',
@@ -26,7 +28,6 @@ const pool = new pg.Pool({
   port: 5432,
   user: 'admin'
 })
-const START_TIME = new Date() - (1000 * 60 * 60)
 
 pool.connect(err => {
   if (err) {
@@ -62,6 +63,7 @@ module.exports = {
         let { challenge_id: id, is_solved, timestamp } = submission
         let attempts = 1
         let time = timestamp - START_TIME
+        console.log(time)
         if (map.has(id)) {
           attempts += map.get(id).attempts
           is_solved = is_solved || map.get(id).is_solved
