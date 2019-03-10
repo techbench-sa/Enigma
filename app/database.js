@@ -90,17 +90,6 @@ module.exports = {
 
   getScore: id => {
     return pool.query(GET_USER_SUBMISSIONS, [id]).then(res => {
-<<<<<<< HEAD
-      return [...res.rows.reduce((map, submission) => {
-        let { challenge_id: id, is_solved, timestamp } = submission
-        let attempts = 1
-        let time = timestamp - START_TIME
-        console.log(time)
-        if (map.has(id)) {
-          attempts += map.get(id).attempts
-          is_solved = is_solved || map.get(id).is_solved
-          time = Math.max(time, map.get(id).time)
-=======
       let submission = res.rows
       const map = submission.reduce((map, {challenge_id: id, is_solved, timestamp}) => {
         const challenge = map.get(id)
@@ -117,7 +106,6 @@ module.exports = {
             is_solved: is_solved || challenge.is_solved,
             time: Math.max(timestamp - START_TIME, challenge.time)
           })
->>>>>>> cc0b6197deb1ed9767375a3ff18c24ecb0be7364
         }
 
         return map
