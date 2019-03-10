@@ -99,6 +99,7 @@ CREATE TABLE "submission" (
     "timestamp" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "code" TEXT NOT NULL,
     "score" INTEGER NOT NULL,
+    "is_solved" BOOLEAN NOT NULL DEFAULT FALSE,
     "language" VARCHAR(10) NOT NULL,
     "player_id" INTEGER NOT NULL,
     "challenge_id" INTEGER NOT NULL,

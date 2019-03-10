@@ -23,7 +23,7 @@ const GET_USER_SCORE = 'SELECT sum(score) FROM "submission" WHERE player_id=$1::
 const CHANGE_USER_TYPE_BY_ID = 'UPDATE "user" SET type=$2::int WHERE id=$1::int;'
 const CHANGE_USERS_TYPE = 'UPDATE "user" SET type=$1::int WHERE type <> 0;'
 
-const ADD_SUBMISSION = 'INSERT INTO "submission" (player_id, challenge_id, code, score, language) VALUES ($1::int, $2::int, $3::text, $4::int, $5::text);'
+const ADD_SUBMISSION = 'INSERT INTO "submission" (player_id, challenge_id, code, score, language, is_solved) VALUES ($1::int, $2::int, $3::text, $4::int, $5::text, $6::boolean);'
 const UPDATE_SUBMISSION = 'UPDATE "submission" SET code=$3::text, score=$4::int, language=$5::text WHERE player_id=$1::int AND challenge_id=$2::int;'
 
 const pool = new pg.Pool({
@@ -109,12 +109,9 @@ module.exports = {
     return pool.query(CHANGE_CHALLENGE_VISIBILITY, [+type, id])
   },
 
-  addSubmission: ({ player_id, challenge_id, code, score, lang }) => {
-    const args = [player_id, challenge_id, code, score, lang]
-    return pool.query(UPDATE_SUBMISSION, args).then(res => {
-      if (res.rowCount === 0)
-        return pool.query(ADD_SUBMISSION, args)
-    })
+  addSubmission: ({ player_id, challenge_id, code, score, lang, is_solved = false }) => {
+    const args = [player_id, challenge_id, code, score, lang, is_solved]
+    return pool.query(ADD_SUBMISSION, args)
   },
 
   registerUser: ({ name, username, email, phoneNumber, password }) => {
