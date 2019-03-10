@@ -10,16 +10,18 @@ const DELETE_CHALLENGE = 'DELETE FROM "challenge" WHERE id=$1::int;'
 const ADD_USER = 'INSERT INTO "user" (name, username, email, phone_number, password) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text);'
 const GET_USER = 'SELECT * FROM "user" WHERE id=$1::int;'
 const GET_USER_BY_USERNAME = 'SELECT * FROM "user" WHERE username=$1::text;'
-const GET_USER_SUBMISSIONS = 'SELECT * FROM "submission" WHERE player_id=$1::int;'
 const GET_USERS = 'SELECT * FROM "user";'
+const GET_USER_SUBMISSIONS = 'SELECT * FROM "submission" WHERE player_id=$1::int;'
+const GET_USERS_SUBMISSIONS = 'SELECT * FROM "submission";'
 const CHANGE_USER_TYPE = 'UPDATE "user" SET type=$2::int WHERE id=$1::int;'
 const CHANGE_USERS_TYPE = 'UPDATE "user" SET type=$1::int WHERE type <> 0;'
 const DELETE_USER = 'DELETE FROM "user" WHERE id=$1::int;'
 
 // select id, s.is_solved, s.timestamp from challenge as c  join (select is_solved, timestamp, challenge_id from submission where player_id = 2) as s ON c.id = s.challenge_id
 const ADD_SUBMISSION = 'INSERT INTO "submission" (player_id, challenge_id, code, score, language, is_solved) VALUES ($1::int, $2::int, $3::text, $4::int, $5::text, $6::boolean);'
-const GET_USER_SUBMISSIONS = 'SELECT * FROM "submission" WHERE player_id=$1::int;'
-const GET_USERS_SUBMISSIONS = 'SELECT * FROM "submission";'
+
+
+const START_TIME = new Date('2019-03-10T13:00:00')
 
 const pool = new pg.Pool({
   database: 'enigma',
@@ -28,7 +30,6 @@ const pool = new pg.Pool({
   port: 5432,
   user: 'admin'
 })
-const START_TIME = new Date('2019-03-10T13:00:00')
 
 pool.connect(err => {
   if (err) {
