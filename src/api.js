@@ -40,7 +40,7 @@ export default {
   changeVisibility (id, type) {
     return api.post('/changeVisibility', { id, type })
   },
-  changeVisibilityForAll (type) {
-    return api.post('/changeVisibilityForAll', { type })
+  changeVisibilityForAll (visibility) {
+    return api.post('/changeVisibilityForAll', { visibility })
   }
 }

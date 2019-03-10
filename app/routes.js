@@ -17,6 +17,7 @@ const challengeHandler = require('./handlers/challenge')
 const solveChallengeHandler = require('./handlers/solveChallenge')
 const addChallengeHandler = require('./handlers/addChallenge')
 const changeVisibilityHandler = require('./handlers/changeVisibility')
+const changeVisibilityForAllHandler = require('./handlers/changeVisibilityForAll')
 
 // generic route handler
 const genericHandler = (req, res, next) => {
@@ -101,5 +102,7 @@ router.post('/api/changeUsersType', isUserAdmin, changeUsersTypeHandler)
 router.post('/api/addChallenge', isUserAdmin, addChallengeHandler)
 
 router.post('/api/changeVisibility', isUserAdmin, changeVisibilityHandler)
+
+router.post('/api/changeVisibilityForAll', isUserAdmin, changeVisibilityForAllHandler)
 
 module.exports = router

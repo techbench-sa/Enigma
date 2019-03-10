@@ -25,7 +25,8 @@
           // td.center {{challenge.points}}
           td.center
             Button(v-if="challenge.type == 1" hoverMessage="Hide" @click="changeVisibility(challenge.id, true)") Visible
-            Button.red(v-if="challenge.type == 0"  hoverMessage="Show" @click="changeVisibility(challenge.id, false)") Hidden
+            Button.red(v-if="challenge.type == 2"  hoverMessage="Show" @click="changeVisibility(challenge.id, false)") Hidden
+            .span(v-if="challenge.type != 2 && challenge.type != 1") {{challenge.type}}
                   //- Button(v-if="!addedToLibrary" icon="bookmark" @click="addToLibrary") {{$lang.main.add_to_library}}
                   //- Button.red(v-if="addedToLibrary" icon="bookmark"  @click="removeFromLibrary" :hoverMessage="$lang.main.remove_from_library")
                   //-   | {{$lang.main.added_to_library}}
@@ -45,7 +46,7 @@ export default {
       this.$store.dispatch('changeVisibility', id)
     },
     changeVisibilityForAll (visibility) {
-      this.$store.dispatch('changeVisibilityForAll')
+      this.$store.dispatch('changeVisibilityForAll', visibility)
     }
   },
   mounted () {

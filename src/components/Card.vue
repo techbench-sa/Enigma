@@ -1,5 +1,5 @@
 <template lang="pug">
-.ChallengeCard(:class="`${color} ${type == 0 ? 'hidden': ''}`")
+.ChallengeCard(:class="`${color} ${type == 2 ? 'hidden': ''}`")
     .title {{ name }}
     .body {{ description }}
     .actions(v-if="color == 'green'")

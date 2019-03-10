@@ -42,13 +42,13 @@ export default new Vuex.Store({
       const i = state.challenges.findIndex(challenge => challenge.id === payload)
       const challenge = state.challenges[i]
       if (i !== -1) {
-        state.challenges.splice(i, 1, { ...challenge, type: !challenge.type })
+        state.challenges.splice(i, 1, { ...challenge, type: challenge.type == 2 ? 1 : 2 })
       }
     },
     'CHANGE_VISIBILITY_FAILURE': () => { connectionLostToast.showToast() },
     'CHANGE_VISIBILITY_FOR_ALL_REQUEST': () => {},
-    'CHANGE_VISIBILITY_FOR_ALL_SUCCESS': (state, payload) => {
-      state.challenges = state.challenges.map(challenge => ({ ...challenge, type: !challenge.type }))
+    'CHANGE_VISIBILITY_FOR_ALL_SUCCESS': (state, visibility) => {
+      state.challenges = state.challenges.map(challenge => ({ ...challenge, type: visibility }))
     },
     'CHANGE_VISIBILITY_FOR_ALL_FAILURE': () => { connectionLostToast.showToast() }
   },
@@ -80,7 +80,7 @@ export default new Vuex.Store({
       context.commit('CHANGE_VISIBILITY_REQUEST', id)
       const i = context.getters.challenges.findIndex(challenge => challenge.id === id)
       const challenge = context.getters.challenges[i]
-      return api.changeVisibility(id, !challenge.type)
+      return api.changeVisibility(id, challenge.type == 2 ? 1 : 2)
         .then(res => {
           context.commit('CHANGE_VISIBILITY_SUCCESS', id)
           return res.data
@@ -93,7 +93,7 @@ export default new Vuex.Store({
       context.commit('CHANGE_VISIBILITY_FOR_ALL_REQUEST')
       return api.changeVisibilityForAll(visibility)
         .then(res => {
-          context.commit('CHANGE_VISIBILITY_FOR_ALL_SUCCESS')
+          context.commit('CHANGE_VISIBILITY_FOR_ALL_SUCCESS', visibility)
           return res.data
         }).catch(() => {
           context.commit('CHANGE_VISIBILITY_FOR_ALL_FAILURE')
