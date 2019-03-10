@@ -46,7 +46,6 @@ export default {
     submit (e) {
       this.error = ''
       this.submitted = false
-      console.log(this.data)
       api.addChallenge(this.data).then(_ => {
         this.submitted = true
         this.emptyForm()

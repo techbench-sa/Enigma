@@ -1,6 +1,8 @@
 <template lang="pug">
 #Challenges
   .container
+    Button.float-right.red.center(@click="changeVisibilityForAll(2)") Disable All
+    Button.float-right.center(@click="changeVisibilityForAll(1)") Activate All
     table
       colgroup
         col(width="0%")
@@ -16,16 +18,14 @@
           // th Points
           th Visibility
       tbody
-        // Button.center(@click="test(0, true)") Show All
-        // Button.red.center(@click="test(-1, false)") Hide All
         tr(v-for="challenge in challenges")
           td.center {{challenge.id}}
           td {{challenge.name}}
           td(style="max-width: 1px") {{challenge.description}}
           // td.center {{challenge.points}}
           td.center
-            Button(v-if="challenge.type == 1" hoverMessage="Hide" @click="test(challenge.id, true)") Visible
-            Button.red(v-if="challenge.type == 0"  hoverMessage="Show" @click="test(challenge.id, false)") Hidden
+            Button(v-if="challenge.type == 1" hoverMessage="Hide" @click="changeVisibility(challenge.id, true)") Visible
+            Button.red(v-if="challenge.type == 0"  hoverMessage="Show" @click="changeVisibility(challenge.id, false)") Hidden
                   //- Button(v-if="!addedToLibrary" icon="bookmark" @click="addToLibrary") {{$lang.main.add_to_library}}
                   //- Button.red(v-if="addedToLibrary" icon="bookmark"  @click="removeFromLibrary" :hoverMessage="$lang.main.remove_from_library")
                   //-   | {{$lang.main.added_to_library}}
@@ -41,8 +41,11 @@ export default {
   name: 'Challenges',
   computed: { ...mapGetters(['challenges', 'user']) },
   methods: {
-    test (id) {
+    changeVisibility (id) {
       this.$store.dispatch('changeVisibility', id)
+    },
+    changeVisibilityForAll (visibility) {
+      this.$store.dispatch('changeVisibilityForAll')
     }
   },
   mounted () {
@@ -55,9 +58,12 @@ export default {
 #Challenges
   .container
     padding: 64px 36px
+    > .Button
+      padding: .6rem 1.2rem
+      margin: 0.8rem 0 1.2rem 1.2rem
   table
     width: 100%
-    margin: 64px 0
+    margin: 32px 0
     font-size: 14px
     border-radius: 4px
     overflow: hidden

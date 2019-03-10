@@ -1,6 +1,8 @@
 <template lang="pug">
 #Users
   .container
+    Button.float-right.red.center(@click="changeUsersType(2)") Disable All
+    Button.float-right.center(@click="changeUsersType(1)") Activate All
     table
       colgroup
         col(width="0%")
@@ -18,8 +20,6 @@
           th Phone number
           th.center state
       tbody
-        //- Button(@click="test(0, true)") Show All
-        //- Button.red(@click="test(-1, false)") Hide All
         tr(v-for="user in users")
           td.center {{user.id}}
           td {{user.name}}
@@ -50,6 +50,9 @@ export default {
     },
     changeUserType (id, type) {
       api.changeUserType(id, type)
+    },
+    changeUsersType (type) {
+      api.changeUsersType(type)
     }
   },
   mounted () {
@@ -65,9 +68,12 @@ export default {
 #Users
   .container
     padding: 64px 36px
+    > .Button
+      padding: .6rem 1.2rem
+      margin: 0.8rem 0 1.2rem 1.2rem
   table
     width: 100%
-    margin: 64px 0
+    margin: 32px 0
     font-size: 14px
     border-radius: 4px
     overflow: hidden

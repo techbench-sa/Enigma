@@ -45,7 +45,12 @@ export default new Vuex.Store({
         state.challenges.splice(i, 1, { ...challenge, type: !challenge.type })
       }
     },
-    'CHANGE_VISIBILITY_FAILURE': () => { connectionLostToast.showToast() }
+    'CHANGE_VISIBILITY_FAILURE': () => { connectionLostToast.showToast() },
+    'CHANGE_VISIBILITY_FOR_ALL_REQUEST': () => {},
+    'CHANGE_VISIBILITY_FOR_ALL_SUCCESS': (state, payload) => {
+      state.challenges = state.challenges.map(challenge => ({ ...challenge, type: !challenge.type }))
+    },
+    'CHANGE_VISIBILITY_FOR_ALL_FAILURE': () => { connectionLostToast.showToast() }
   },
   actions: {
     fetchChallenges: context => {
@@ -81,6 +86,17 @@ export default new Vuex.Store({
           return res.data
         }).catch(() => {
           context.commit('CHANGE_VISIBILITY_FAILURE')
+          return {}
+        })
+    },
+    changeVisibilityForAll: (context, visibility) => {
+      context.commit('CHANGE_VISIBILITY_FOR_ALL_REQUEST')
+      return api.changeVisibilityForAll(visibility)
+        .then(res => {
+          context.commit('CHANGE_VISIBILITY_FOR_ALL_SUCCESS')
+          return res.data
+        }).catch(() => {
+          context.commit('CHANGE_VISIBILITY_FOR_ALL_FAILURE')
           return {}
         })
     },

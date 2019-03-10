@@ -11,6 +11,7 @@ const registereHandler = require('./handlers/register')
 const userHandler = require('./handlers/user')
 const usersHandler = require('./handlers/users')
 const changeUserTypeHandler = require('./handlers/changeUserType')
+const changeUsersTypeHandler = require('./handlers/changeUsersType')
 const challengesHandler = require('./handlers/challenges')
 const challengeHandler = require('./handlers/challenge')
 const solveChallengeHandler = require('./handlers/solveChallenge')
@@ -94,6 +95,8 @@ router.post('/api/submit', isUserAuthenticated, solveChallengeHandler)
 router.get('/api/users', isUserAdmin, usersHandler)
 
 router.post('/api/changeUserType', isUserAdmin, changeUserTypeHandler)
+
+router.post('/api/changeUsersType', isUserAdmin, changeUsersTypeHandler)
 
 router.post('/api/addChallenge', isUserAdmin, addChallengeHandler)
 

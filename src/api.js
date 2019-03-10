@@ -17,6 +17,9 @@ export default {
   changeUserType (id, type) {
     return api.post('/changeUserType', { id, type })
   },
+  changeUsersType (type) {
+    return api.post('/changeUsersType', { type })
+  },
   getChallenges () {
     return api('/challenges')
   },
@@ -34,5 +37,8 @@ export default {
   },
   changeVisibility (id, type) {
     return api.post('/changeVisibility', { id, type })
+  },
+  changeVisibilityForAll (type) {
+    return api.post('/changeVisibilityForAll', { type })
   }
 }
