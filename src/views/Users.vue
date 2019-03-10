@@ -17,7 +17,7 @@
           th Name
           th Username
           th Email
-          th Phone number
+          th score
           th.center state
       tbody
         tr(v-for="user in users")
@@ -25,7 +25,7 @@
           td {{user.name}}
           td {{user.username}}
           td {{user.email}}
-          td {{user.phone_number}}
+          td {{user.score}}
           td.center
             Button(v-if="user.type == 0" disabled) Admin
             Button(v-if="user.type == 1" hoverMessage="disable" @click="changeUserType(user.id, 2)") Active

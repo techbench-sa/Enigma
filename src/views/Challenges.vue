@@ -1,7 +1,7 @@
 <template lang="pug">
 #Challenges
   .container
-    Button.float-right.red.center(@click="changeVisibilityForAll(2)") Disable All
+    Button.float-right.red.center(@click="changeVisibilityForAll(3)") Disable All
     Button.float-right.center(@click="changeVisibilityForAll(1)") Activate All
     table
       colgroup
@@ -25,8 +25,8 @@
           // td.center {{challenge.points}}
           td.center
             Button(v-if="challenge.type == 1" hoverMessage="Hide" @click="changeVisibility(challenge.id, true)") Visible
-            Button.red(v-if="challenge.type == 2"  hoverMessage="Show" @click="changeVisibility(challenge.id, false)") Hidden
-            .span(v-if="challenge.type != 2 && challenge.type != 1") {{challenge.type}}
+            Button.red(v-if="challenge.type == 3"  hoverMessage="Show" @click="changeVisibility(challenge.id, false)") Hidden
+            .span(v-if="challenge.type != 3 && challenge.type != 1") {{challenge.type}}
                   //- Button(v-if="!addedToLibrary" icon="bookmark" @click="addToLibrary") {{$lang.main.add_to_library}}
                   //- Button.red(v-if="addedToLibrary" icon="bookmark"  @click="removeFromLibrary" :hoverMessage="$lang.main.remove_from_library")
                   //-   | {{$lang.main.added_to_library}}

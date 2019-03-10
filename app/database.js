@@ -18,8 +18,8 @@ const DELETE_USER = 'DELETE FROM "user" WHERE id=$1::int;'
 
 // select id, s.is_solved, s.timestamp from challenge as c  join (select is_solved, timestamp, challenge_id from submission where player_id = 2) as s ON c.id = s.challenge_id
 const ADD_SUBMISSION = 'INSERT INTO "submission" (player_id, challenge_id, code, score, language, is_solved) VALUES ($1::int, $2::int, $3::text, $4::int, $5::text, $6::boolean);'
-
-const START_TIME = new Date() - (1000 * 60 * 60)
+const GET_USER_SUBMISSIONS = 'SELECT * FROM "submission" WHERE player_id=$1::int;'
+const GET_USERS_SUBMISSIONS = 'SELECT * FROM "submission";'
 
 const pool = new pg.Pool({
   database: 'enigma',
@@ -28,6 +28,7 @@ const pool = new pg.Pool({
   port: 5432,
   user: 'admin'
 })
+const START_TIME = new Date('2019-03-10T13:00:00')
 
 pool.connect(err => {
   if (err) {
@@ -51,14 +52,44 @@ module.exports = {
     }).catch(() => {})
   },
 
-  getUsers: () => {
-    return pool.query(GET_USERS).then(res => {
-      return res.rows
+  getUsers: async () => {
+    const users = await pool.query(GET_USERS).then(res => res.rows)
+    const submissions = await pool.query(GET_USERS_SUBMISSIONS).then(res => res.rows)
+    return users.map(user => {
+      let submission = submissions.filter(submission => submission.player_id === user.id)
+      if (submission.length == 0)
+        return {...user, score: 0}
+      const map = submission.reduce((map, {challenge_id: id, is_solved, timestamp}) => {
+        const challenge = map.get(id)
+
+        map.set(id, {
+          attempts: 0,
+          is_solved: is_solved,
+          time: timestamp - START_TIME
+        })
+
+        if (challenge) {
+          map.set(id, {
+            attempts: challenge.attempts + 1,
+            is_solved: is_solved || challenge.is_solved,
+            time: Math.max(timestamp - START_TIME, challenge.time)
+          })
+        }
+
+        return map
+      }, new Map)
+
+      const score = [...map].reduce((score, [id, {attempts, is_solved, time}]) => {
+        const sec = time / 1000 | 0;
+        return score + (attempts + sec) * is_solved
+      }, 0)
+      return {...user, score}
     })
   },
 
   getScore: id => {
     return pool.query(GET_USER_SUBMISSIONS, [id]).then(res => {
+<<<<<<< HEAD
       return [...res.rows.reduce((map, submission) => {
         let { challenge_id: id, is_solved, timestamp } = submission
         let attempts = 1
@@ -68,12 +99,35 @@ module.exports = {
           attempts += map.get(id).attempts
           is_solved = is_solved || map.get(id).is_solved
           time = Math.max(time, map.get(id).time)
+=======
+      let submission = res.rows
+      const map = submission.reduce((map, {challenge_id: id, is_solved, timestamp}) => {
+        const challenge = map.get(id)
+
+        map.set(id, {
+          attempts: 0,
+          is_solved: is_solved,
+          time: timestamp - START_TIME
+        })
+
+        if (challenge) {
+          map.set(id, {
+            attempts: challenge.attempts + 1,
+            is_solved: is_solved || challenge.is_solved,
+            time: Math.max(timestamp - START_TIME, challenge.time)
+          })
+>>>>>>> cc0b6197deb1ed9767375a3ff18c24ecb0be7364
         }
-        map.set(id, { attempts, is_solved, time })
+
         return map
-      }, new Map)].reduce((score, [id, { attempts, is_solved, time }]) => {
-        return score + (attempts - 1 + (time / 1000 | 0)) * is_solved
+      }, new Map)
+
+      const score = [...map].reduce((score, [id, {attempts, is_solved, time}]) => {
+        const sec = time / 1000 | 0;
+        return score + (attempts + sec) * is_solved
       }, 0)
+
+      return score
     })
   },
 
@@ -87,6 +141,10 @@ module.exports = {
     return pool.query(GET_CHALLENGE, [id]).then(res => {
       return res.rows[0]
     })
+  },
+
+  deleteChallenge: id => {
+    return pool.query(DELETE_CHALLENGE, [id])
   },
 
   addChallenge: data => {
