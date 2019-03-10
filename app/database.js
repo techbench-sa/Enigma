@@ -15,6 +15,8 @@ const GET_USER_SCORE = 'SELECT sum(score) FROM "submission" WHERE player_id=$1::
 const CHANGE_USER_TYPE_BY_ID = 'UPDATE "user" SET type=$2::int WHERE id=$1::int;'
 const CHANGE_USERS_TYPE = 'UPDATE "user" SET type=$1::int WHERE type <> 0;'
 
+// select id, s.is_solved, s.timestamp from challenge as c  join (select is_solved, timestamp, challenge_id from submission where player_id = 2) as s ON c.id = s.challenge_id
+
 const ADD_SUBMISSION = 'INSERT INTO "submission" (player_id, challenge_id, code, score, language, is_solved) VALUES ($1::int, $2::int, $3::text, $4::int, $5::text, $6::boolean);'
 const pool = new pg.Pool({
   database: 'enigma',
