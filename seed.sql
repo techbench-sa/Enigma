@@ -103,25 +103,25 @@ CREATE TABLE "submission" (
     "language" VARCHAR(10) NOT NULL,
     "player_id" INTEGER NOT NULL,
     "challenge_id" INTEGER NOT NULL,
-    FOREIGN KEY (player_id) REFERENCES "user" (id),
-    FOREIGN KEY (challenge_id) REFERENCES "challenge" (id),
+    FOREIGN KEY (player_id) REFERENCES "user" (id) ON DELETE CASCADE,
+    FOREIGN KEY (challenge_id) REFERENCES "challenge" (id) ON DELETE CASCADE,
     PRIMARY KEY (id)
 );
 
 -- provided the field is named the same thing in
 -- all tables that use this, you can use a centralized function
 
-CREATE FUNCTION update_submission_timestamp ()
-    RETURNS TRIGGER
-    LANGUAGE plpgsql
-    AS $$
-BEGIN
-    NEW.timestamp = CURRENT_TIMESTAMP;
-    RETURN NEW;
-END;
-$$;
+-- CREATE FUNCTION update_submission_timestamp ()
+--     RETURNS TRIGGER
+--     LANGUAGE plpgsql
+--     AS $$
+-- BEGIN
+--     NEW.timestamp = CURRENT_TIMESTAMP;
+--     RETURN NEW;
+-- END;
+-- $$;
 
-CREATE TRIGGER submission_time_modtime
-    BEFORE UPDATE ON submission
-    FOR EACH ROW
-    EXECUTE PROCEDURE update_submission_timestamp ();
+-- CREATE TRIGGER submission_time_modtime
+--     BEFORE UPDATE ON submission
+--     FOR EACH ROW
+--     EXECUTE PROCEDURE update_submission_timestamp ();
