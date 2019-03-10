@@ -1,17 +1,9 @@
 const pg = require('pg')
 // const fs = require('fs')
 
-const GET_CHALLENGE =  `SELECT * FROM "challenge" WHERE id=$1::int`
-const GET_CHALLENGES = `
-  SELECT id, name, description, points, COALESCE(s.score,0) score, type FROM "challenge"  
-  LEFT JOIN 
-  (SELECT score, challenge_id FROM "submission" WHERE player_id=$1::int) AS s
-  ON challenge.id =  s.challenge_id
-  WHERE type IN (SELECT type FROM "user" WHERE id=$1::int) OR 0 IN (SELECT type FROM "user" WHERE id=$1::int)
-  ORDER BY id
-  ;
-`
-const ADD_CHALLENGE = `INSERT INTO "challenge" (name, description, method_name, method_type, tests, parameters, points) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text, $6::text, $7::int);`
+const GET_CHALLENGE =  'SELECT * FROM "challenge" WHERE id=$1::int'
+const GET_CHALLENGES = 'SELECT id, name, description, points,  type, COALESCE(s.is_solved, FALSE) is_solved FROM "challenge" LEFT JOIN (SELECT is_solved, challenge_id FROM "submission" WHERE player_id=$1::int) AS s ON challenge.id =  s.challenge_id WHERE type IN (SELECT type FROM "user" WHERE id=$1::int) OR 0 IN (SELECT type FROM "user" WHERE id=$1::int) ORDER BY id;'
+const ADD_CHALLENGE = 'INSERT INTO "challenge" (name, description, method_name, method_type, tests, parameters, points) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text, $6::text, $7::int);'
 const CHANGE_CHALLENGE_VISIBILITY = 'UPDATE "challenge" SET type=$1::int WHERE id=$2::int;'
 const CHANGE_CHALLENGES_VISIBILITY = 'UPDATE "challenge" SET type=$1::int;'
 
@@ -23,9 +15,7 @@ const GET_USER_SCORE = 'SELECT sum(score) FROM "submission" WHERE player_id=$1::
 const CHANGE_USER_TYPE_BY_ID = 'UPDATE "user" SET type=$2::int WHERE id=$1::int;'
 const CHANGE_USERS_TYPE = 'UPDATE "user" SET type=$1::int WHERE type <> 0;'
 
-const ADD_SUBMISSION = 'INSERT INTO "submission" (player_id, challenge_id, code, score, language) VALUES ($1::int, $2::int, $3::text, $4::int, $5::text);'
-const UPDATE_SUBMISSION = 'UPDATE "submission" SET code=$3::text, score=$4::int, language=$5::text WHERE player_id=$1::int AND challenge_id=$2::int;'
-
+const ADD_SUBMISSION = 'INSERT INTO "submission" (player_id, challenge_id, code, score, language, is_solved) VALUES ($1::int, $2::int, $3::text, $4::int, $5::text, $6::boolean);'
 const pool = new pg.Pool({
   database: 'enigma',
   host: 'localhost',
@@ -109,12 +99,9 @@ module.exports = {
     return pool.query(CHANGE_CHALLENGE_VISIBILITY, [+type, id])
   },
 
-  addSubmission: ({ player_id, challenge_id, code, score, lang }) => {
-    const args = [player_id, challenge_id, code, score, lang]
-    return pool.query(UPDATE_SUBMISSION, args).then(res => {
-      if (res.rowCount === 0)
-        return pool.query(ADD_SUBMISSION, args)
-    })
+  addSubmission: ({ player_id, challenge_id, code, score, lang, is_solved = false }) => {
+    const args = [player_id, challenge_id, code, score, lang, is_solved]
+    return pool.query(ADD_SUBMISSION, args)
   },
 
   registerUser: ({ name, username, email, phoneNumber, password }) => {

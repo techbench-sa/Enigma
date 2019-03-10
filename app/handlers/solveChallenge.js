@@ -68,11 +68,13 @@ module.exports = (req, res, next) => {
         const results = JSON.parse(
           '[' + response.trim().replace(/\n/g, ',') + ']'
         )
+        const score = results.filter(result => result.payload.value).length
         await database.addSubmission({
           player_id: userID,
           challenge_id: challenge.id,
           code: submission,
-          score: results.filter(result => result.payload.value).length,
+          is_solved: challenge.points === score,
+          score,
           lang
         })
         res.json({ results, code })

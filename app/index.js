@@ -11,7 +11,7 @@ const Routes = require('./routes')
 
 // FOR DEVELOPMENT
 if (process.argv[2] == 'dev') {
-  global.USER = { id: 1 }
+  global.USER = { id: +process.argv[3] || 1 }
   console.log('[dev] logged in with id ' + global.USER.id)
 }
 //////////////////
