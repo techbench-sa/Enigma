@@ -84,7 +84,7 @@ module.exports = {
         return score + (attempts + sec) * is_solved
       }, 0)
 
-      let solved = new Set(submissions.filter(submission => submissions.is_solved).map(submission => submission.challenge_id)).length
+      let solved = [...new Set(submissions.filter(submission => submission.is_solved).map(submission => submission.challenge_id))].length
       return {...user, score, submissions: submissions.length, solved}
     })
   },
