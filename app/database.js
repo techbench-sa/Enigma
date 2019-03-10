@@ -2,7 +2,7 @@ const pg = require('pg')
 // const fs = require('fs')
 
 const GET_CHALLENGE =  'SELECT * FROM "challenge" WHERE id=$1::int'
-const GET_CHALLENGES = 'SELECT id, name, description, points,  type, COALESCE(s.is_solved, FALSE) is_solved FROM "challenge" LEFT JOIN (SELECT is_solved, challenge_id FROM "submission" WHERE player_id=$1::int) AS s ON challenge.id =  s.challenge_id WHERE type IN (SELECT type FROM "user" WHERE id=$1::int) OR 0 IN (SELECT type FROM "user" WHERE id=$1::int) ORDER BY id;'
+const GET_CHALLENGES = 'SELECT id, name, description, points,  type, COALESCE(sum(CASE WHEN s.is_solved THEN 1 ELSE 0 END), 0)  is_solved FROM "challenge" LEFT JOIN (SELECT is_solved, challenge_id FROM "submission" WHERE player_id=$1::int) AS s ON challenge.id =  s.challenge_id WHERE type IN (SELECT type FROM "user" WHERE id=$1::int) OR 0 IN (SELECT type FROM "user" WHERE id=$1::int) GROUP BY id ORDER BY id;'
 const ADD_CHALLENGE = 'INSERT INTO "challenge" (name, description, method_name, method_type, tests, parameters, points) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text, $6::text, $7::int);'
 const CHANGE_CHALLENGE_VISIBILITY = 'UPDATE "challenge" SET type=$1::int WHERE id=$2::int;'
 const CHANGE_CHALLENGES_VISIBILITY = 'UPDATE "challenge" SET type=$1::int;'
