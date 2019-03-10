@@ -23,6 +23,7 @@
           th Phone number
           th submissions
           th score
+          th solved
           th.center state
       tbody
         tr(v-for="user in users")
@@ -33,6 +34,7 @@
           td {{user.phone_number}}
           td {{user.submissions}}
           td {{user.score}}
+          td {{user.solved}}
           td.center
             Button(v-if="user.type == 0" disabled) Admin
             Button(v-if="user.type == 1" hoverMessage="disable" @click="changeUserType(user.id, 2)") Active
