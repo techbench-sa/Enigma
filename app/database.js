@@ -6,6 +6,7 @@ const GET_CHALLENGES = 'SELECT id, name, description, points,  type, COALESCE(su
 const ADD_CHALLENGE = 'INSERT INTO "challenge" (name, description, method_name, method_type, tests, parameters, points) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text, $6::text, $7::int);'
 const CHANGE_CHALLENGE_VISIBILITY = 'UPDATE "challenge" SET type=$1::int WHERE id=$2::int;'
 const CHANGE_CHALLENGES_VISIBILITY = 'UPDATE "challenge" SET type=$1::int;'
+const DELETE_CHALLENGE = 'DELETE FROM "challenge" WHERE id=$1::int'
 
 const ADD_USER = 'INSERT INTO "user" (name, username, email, phone_number, password) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text);'
 const GET_USER_BY_USERNAME = 'SELECT * FROM "user" WHERE username=$1::text;'
@@ -85,6 +86,10 @@ module.exports = {
     return pool.query(GET_CHALLENGE, [id]).then(res => {
       return res.rows[0]
     })
+  },
+
+  deleteChallenge: id => {
+    return pool.query(DELETE_CHALLENGE, [id])
   },
 
   addChallenge: data => {
