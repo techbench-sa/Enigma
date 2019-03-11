@@ -1,5 +1,16 @@
 const array = (type, name, values) => {
-  const arr = values.map(val => (type == 'String') ? `"${val}"` : val).join(', ')
+  const isString = type.indexOf('String') != -1
+  const isChar = type.indexOf('char') != -1
+  const arr = values.map(val => {
+    if (type.indexOf('[]') != -1)
+      return `{${val.slice(1,-1)}}`
+    const hasQoutes = val.length >= 2 && (val[0] == '"' || val[0] == "'")
+    if (isString && !hasQoutes)
+      return `"${val}"`
+    if (isChar && !hasQoutes)
+      return `'${val}'`
+    return val
+  }).join(', ')
   return `${type}[] ${name} = {${arr}};`
 }
 
@@ -10,6 +21,11 @@ const type = type => {
       case 'Double': return 'double'
       case 'Boolean': return 'boolean'
       case 'Char': return 'char'
+      case 'String Array': return 'String[]'
+      case 'Integer Array': return 'int[]'
+      case 'Double Array': return 'double[]'
+      case 'Boolean Array': return 'boolean[]'
+      case 'Char Array': return 'char[]'
   }
 }
 
@@ -24,9 +40,12 @@ try {
   throw "Invalid challenge syntax ID: " + challenge.id;
 }
 
+const isArray = method_type.indexOf('Array') != -1
+const isString = method_type.indexOf('String') != -1
+
 return `class Challenge_${challenge.id} {
 
-  public static ${method_type} ${method_name} (${params.map(param => `${type(param.type)} ${param.name}`).join(', ')}) {
+  public static ${type(method_type)} ${method_name} (${params.map(param => `${type(param.type)} ${param.name}`).join(', ')}) {
 ${
   check(submission) ? submission
   : `isEmpty = true; return ${method_type == 'String' ? '""' : method_type == 'Boolean' ? 'false' : '0'};`
@@ -54,14 +73,15 @@ ${
           System.setOut(dummyStream);
           try {
             ${type(method_type)} res = ${method_name}(${params.map((_, i) => `args${i}[i]`).join(', ')});
-            results[i] = ${method_type == 'String' ? 'res.equals(outputs[i])' : 'res == outputs[i]'};
+            results[i] = ${isArray ? 'java.util.Arrays.equals(res, outputs[i])' : isString ? 'res.equals(outputs[i])' : 'res == outputs[i]'};
             System.setOut(originalStream);
             if (isEmpty) {
               if (i == 0)
                 System.out.println("{\\"error\\":\\"test\\",\\"payload\\":{\\"message\\":\\"You didn\'t write anything!\\"}}");
               results[i] = false;
             }
-            System.out.println("{\\"type\\":\\"test\\",\\"payload\\":{\\"test\\":"+i+",\\"result\\":${method_type == 'String' ? '\\""+res+"\\"' : '"+res+"'},\\"value\\":"+results[i]+"}}");
+            String resStr = ${isArray ? 'java.util.Arrays.toString(res)' : 'res + ""' };
+            System.out.println("{\\"type\\":\\"test\\",\\"payload\\":{\\"test\\":"+i+",\\"result\\":\\""+resStr+"\\",\\"value\\":"+results[i]+"}}");
           } catch (Exception e) {
             System.setOut(originalStream);
             System.out.println("{\\"error\\":\\"test\\",\\"payload\\":{\\"message\\":\\""+e.toString()+"\\"}}");          

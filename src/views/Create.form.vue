@@ -31,6 +31,11 @@
                   option Double
                   option Boolean
                   option Char
+                  option Integer Array
+                  option String Array
+                  option Double Array
+                  option Boolean Array
+                  option Char Array
         .row
           h4 Parameters
         .row
@@ -49,6 +54,11 @@
                 option Double
                 option Boolean
                 option Char
+                option Integer Array
+                option String Array
+                option Double Array
+                option Boolean Array
+                option Char Array
         Button(@click="addParam") add parameter
     .row(style="margin-top: 64px")
       .column
@@ -82,15 +92,15 @@ export default {
   data () {
     return {
       challenge: {
-        name: '',
-        description: '',
+        name: 'Title',
+        description: 'description...',
         score: 1
       },
       method: {
-        name: '',
+        name: 'num',
         type: 'Integer'
       },
-      params: [{ name: '', type: 'Integer' }],
+      params: [{ name: 'arg' + (Math.random() * 100 | 0), type: 'Integer' }],
       output: [''],
       tests: [['']],
       error: '',
@@ -130,7 +140,7 @@ export default {
       }
       api.addChallenge(data).then(_ => {
         this.submitted = true
-        this.emptyForm()
+        //this.emptyForm()
       }).catch(err => {
         this.error = err.response.data.message[0].message
       })

@@ -1,15 +1,32 @@
 const array = (type, name, values) => {
-  const arr = values.map(val => (type == 'String') ? `"${val}"` : val).join(', ')
+  const isString = type.indexOf('String') != -1
+  const isChar = type.indexOf('char') != -1
+  const arr = values.map(val => {
+    if (type.indexOf('[]') != -1)
+      return `[${val.slice(1,-1)}]`
+    const hasQoutes = val.length >= 2 && (val[0] == '"' || val[0] == "'")
+    if (isString && !hasQoutes)
+      return `"${val}"`
+    if (isChar && !hasQoutes)
+      return `'${val}'`
+    return val
+  }).join(', ')
   return `${name} = [${arr}]`
 }
 
+
 const type = type => {
   switch (type) {
-      case 'String': return 'String'
-      case 'Integer': return 'int'
-      case 'Double': return 'double'
-      case 'Boolean': return 'boolean'
-      case 'Char': return 'char'
+    case 'String': return 'String'
+    case 'Integer': return 'int'
+    case 'Double': return 'double'
+    case 'Boolean': return 'boolean'
+    case 'Char': return 'char'
+    case 'String Array': return 'String[]'
+    case 'Integer Array': return 'int[]'
+    case 'Double Array': return 'double[]'
+    case 'Boolean Array': return 'boolean[]'
+    case 'Char Array': return 'char[]'
   }
 }
 
@@ -42,7 +59,7 @@ for i in range(len(outputs)):
   results.append(res == outputs[i])
   if (res == None):
     res = ${method_type == 'String' ? '""' : '0'}
-  print("{\\"type\\":\\"test\\",\\"payload\\":{\\"test\\":"+str(i)+",\\"result\\":${method_type == 'String' ? '\\""+str(res)+"\\"' : '"+str(res)+"'},\\"value\\":"+str(results[i]).lower()+"} }")
+  print("{\\"type\\":\\"test\\",\\"payload\\":{\\"test\\":"+str(i)+",\\"result\\":\\""+str(res)+"\\",\\"value\\":"+str(results[i]).lower()+"} }")
 `
 
 }
