@@ -93,8 +93,30 @@ export default {
                 const { inputs, outputs } = this.tests
                 const { test, result, value } = payload
                 const t = i => parameters[i].type
-                const args = inputs.map((v, i) => `<span class="${t(i)}">${t(i) === 'String' ? `"${v[test]}"` : v[test]}</span>`)
-                const out = val => `<span class="${outputType}">${outputType === 'String' ? `"${val}"` : val}</span>`
+                const args = inputs.map((v, i) => {
+                  if (t(i).indexOf('Array') != -1)
+                    return `<span class="${t(i)}">${v[test]}</span>`
+                  const isString = t(i).indexOf('String') != -1
+                  const isChar = t(i).indexOf('char') != -1
+                  const hasQoutes = v[test].length >= 2 && (v[test][0] == '"' || v[test][0] == "'")
+                  if (isString && !hasQoutes)
+                    return `<span class="${t(i)}">"${v[test]}"</span>`
+                  if (isChar && !hasQoutes)
+                    return `<span class="${t(i)}">'${v[test]}'</span>`
+                  return `<span class="${t(i)}">${v[test]}</span>`
+                })
+                const out = val => {
+                  if (outputType.indexOf('Array') != -1)
+                    return `<span class="${outputType}">${val}</span>`
+                  const isString = outputType.indexOf('String') != -1
+                  const isChar = outputType.indexOf('Char') != -1
+                  const hasQoutes = val.length >= 2 && (val[0] == '"' || val[0] == "'")
+                      if (isString && !hasQoutes)
+                        return `<span class="${outputType}">"${val}"</span>`
+                      if (isChar && !hasQoutes)
+                        return `<span class="${outputType}">'${val}'</span>`
+                      return `<span class="${outputType}">${val}</span>`
+                }
                 if (value) {
                   return {
                     message: `${method}(${args.join(', ')}) <i>returns</i> ${out(result)}`,
@@ -184,6 +206,8 @@ export default {
         i
           color: rgba(#fff, .7)
         span
+          color: #ae81ff
+        .Array
           color: #ae81ff
         .Icon
           content: ""

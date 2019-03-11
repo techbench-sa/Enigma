@@ -1,61 +1,48 @@
+const Joi = require('joi')
 const database = require('../database')
 
-module.exports = (req, res, next) => {
+module.exports = ({ user, body: data }, res, next) => {
   // FOR DEVELOPMENT
-  if (global.USER) req.user = global.USER
+  if (global.USER) user = global.USER
   //////////////////
-  const Joi = require('joi')
-  const data = req.body
+  const dataTypes = [
+    'Integer',
+    'String',
+    'Double',
+    'Boolean',
+    'Char',
+    'Integer Array',
+    'String Array',
+    'Double Array',
+    'Boolean Array',
+    'Char Array'
+  ]
+  
   const schema = Joi.object().keys({
     challenge: Joi.object({
-      name: Joi.string()
-        .required()
-        .error(err => 'Challenge name is required.'),
-      description: Joi.string()
-        .required()
-        .error(err => 'Challenge description is required.'),
-      score: Joi.number()
-        .required()
-        .error(err => 'Score is required and has to be a number.')
+      name: Joi.string().required().error(err => 'Challenge name is required.'),
+      description: Joi.string().required().error(err => 'Challenge description is required.'),
+      score: Joi.number().required().error(err => 'Score is required and has to be a number.')
     }),
     method: Joi.object({
-      name: Joi.string()
-        .required()
-        .error(err => 'Method name is required.'),
-      type: Joi.valid('String', [
-        'Integer',
-        'String',
-        'Double',
-        'Boolean',
-        'Char'
-      ]).required()
+      name: Joi.string().required().error(err => 'Method name is required.'),
+      type: Joi.valid('String', dataTypes).required()
     }),
     tests: Joi.object({
-      inputs: Joi.array(),
-      outputs: Joi.array()
+      inputs: Joi.array().min(1),
+      outputs: Joi.array().min(1)
     }),
-    params: Joi.array()
-      .items(
-        Joi.object({
-          name: Joi.string().required(),
-          type: Joi.valid('String', [
-            'Integer',
-            'String',
-            'Double',
-            'Boolean',
-            'Char'
-          ]).required()
-        })
-      )
-      .error(err => 'Paremeters are required.')
-  })
-  Joi.validate(data, schema, async (err, value) => {
-    if (JSON.stringify(value) === '{}') {
-      res.status(422).json({
-        status: 'error',
-        message: [{ message: 'You didn\'t write anything!'}]
+    params: Joi.array().min(1).items(
+      Joi.object({
+        name: Joi.string().required(),
+        type: Joi.valid('String', dataTypes).required()
       })
-    } else if (err) {
+    )
+    .error(err => 'Paremeters are required.')
+  })
+
+  Joi.validate(data, schema, async (err, value) => {
+    if (err) {
       console.log(err)
       res.status(422).json({
         status: 'error',
@@ -63,7 +50,9 @@ module.exports = (req, res, next) => {
       })
     } else {
       console.log('========================================')
+      console.log(value)
       database.addChallenge(value).then(id => res.json(id))
     }
   })
+
 }

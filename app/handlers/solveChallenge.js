@@ -65,9 +65,16 @@ module.exports = (req, res, next) => {
         console.log(err)
       })
       if (code === 0) {
-        const results = JSON.parse(
-          '[' + response.trim().replace(/\n/g, ',') + ']'
-        )
+        let results
+        try {
+          results = JSON.parse(
+            '[' + `${response}`.trim().replace(/\n/g, ',') + ']'
+          )
+        } catch (e) {
+          console.error('\033[0;31m[err] solveChallenge.js:73\033[0m')
+          console.log(response)
+          res.json({ error: 'Unexpected Error...', code: 1 })
+        }
         const score = results.filter(result => result.payload.value).length
         await database.addSubmission({
           player_id: userID,
