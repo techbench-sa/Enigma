@@ -17,14 +17,14 @@
       thead
         tr
           th ID
-          th Name
+          th Full Name
           th Username
           th Email
-          th Phone number
-          // th submissions
-          th score
-          th solved
-          th.center state
+          th Phone Number
+          th Gender
+          th Score
+          th Solved
+          th.center State
       tbody
         tr(v-for="user in users")
           td.center {{user.id}}
@@ -32,7 +32,7 @@
           td {{user.username}}
           td {{user.email}}
           td {{user.phone_number}}
-          // - td {{user.submissions}}
+          td {{user.gender ? "Male" : "Female"}}
           td {{user.score}}
           td {{user.solved}}
           td.center
