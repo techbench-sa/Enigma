@@ -19,7 +19,7 @@ const GET_USER_BY_USERNAME = 'SELECT * FROM "user" WHERE username=$1::text;'
 const GET_USERS =
   'SELECT u.*, COALESCE(score, 0) score, COALESCE(solved, 0) solved FROM "user" u LEFT JOIN (SELECT SUM(score) score, player_id, COUNT(is_solved) solved FROM "submission" group by player_id) AS s ON u.id=s.player_id;'
 const GET_USER_SUBMISSIONS =
-  'SELECT SUM(score) score FROM "submission" WHERE player_id=$1::int;'
+  'SELECT COALESCE(SUM(score), 0)score FROM "submission" WHERE player_id=$1::int;'
 
 const CHANGE_USER_TYPE = 'UPDATE "user" SET type=$2::int WHERE id=$1::int;'
 const CHANGE_USERS_TYPE = 'UPDATE "user" SET type=$1::int WHERE type <> 0;'
