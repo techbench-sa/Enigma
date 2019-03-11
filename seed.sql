@@ -126,17 +126,17 @@ CREATE TABLE "submission" (
 -- provided the field is named the same thing in
 -- all tables that use this, you can use a centralized function
 
--- CREATE FUNCTION update_submission_timestamp ()
---     RETURNS TRIGGER
---     LANGUAGE plpgsql
---     AS $$
--- BEGIN
---     NEW.timestamp = CURRENT_TIMESTAMP;
---     RETURN NEW;
--- END;
--- $$;
+CREATE FUNCTION update_submission_timestamp ()
+    RETURNS TRIGGER
+    LANGUAGE plpgsql
+    AS $$
+BEGIN
+    NEW.timestamp = CURRENT_TIMESTAMP;
+    RETURN NEW;
+END;
+$$;
 
--- CREATE TRIGGER submission_time_modtime
---     BEFORE UPDATE ON submission
---     FOR EACH ROW
---     EXECUTE PROCEDURE update_submission_timestamp ();
+CREATE TRIGGER submission_time_modtime
+    BEFORE UPDATE ON submission
+    FOR EACH ROW
+    EXECUTE PROCEDURE update_submission_timestamp ();

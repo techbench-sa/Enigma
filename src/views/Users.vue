@@ -21,7 +21,7 @@
           th Username
           th Email
           th Phone number
-          th submissions
+          // th submissions
           th score
           th solved
           th.center state
@@ -32,7 +32,7 @@
           td {{user.username}}
           td {{user.email}}
           td {{user.phone_number}}
-          td {{user.submissions}}
+          // - td {{user.submissions}}
           td {{user.score}}
           td {{user.solved}}
           td.center

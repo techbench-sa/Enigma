@@ -16,14 +16,16 @@ const router = new Router({
       meta: {
         requiresAuth: true
       }
-    }, {
+    },
+    {
       path: '/solve/:lang/:id',
       name: 'solve',
       meta: {
         requiresAuth: true
       },
       component: () => import('./views/Solve.vue')
-    }, {
+    },
+    {
       path: '/create',
       name: 'create',
       meta: {

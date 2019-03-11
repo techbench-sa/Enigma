@@ -1,24 +1,38 @@
 const pg = require('pg')
 
-const ADD_CHALLENGE = 'INSERT INTO "challenge" (name, description, method_name, method_type, tests, parameters, points) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text, $6::text, $7::int);'
+const ADD_CHALLENGE =
+  'INSERT INTO "challenge" (name, description, method_name, method_type, tests, parameters, points) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text, $6::text, $7::int);'
 const GET_CHALLENGE = 'SELECT * FROM "challenge" WHERE id=$1::int'
-const GET_CHALLENGES = 'SELECT id, name, description, points,  type, COALESCE(sum(CASE WHEN s.is_solved THEN 1 ELSE 0 END), 0)  is_solved FROM "challenge" LEFT JOIN (SELECT is_solved, challenge_id FROM "submission" WHERE player_id=$1::int) AS s ON challenge.id =  s.challenge_id WHERE type IN (SELECT type FROM "user" WHERE id=$1::int) OR 0 IN (SELECT type FROM "user" WHERE id=$1::int) GROUP BY id ORDER BY id;'
-const CHANGE_CHALLENGE_TYPE = 'UPDATE "challenge" SET type=$1::int WHERE id=$2::int;'
+const GET_CHALLENGES =
+  'SELECT id, name, description, points,  type, COALESCE(sum(CASE WHEN s.is_solved THEN 1 ELSE 0 END), 0)  is_solved FROM "challenge" LEFT JOIN (SELECT is_solved, challenge_id FROM "submission" WHERE player_id=$1::int) AS s ON challenge.id =  s.challenge_id WHERE type IN (SELECT type FROM "user" WHERE id=$1::int) OR 0 IN (SELECT type FROM "user" WHERE id=$1::int) GROUP BY id ORDER BY id;'
+const CHANGE_CHALLENGE_TYPE =
+  'UPDATE "challenge" SET type=$1::int WHERE id=$2::int;'
 const CHANGE_CHALLENGES_TYPE = 'UPDATE "challenge" SET type=$1::int;'
 const DELETE_CHALLENGE = 'DELETE FROM "challenge" WHERE id=$1::int;'
 
-const ADD_USER = 'INSERT INTO "user" (name, username, email, phone_number, password) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text);'
+const ADD_USER =
+  'INSERT INTO "user" (name, username, email, phone_number, password) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text);'
 const GET_USER = 'SELECT * FROM "user" WHERE id=$1::int;'
+const GET_USER_DATA =
+  'SELECT *  FROM "user" u  JOIN (SELECT SUM(score) score, player_id, COUNT(is_solved) solved FROM "submission" where player_id=$1::int group by player_id) AS s ON u.id=s.player_id WHERE u.id=$1::int;'
 const GET_USER_BY_USERNAME = 'SELECT * FROM "user" WHERE username=$1::text;'
-const GET_USERS = 'SELECT * FROM "user";'
-const GET_USER_SUBMISSIONS = 'SELECT * FROM "submission" WHERE player_id=$1::int;'
-const GET_USERS_SUBMISSIONS = 'SELECT * FROM "submission";'
+const GET_USERS =
+  'SELECT u.*, COALESCE(score, 0) score, COALESCE(solved, 0) solved FROM "user" u LEFT JOIN (SELECT SUM(score) score, player_id, COUNT(is_solved) solved FROM "submission" group by player_id) AS s ON u.id=s.player_id;'
+const GET_USER_SUBMISSIONS =
+  'SELECT SUM(score) score FROM "submission" WHERE player_id=$1::int;'
+
 const CHANGE_USER_TYPE = 'UPDATE "user" SET type=$2::int WHERE id=$1::int;'
 const CHANGE_USERS_TYPE = 'UPDATE "user" SET type=$1::int WHERE type <> 0;'
 const DELETE_USER = 'DELETE FROM "user" WHERE id=$1::int;'
 
 // select id, s.is_solved, s.timestamp from challenge as c  join (select is_solved, timestamp, challenge_id from submission where player_id = 2) as s ON c.id = s.challenge_id
-const ADD_SUBMISSION = 'INSERT INTO "submission" (player_id, challenge_id, code, score, language, is_solved) VALUES ($1::int, $2::int, $3::text, $4::int, $5::text, $6::boolean);'
+// const ADD_SUBMISSION_ = 'INSERT INTO "submission" (player_id, challenge_id, code, score, language, is_solved) VALUES ($1::int, $2::int, $3::text, $4::int, $5::text, $6::boolean);'
+
+const ADD_SUBMISSION =
+  'INSERT INTO "submission" (player_id, challenge_id, code, language, is_solved, score) SELECT $1::int, $2::int, $3::text, $5::text, $6::boolean, CASE WHEN count(challenge_id) < 10 AND $6::boolean THEN 10-count(challenge_id) ELSE 0 END+$4::int*CASE WHEN $6::boolean THEN 2 ELSE 1 END from "submission" where challenge_id = $2::int AND is_solved;'
+
+const UPDATE_SUBMISSION =
+  'UPDATE "submission" SET code=$3::text, language=$5::text, is_solved=$6::boolean, score=(SELECT CASE WHEN count(challenge_id) < 10 AND $6::boolean THEN 10-count(challenge_id) ELSE 0 END+$4::INT*CASE WHEN $6::boolean THEN 2 ELSE 1 END from "submission" WHERE challenge_id = $2::int AND is_solved) WHERE player_id = $1::int AND challenge_id = $2::int;'
 
 const START_TIME = new Date('2019-03-10T13:00:00')
 
@@ -32,11 +46,11 @@ const pool = new pg.Pool({
 
 pool.connect(err => {
   if (err) {
-    console.log('\x1B[0;31m' + '[pg] couldn\'t connect' + '\x1B[0m')
+    console.log('\x1B[0;31m' + "[pg] couldn't connect" + '\x1B[0m')
     console.error(err)
   } else {
     console.log('\x1B[0;32m' + '[pg] connected' + '\x1B[0m')
-    //pool.query(ADD_SUBMISSION, [2, 1, '', 0, 'java', true]) 
+    // pool.query(ADD_SUBMISSION, [2, 1, '', 0, 'java', true])
   }
 })
 
@@ -48,77 +62,32 @@ module.exports = {
   },
 
   getUserByID: id => {
-    return pool.query(GET_USER, [id]).then(res => {
-      return { ...res.rows[0] }
-    }).catch(() => {})
+    return pool
+      .query(GET_USER, [id])
+      .then(res => {
+        return { ...res.rows[0] }
+      })
+      .catch(() => {})
   },
 
-  getUsers: async () => {
-    const users = await pool.query(GET_USERS).then(res => res.rows)
-    const usersSubmissions = await pool.query(GET_USERS_SUBMISSIONS).then(res => res.rows)
-    return users.map(user => {
-      let submissions = usersSubmissions.filter(submission => submission.player_id === user.id)
-      if (submissions.length == 0)
-        return {...user, score: 0, submissions: 0, solved: 0}
-      const map = submissions.reduce((map, {challenge_id: id, is_solved, timestamp}) => {
-        const challenge = map.get(id)
+  getUserData: id => {
+    return pool
+      .query(GET_USER_DATA, [id])
+      .then(res => {
+        return { ...res.rows[0] }
+      })
+      .catch(() => {})
+  },
 
-        map.set(id, {
-          attempts: 0,
-          is_solved: is_solved,
-          time: timestamp - START_TIME
-        })
-
-        if (challenge) {
-          map.set(id, {
-            attempts: challenge.attempts + 1,
-            is_solved: is_solved || challenge.is_solved,
-            time: Math.max(timestamp - START_TIME, challenge.time)
-          })
-        }
-
-        return map
-      }, new Map)
-
-      const score = [...map].reduce((score, [id, { attempts, is_solved, time }]) => {
-        const sec = time / 1000 | 0
-        return score + (attempts + sec) * is_solved
-      }, 0)
-
-      let solved = [...new Set(submissions.filter(submission => submission.is_solved).map(submission => submission.challenge_id))].length
-      return {...user, score, submissions: submissions.length, solved}
+  getUsers: () => {
+    return pool.query(GET_USERS).then(res => {
+      return res.rows
     })
   },
 
   getScore: id => {
     return pool.query(GET_USER_SUBMISSIONS, [id]).then(res => {
-      let submission = res.rows
-      const map = submission.reduce((map, { challenge_id: id, is_solved, timestamp }) => {
-        const challenge = map.get(id)
-
-        map.set(id, {
-          attempts: 0,
-          is_solved: is_solved,
-          time: timestamp - START_TIME
-        })
-
-        if (challenge) {
-          map.set(id, {
-            attempts: challenge.attempts + 1,
-            is_solved: is_solved || challenge.is_solved,
-            time: Math.max(timestamp - START_TIME, challenge.time)
-          })
-        }
-
-        return map
-      }, new Map)
-
-      const score = [...map].reduce((score, [id, { attempts, is_solved, time }]) => {
-        const sec = time / 1000 | 0
-        return score + (attempts + sec) * is_solved
-      }, 0)
-
-      return score
+      return res.rows[0].score
     })
   },
 
@@ -139,15 +108,17 @@ module.exports = {
   },
 
   addChallenge: data => {
-    return pool.query(ADD_CHALLENGE, [
-      data.challenge.name,
-      data.challenge.description,
-      data.method.name,
-      data.method.type,
-      JSON.stringify(data.tests),
-      JSON.stringify(data.params),
-      data.challenge.score
-    ]).then(res => res.insertId)
+    return pool
+      .query(ADD_CHALLENGE, [
+        data.challenge.name,
+        data.challenge.description,
+        data.method.name,
+        data.method.type,
+        JSON.stringify(data.tests),
+        JSON.stringify(data.params),
+        data.challenge.score
+      ])
+      .then(res => res.insertId)
   },
 
   changeUserType: (id, type) => {
@@ -166,9 +137,21 @@ module.exports = {
     return pool.query(CHANGE_CHALLENGE_TYPE, [+type, id])
   },
 
-  addSubmission: ({ player_id, challenge_id, code, score, lang, is_solved = false }) => {
+  addSubmission: ({
+    player_id,
+    challenge_id,
+    code,
+    score,
+    lang,
+    is_solved = false
+  }) => {
     const args = [player_id, challenge_id, code, score, lang, is_solved]
-    return pool.query(ADD_SUBMISSION, args)
+    return pool.query(UPDATE_SUBMISSION, args).then(res => {
+      console.log(res)
+      if (res.rowCount === 0) {
+        return pool.query(ADD_SUBMISSION, args)
+      }
+    })
   },
 
   registerUser: ({ name, username, email, phoneNumber, password }) => {
