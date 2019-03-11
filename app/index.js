@@ -5,7 +5,7 @@ const cors = require('cors')
 const history = require('connect-history-api-fallback')
 const passport = require('./passport')
 const app = express()
-const port = 3000
+const port = 3001
 
 const Routes = require('./routes')
 
@@ -40,4 +40,6 @@ app.use('/', Routes)
 
 // app.post('/login', passport.authenticate('local', { successRedirect: '/', failureRedirect: '/' }));
 
-app.listen(port, () => console.log('\x1B[0;32m' + `[url] http://localhost:${port}` + '\x1B[0m'))
+app.listen(port, () =>
+  console.log('\x1B[0;32m' + `[url] http://localhost:${port}` + '\x1B[0m')
+)
