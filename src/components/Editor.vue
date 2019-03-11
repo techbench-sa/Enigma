@@ -14,6 +14,11 @@ import 'codemirror/mode/python/python'
 export default {
   name: 'Editor',
   props: ['value'],
+  data () {
+    return {
+      canChange: false
+    }
+  },
   watch: {
     value (val) {
       this.setValue(val)
@@ -21,9 +26,11 @@ export default {
   },
   methods: {
     setValue (val) {
+      this.canChange = true
       if (val !== this.editor.getDoc().getValue()) {
         this.editor.getDoc().setValue(val)
       }
+      this.canChange = false
     }
   },
   mounted () {
@@ -39,6 +46,18 @@ export default {
     })
     this.editor.setSize('100%', '100%')
     this.setValue(this.value)
+    this.editor.on('beforeChange', (cm, change) => {
+      if (this.canChange) {
+        return true
+      }
+      const readOnlyLines = [0, 1, 2, cm.doc.size - 3, cm.doc.size - 2, cm.doc.size - 1]
+      if (change.to.line === cm.doc.size - 3 && change.to.ch === 0) {
+        change.cancel()
+      }
+      if (~readOnlyLines.indexOf(change.from.line)) {
+        change.cancel()
+      }
+    })
     this.editor.on('change', cm => {
       this.$emit('update:value', cm.getValue())
     })

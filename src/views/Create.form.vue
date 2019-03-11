@@ -60,106 +60,104 @@
                 option Boolean Array
                 option Char Array
         Button(@click="addParam") add parameter
+    br
+    br
+    br
+    h2 Test cases
     .row(style="margin-top: 64px")
-      .column
-        h2 Tests
-      // .column.column-25
-      //   Button(@click="addTest") add test
-    .row.test(v-for="(test, i) in tests[0]" :key="i")
-      .column
-        // label Test {{ i + 1 }}
-        .row
-          .column.column-20(v-for="(param, j) in params")
-            Button(@click="uploadFile(param.name)") {{param.name}}
-              input(type="file" style="display:none" id="param.name")
-            // input(type="text" :placeholder="param.name" v-model="tests[j][i]" required)
-          .column(style="padding: 0")
-          .column.column-20
-            Button(@click="uploadFile('output')") Output
-              input(type="file" style="display:none" id="output")
-            // input(type="text" placeholder="output" v-model="output[i]" required)
+      .column.column-20(v-for="(param, n) in params")
+        Button(@click="uploadFile(n)" :class="{red: isUploaded[n + 1]}") {{param.name || '_'}}
+        input(type="file" style="display:none" :id="'create-file-upload-' + n")
+      .column(style="padding: 0")
+      .column.column-20
+        Button(@click="uploadFile(-1)" :class="{red: isUploaded[0]}") Output
+        input(type="file" style="display:none" id="create-file-upload--1")
     Button.submit(@click="submit") submit
 </template>
 
 <script>
 import api from '@/api'
+import Toastify from 'toastify-js'
 
-
-
+const createToast = (text, type) => Toastify({ text, duration: 3000, newWindow: true, close: true, className: type })
 
 export default {
   name: 'Create',
   data () {
     return {
       challenge: {
-        name: 'Title',
-        description: 'description...',
-        score: 1
+        name: "",
+        description: "",
+        score: 0
       },
       method: {
-        name: 'num',
-        type: 'Integer'
+        name: "",
+        type: "Integer"
       },
-      params: [{ name: 'arg' + (Math.random() * 100 | 0), type: 'Integer' }],
-      output: [''],
-      tests: [['']],
+      tests: {
+        inputs: [
+          []
+        ],
+        outputs: []
+      },
+      params: [
+        { name: "", type: "Integer" }
+      ],
+      submitted: false,
       error: '',
-      submitted: false
+      isUploaded: []
     }
   },
   methods: {
-    uploadFile(id) {
-      console.log(id)
+    uploadFile (n) {
+      const el = document.querySelector("#create-file-upload-" + n)
+      el.click()
+      this.isUploaded[n + 1] = false
+      const that = this
+      that.isUploaded = [...that.isUploaded]
+      el.addEventListener('change', function () {
+        const file = this.files[0]
+        const reader = new FileReader()
+        reader.onload = e => {
+          createToast('File Uploaded!', 'success').showToast()
+          that.isUploaded[n + 1] = true
+          that.isUploaded = [...that.isUploaded]
+          if (n == -1)
+            that.tests.outputs = reader.result.split('\n')
+          else
+            that.tests.inputs[n] = reader.result.split('\n')
+          console.log(that)
+        }
+        reader.readAsText(file)
+      }, false)
     },
-
     addParam () {
       if (this.params.length === 4) {
         return false
       } else if (this.params.length === 0 || this.params[this.params.length - 1].name !== '') {
         this.params.push({ name: '', type: 'Integer' })
-        this.tests.push(','.repeat(this.tests[0].length - 1).split(','))
       }
-    },
-    addTest () {
-      this.tests.forEach(test => test.push(''))
-      this.output.push('')
-      this.challenge.score = this.output.length
     },
     submit (e) {
       this.error = ''
       this.submitted = false
-
       const data = {
         challenge: this.challenge,
         method: this.method,
-        tests: {
-          inputs: this.tests,
-          outputs: this.output
-        },
+        tests: this.tests,
         params: this.params
       }
+      console.log(data)
       api.addChallenge(data).then(_ => {
         this.submitted = true
-        //this.emptyForm()
+          document.body.scrollTop = 0
+          document.documentElement.scrollTop = 0
       }).catch(err => {
-        this.error = err.response.data.message[0].message
+        this.error = err.response.data.message
+        document.body.scrollTop = 0
+        document.documentElement.scrollTop = 0
       })
       e.preventDefault()
-    },
-
-    emptyForm () {
-      this.challenge = {
-        name: '',
-        description: '',
-        score: 1
-      }
-      this.method = {
-        name: '',
-        type: 'Integer'
-      }
-      this.params = [{ name: '', type: 'Integer' }]
-      this.output = ['']
-      this.tests = [['']]
     }
   }
 }
@@ -215,11 +213,13 @@ export default {
     input, select
       font-size: 18px
       height: 42px
-  .test
-    margin-bottom: 12px
-    &:not(:last-of-type)
-      border-bottom: 1px solid rgba(255, 255, 255, .05)
   .submit
     width: 192px
     margin: 48px auto
+  .red
+    background-color: rgba(#D32F2F, .5) !important
+    border: 1px solid rgba(#B71C1C, .5) !important
+    &:hover
+      background-color: rgba(#F44336, .5) !important
+      border: 1px solid rgba(#D32F2F, .5) !important
 </style>

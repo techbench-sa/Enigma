@@ -165,7 +165,7 @@ export default {
       overflow: hidden
       background-image: linear-gradient(#282828, #242424)
       display: grid
-      grid-template-columns: auto 480px
+      grid-template-columns: calc(100% - 480px) 480px
       grid-template-rows: calc(100% - 320px) 320px
       position: relative
       .hide
