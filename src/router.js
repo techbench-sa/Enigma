@@ -29,7 +29,7 @@ const router = new Router({
       meta: {
         requiresAuth: true
       },
-      component: () => import('./views/Create.vue')
+      component: () => import('./views/Create.form.vue')
     },
     {
       path: '/login',

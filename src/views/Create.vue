@@ -6,6 +6,7 @@
       Alert(v-if="submitted" type="success") A new challenge has been created successfully.
       Alert(v-if="error" type="error") {{ error }}
     .row
+      
       textarea(v-model="data" placeholder=`{
   "challenge": {
     "name": "Factorial",

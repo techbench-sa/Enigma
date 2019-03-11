@@ -63,22 +63,29 @@
     .row(style="margin-top: 64px")
       .column
         h2 Tests
-      .column.column-25
-        Button(@click="addTest") add test
+      // .column.column-25
+      //   Button(@click="addTest") add test
     .row.test(v-for="(test, i) in tests[0]" :key="i")
       .column
-        label Test {{ i + 1 }}
+        // label Test {{ i + 1 }}
         .row
           .column.column-20(v-for="(param, j) in params")
-            input(type="text" :placeholder="param.name" v-model="tests[j][i]" required)
+            Button(@click="uploadFile(param.name)") {{param.name}}
+              input(type="file" style="display:none" id="param.name")
+            // input(type="text" :placeholder="param.name" v-model="tests[j][i]" required)
           .column(style="padding: 0")
           .column.column-20
-            input(type="text" placeholder="output" v-model="output[i]" required)
+            Button(@click="uploadFile('output')") Output
+              input(type="file" style="display:none" id="output")
+            // input(type="text" placeholder="output" v-model="output[i]" required)
     Button.submit(@click="submit") submit
 </template>
 
 <script>
 import api from '@/api'
+
+
+
 
 export default {
   name: 'Create',
@@ -101,6 +108,10 @@ export default {
     }
   },
   methods: {
+    uploadFile(id) {
+      console.log(id)
+    },
+
     addParam () {
       if (this.params.length === 4) {
         return false
@@ -117,6 +128,7 @@ export default {
     submit (e) {
       this.error = ''
       this.submitted = false
+
       const data = {
         challenge: this.challenge,
         method: this.method,
