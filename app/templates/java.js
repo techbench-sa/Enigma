@@ -2,6 +2,7 @@ const array = (type, name, values) => {
   const isString = type.indexOf('String') != -1
   const isChar = type.indexOf('char') != -1
   const arr = values.map(val => {
+    val = val.trim()
     if (type.indexOf('[]') != -1)
       return `{${val.slice(1,-1)}}`
     const hasQoutes = val.length >= 2 && (val[0] == '"' || val[0] == "'")
