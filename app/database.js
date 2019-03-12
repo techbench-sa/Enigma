@@ -158,7 +158,7 @@ module.exports = {
     return pool.query(ADD_USER, [name, username, email, phoneNumber, password])
   },
 
-  deleteUser: ({ id }) => {
+  deleteUser: (id) => {
     return pool.query(DELETE_USER, [id])
   }
 }
