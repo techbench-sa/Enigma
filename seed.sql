@@ -149,7 +149,7 @@ CREATE TRIGGER submission_time_modtime
 CREATE TABLE "token" (
     "string" VARCHAR(50) NOT NULL UNIQUE,
     "is_used" BOOLEAN NOT NULL DEFAULT FALSE,
-    "user_id" INTEGER,
+    "user_id" INTEGER
 );
 
 INSERT INTO "token" ("string")
