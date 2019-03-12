@@ -13,7 +13,7 @@
           Icon
       .panel
           .title {{ challenge.name }}
-          .body {{ challenge.description }}
+          .body(v-html="challenge.description.replace(/\\n/g, '<br />')")
           Button(@click="submit" :disabled="checking || solved") {{ solved ? 'solved' : checking ? 'checking...' : 'submit' }}
 </template>
 

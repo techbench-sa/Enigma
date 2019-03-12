@@ -50,6 +50,8 @@ ${
 }
 #### please write above this line ####
 
+error = "Please return something before submitting your code."
+
 ${tests.inputs.map((values, n) => array(type(params[n].type), 'args' + n, values)).join('\n')}
 ${array(type(method_type), 'outputs', tests.outputs)}
 results = []

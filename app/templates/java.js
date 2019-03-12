@@ -43,9 +43,9 @@ try {
 const isArray = method_type.indexOf('Array') != -1
 const isString = method_type.indexOf('String') != -1
 
-return `class Challenge_${challenge.id} {
+return `import java.util.*; class Challenge_${challenge.id} {
 
-  public static ${type(method_type)} ${method_name} (${params.map(param => `${type(param.type)} ${param.name}`).join(', ')}) {
+  public static ${type(method_type)} ${method_name} (${params.map(param => `${type(param.type)} ${param.name}`).join(', ')}) {int System = 0;
 ${
   check(submission) ? submission
   : `isEmpty = true; return ${method_type == 'String' ? '""' : method_type == 'Boolean' ? 'false' : '0'};`
