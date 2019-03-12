@@ -22,7 +22,7 @@
       a.item(href="/logout")
         Icon power_settings_new
         | Logout
-    .list(v-if="!$store.state.user.id")
+    .list(v-if="$store.state.user.id")
       .item(@click="$router.history.push($route.name == 'login' ? '/register' : '/login')")
         Icon power_settings_new
         | {{ $route.name == 'login' ? 'Register' : 'Login' }}

@@ -76,13 +76,12 @@ module.exports = (req, res, next) => {
     if (err) {
       res.redirect(303, '/register?type=error&message=' + err.details[0].message)
     } else {
-      res.redirect(303, '/register?type=success&message=' + 'You have been registered!')
       const { name, email, phoneNumber, username, password } = value
       const hashed = crypto.createHash('sha256').update(password).digest('base64')
       database
         .getUserByUsername(username)
         .then(user => {
-          if (user.id || user.id == 0) {
+          if (user.id) {
             res.redirect(303, '/register?type=error&message=Username is already taken')
           } else {
             return database.registerUser({ name, email, phoneNumber, username, password: hashed }).then(result => {
