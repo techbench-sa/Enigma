@@ -30,9 +30,11 @@ const DELETE_USER = 'DELETE FROM "user" WHERE id=$1::int;'
 
 const ADD_SUBMISSION =
   'INSERT INTO "submission" (player_id, challenge_id, code, language, is_solved, score) SELECT $1::int, $2::int, $3::text, $5::text, $6::boolean, CASE WHEN count(challenge_id) < 10 AND $6::boolean THEN 10-count(challenge_id) ELSE 0 END+$4::int*CASE WHEN $6::boolean THEN 2 ELSE 1 END from "submission" where challenge_id = $2::int AND is_solved;'
-
 const UPDATE_SUBMISSION =
   'UPDATE "submission" SET code=$3::text, language=$5::text, is_solved=$6::boolean, score=(SELECT CASE WHEN count(challenge_id) < 10 AND $6::boolean THEN 10-count(challenge_id) ELSE 0 END+$4::INT*CASE WHEN $6::boolean THEN 2 ELSE 1 END from "submission" WHERE challenge_id = $2::int AND is_solved) WHERE player_id = $1::int AND challenge_id = $2::int;'
+
+const GET_TOKENS = 'SELECT * FROM "token"'
+
 
 // const START_TIME = new Date('2019-03-10T13:00:00')
 
@@ -160,5 +162,9 @@ module.exports = {
 
   deleteUser: (id) => {
     return pool.query(DELETE_USER, [id])
+  },
+
+  getTokens: () => {
+    return pool.query(GET_TOKENS).then(res => res.rows)
   }
 }

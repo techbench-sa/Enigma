@@ -66,6 +66,14 @@ const router = new Router({
         requiresAuth: true
       },
       component: () => import('./views/Leaderboard.vue')
+    },
+    {
+      path: '/tokens',
+      name: 'tokens',
+      meta: {
+        requiresAuth: true
+      },
+      component: () => import('./views/Tokens.vue')
     }
   ]
 })
