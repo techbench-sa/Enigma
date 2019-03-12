@@ -3,7 +3,7 @@ import axios from 'axios'
 // http://localhost:3000/api
 
 const api = axios.create({
-  // baseURL: 'http://localhost:3000/api',
+  // baseURL: 'http://localhost:3001/api',
   baseURL: '/api',
   headers: {
     'Content-Type': 'application/json'
@@ -43,5 +43,11 @@ export default {
   },
   changeVisibilityForAll (visibility) {
     return api.post('/changeVisibilityForAll', { visibility })
+  },
+  deleteUser (id) {
+    return api.post('/deleteUser', { id })
+  },
+  deleteChallenge (id) {
+    return api.post('/deleteChallenge', { id })
   }
 }

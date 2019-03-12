@@ -18,23 +18,28 @@
         tr
           th ID
           th Full Name
+          th Gender
           th Username
           th Email
           th Phone Number
-          th Gender
+          
           th Score
           th Solved
+          th.center Delete
           th.center State
       tbody
         tr(v-for="user in users")
           td.center {{user.id}}
           td {{user.name}}
+          td {{user.gender ? "Male" : "Female"}}
           td {{user.username}}
           td {{user.email}}
           td {{user.phone_number}}
-          td {{user.gender ? "Male" : "Female"}}
           td {{user.score}}
           td {{user.solved}}
+          td.center
+            Button(v-if="user.type == 0" disabled) Admin
+            Button.red(v-if="user.type != 0" @click="deleteUser(user.id)") Delete
           td.center
             Button(v-if="user.type == 0" disabled) Admin
             Button(v-if="user.type == 1" hoverMessage="disable" @click="changeUserType(user.id, 2)") Active
@@ -62,6 +67,9 @@ export default {
     },
     changeUsersType (type) {
       api.changeUsersType(type)
+    },
+    deleteUser (id) {
+      api.deleteUser(id)
     }
   },
   mounted () {

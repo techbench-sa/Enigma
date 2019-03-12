@@ -9,20 +9,23 @@
         col(width="0%")
         col(width="100%")
         col(width="0%")
-        // col(width="0%")
+        col(width="0%")
       thead
         tr
           th ID
           th Title
           th Description
-          // th Points
-          th Visibility
+          th Points
+          th.center Delete
+          th.center State
       tbody
         tr(v-for="challenge in challenges")
           td.center {{challenge.id}}
           td {{challenge.name}}
           td(style="max-width: 1px") {{challenge.description}}
-          // td.center {{challenge.points}}
+          td.center {{challenge.points}}
+          td.center
+            Button.red(@click="deleteChallenge(challenge.id)") Delete
           td.center
             Button(v-if="challenge.type == 1" hoverMessage="Hide" @click="changeVisibility(challenge.id, true)") Visible
             Button.red(v-if="challenge.type == 3"  hoverMessage="Show" @click="changeVisibility(challenge.id, false)") Hidden
@@ -47,6 +50,9 @@ export default {
     },
     changeVisibilityForAll (visibility) {
       this.$store.dispatch('changeVisibilityForAll', visibility)
+    },
+    deleteChallenge (id) {
+      api.deleteChallenge(id)
     }
   },
   mounted () {
