@@ -37,14 +37,14 @@ export default {
     challenge ({ name, signatures }) {
       switch (this.$route.params.lang) {
         case 'java':
-          this.value = `class ${name.replace(' ', '')} {\n\n` +
+          this.value = `class ${name.replace(/ /g, '')} {\n\n` +
             `\t${signatures.java} {\n\n` +
             '\t\t/* write your code here */\n\n' +
             '\t}\n\n' +
             '}'
           break
         case 'python':
-          this.value = `# ${name.replace(' ', '')}.py\n\n` +
+          this.value = `# ${name.replace(/ /g, '')}.py\n\n` +
             `${signatures.python}:\n\n` +
             '\t# write your code here #\n\n' +
             '#### please write above this line ####\n\n'
