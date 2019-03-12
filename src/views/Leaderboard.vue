@@ -44,7 +44,7 @@ export default {
   },
   computed: {
     total () {
-      return this.users.length ? this.users.reduce((max, user) => user.score > max ? user.score : max, 0) : 0
+      return this.users.length ? this.users.reduce((max, user) => +user.score > max ? +user.score : max, 0) : 0
     }
   },
   methods: {
