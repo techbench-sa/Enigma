@@ -154,8 +154,8 @@ module.exports = {
     })
   },
 
-  registerUser: ({ name, username, email, phoneNumber, password }) => {
-    return pool.query(ADD_USER, [name, username, email, phoneNumber, password])
+  registerUser: ({ name, username, email, phoneNumber, password, gender, token }) => {
+    return pool.query(ADD_USER, [name, username, email, phoneNumber, password, 1, 'xxx'])
   },
 
   deleteUser: ({ id }) => {
