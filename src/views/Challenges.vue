@@ -20,7 +20,7 @@
           th.center State
       tbody
         tr(v-for="challenge in challenges")
-          td.center {{challenge.id}}
+          td.center(@click="solveWith('java')") {{challenge.id}}
           td {{challenge.name}}
           td(style="max-width: 1px") {{challenge.description}}
           td.center {{challenge.points}}
@@ -47,6 +47,9 @@ export default {
   methods: {
     changeVisibility (id) {
       this.$store.dispatch('changeVisibility', id)
+    },
+    solveWith (lang) {
+      this.$router.history.push(`solve/${lang}/${this.id}`)
     },
     changeVisibilityForAll (visibility) {
       this.$store.dispatch('changeVisibilityForAll', visibility)
