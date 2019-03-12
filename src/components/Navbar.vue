@@ -4,7 +4,7 @@
     router-link.brand(:to="'/'")
       Icon.back(:class="{showBack}") arrow_back_ios
       | Enigma
-    .list(v-if="$store.state.user.id")
+    .list(v-if="$store.state.user.id && $route.name != 'leaderboard'")
       router-link.item(:to="'/challenges'" v-if="$store.state.user.type == 0")
         Icon assignment
         | Challenges
@@ -17,11 +17,11 @@
       router-link.item(:to="'/create'"  v-if="$store.state.user.type == 0")
         Icon add
         | Create
+    .list(v-if="!$store.state.user.id || $route.name == 'leaderboard'")
     .list(v-if="$store.state.user.id")
       a.item(href="/logout")
         Icon power_settings_new
         | Logout
-    .list(v-if="!$store.state.user.id")
     .list(v-if="!$store.state.user.id")
       .item(@click="$router.history.push($route.name == 'login' ? '/register' : '/login')")
         Icon power_settings_new

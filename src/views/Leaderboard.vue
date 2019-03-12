@@ -14,22 +14,27 @@
           th.center RANK
           th PLAYER'S NAME
           th PROGRESS
+          th.center POINTS
           th.center SOLVED
-      tbody
+      transition-group(name="leaderboard-animation" tag="tbody")
         //- Button(@click="test(0, true)") Show All
         //- Button.red(@click="test(-1, false)") Hide All
-        tr(v-for="user in users")
-          td.center(style="font-size: 3.2rem") {{user.id}}
+        
+        tr(v-for="(user, i) in users" :key="user.id")
+          td.center(style="font-size: 3.2rem") {{i + 1}}
           td {{user.name}}
           td
             .progress-bar
               .bar
-                .progress(:style="'width:' + ((user.solved - diff(user.solved, user.score)) / total * 100) + '%'")
+                .progress(:style="'width:' + (user.score / total * 100) + '%'")
+          td.center(style="font-size: 2.4rem") {{user.score}} pts
           td.center(style="font-size: 3.2rem") {{user.solved}}
 </template>
 
 <script>
 import api from '../api'
+import Vue from 'vue'
+
 export default {
   name: 'Leaderboard',
   data () {
@@ -39,19 +44,15 @@ export default {
   },
   computed: {
     total () {
-      return this.users.length ? this.users.reduce((max, user) => user.solved > max ? user.solved : max, 0) : 0
+      return this.users.length ? this.users.reduce((max, user) => user.score > max ? user.score : max, 0) : 0
     }
   },
   methods: {
     getUsers () {
       api.getUsers().then(res => {
-        this.users = res.data.sort((a, b) => a.id - b.id)
+        this.users = res.data.sort((a, b) => b.score - a.score)
       })
       this.timeout = setTimeout(this.getUsers, 1000)
-    },
-    diff (solved, score) {
-      const similar = this.users.filter(user => user.solved == solved)
-      return similar.findIndex(user => user.score == score) / similar.length
     },
     changeUserType (id, type) {
       api.changeUserType(id, type)
@@ -114,17 +115,19 @@ export default {
       background-color: rgba(#F44336, .5) !important
       border: 1px solid rgba(#D32F2F, .5) !important
 
-.progress-bar 
-	border-radius: 4px
-	overflow: hidden
-  width: 100%
-	span
-		display: block
-.bar
-  background: #212121
-.progress
-  animation: loader 8s ease infinite
-  background: rgb(250, 185, 21)
-  color: #fff
-  padding: 2px
+  .progress-bar 
+    border-radius: 4px
+    overflow: hidden
+    width: 100%
+    span
+      display: block
+  .bar
+    background: #212121
+  .progress
+    animation: loader 8s ease infinite
+    background: rgb(250, 185, 21)
+    color: #fff
+    padding: 2px
+  .leaderboard-animation-move
+    transition: transform .5s
 </style>
