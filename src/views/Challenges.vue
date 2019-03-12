@@ -52,7 +52,8 @@ export default {
       this.$store.dispatch('changeVisibilityForAll', visibility)
     },
     deleteChallenge (id) {
-      api.deleteChallenge(id)
+      this.$store.dispatch('deleteChallenge', id)
+      
     }
   },
   mounted () {

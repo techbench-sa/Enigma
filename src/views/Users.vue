@@ -22,7 +22,6 @@
           th Username
           th Email
           th Phone Number
-          
           th Score
           th Solved
           th.center Delete

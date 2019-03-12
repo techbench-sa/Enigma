@@ -18,6 +18,8 @@ const solveChallengeHandler = require('./handlers/solveChallenge')
 const addChallengeHandler = require('./handlers/addChallenge')
 const changeVisibilityHandler = require('./handlers/changeVisibility')
 const changeVisibilityForAllHandler = require('./handlers/changeVisibilityForAll')
+const deleteUserHandler = require('./handlers/deleteUser')
+const deleteChallengeHandler = require('./handlers/deleteChallenge')
 
 // generic route handler
 const genericHandler = (req, res, next) => {
@@ -30,7 +32,7 @@ const genericHandler = (req, res, next) => {
 function isUserAuthenticated (req, res, next) {
   // FOR DEVELOPMENT
   if (global.USER) req.user = global.USER
-  //////////////////
+  /// ///////////////
   if (req.user) {
     next()
   } else {
@@ -44,7 +46,7 @@ function isUserAdmin (req, res, next) {
     req.user = global.USER
     next()
   }
-  //////////////////
+  /// ///////////////
   else if (req.user && req.user.type === 0) {
     next()
   } else {
@@ -103,6 +105,14 @@ router.post('/api/addChallenge', isUserAdmin, addChallengeHandler)
 
 router.post('/api/changeVisibility', isUserAdmin, changeVisibilityHandler)
 
-router.post('/api/changeVisibilityForAll', isUserAdmin, changeVisibilityForAllHandler)
+router.post('/api/deleteUser', isUserAdmin, deleteUserHandler)
+
+router.post('/api/deleteChallenge', isUserAdmin, deleteChallengeHandler)
+
+router.post(
+  '/api/changeVisibilityForAll',
+  isUserAdmin,
+  changeVisibilityForAllHandler
+)
 
 module.exports = router
