@@ -13,7 +13,7 @@
         .row
           .column
             label Email
-            input(type="email" placeholder="JohnSmith@example.com" name="email" required)
+            input(type="email" placeholder="john@smith.com" name="email" required)
           .column
             label Phone number
             input(type="text" placeholder="05XXXXXXXX" name="phoneNumber" minlength="9" maxlength="21" required)
