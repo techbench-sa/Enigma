@@ -43,7 +43,7 @@ try {
 const isArray = method_type.indexOf('Array') != -1
 const isString = method_type.indexOf('String') != -1
 
-return `class Challenge_${challenge.id} {
+return `import java.util.*; class Challenge_${challenge.id} {int System = 0;
 
   public static ${type(method_type)} ${method_name} (${params.map(param => `${type(param.type)} ${param.name}`).join(', ')}) {
 ${

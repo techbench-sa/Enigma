@@ -80,7 +80,7 @@ module.exports = (req, res, next) => {
           player_id: userID,
           challenge_id: challenge.id,
           code: submission,
-          is_solved: challenge.points === score,
+          is_solved: challenge.points <= score,
           score,
           lang
         })
