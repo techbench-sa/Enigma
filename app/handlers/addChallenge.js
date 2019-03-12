@@ -49,8 +49,8 @@ module.exports = ({ user, body: data }, res, next) => {
         message: err.details[0].message
       })
     } else {
-      console.log('========================================')
-      console.log(value)
+      if (value.challenge && value.challenge.score)
+        value.challenge.score = value.challenge.outputs
       database.addChallenge(value).then(id => res.json(id))
     }
   })
