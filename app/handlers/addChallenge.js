@@ -49,8 +49,8 @@ module.exports = ({ user, body: data }, res, next) => {
         message: err.details[0].message
       })
     } else {
-      if (value.challenge && value.challenge.score == 0)
-        value.challenge.score = value.challenge.outputs
+      if (value.challenge.score == 0)
+        value.challenge.score = value.tests.outputs.length
       database.addChallenge(value).then(id => res.json(id))
     }
   })
