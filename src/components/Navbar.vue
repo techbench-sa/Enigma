@@ -11,6 +11,9 @@
       router-link.item(:to="'/users'" v-if="$store.state.user.type == 0")
         Icon people
         | Users
+      router-link.item(:to="'/tokens'" v-if="$store.state.user.type == 0")
+        Icon vpn_key
+        | Tokens
       router-link.item(:to="'/leaderboard'" v-if="$store.state.user.type == 0")
         Icon show_chart
         | Leaderbaord

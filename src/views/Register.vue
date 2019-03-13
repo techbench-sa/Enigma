@@ -21,6 +21,11 @@
           .column
             label Username
             input(type="text" placeholder="johnSmith" name="username" minlength="4" maxlength="16" required)
+          .column.column-33
+            label Gender
+            select(type="text" placeholder="johnSmith" name="gender" required)
+              option(value="male") male
+              option(value="female") female
         .row
           .column
             label Password
@@ -28,6 +33,10 @@
           .column
             label Verify password
             input(type="password" name="verifyPassword" minlength="8" maxlength="32" required)
+        .row
+          .column
+            label Token
+            input(type="text" placeholder="234A2174B2142FEADE35E3C1337D3ACE" minlength="32" maxlength="32" name="token" required)
         br
         br
         br

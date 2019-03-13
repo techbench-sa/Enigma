@@ -19,6 +19,7 @@ const addChallengeHandler = require('./handlers/addChallenge')
 const changeVisibilityHandler = require('./handlers/changeVisibility')
 const changeVisibilityForAllHandler = require('./handlers/changeVisibilityForAll')
 const deleteUserHandler = require('./handlers/deleteUser')
+const getTokensHandler = require('./handlers/tokens')
 const deleteChallengeHandler = require('./handlers/deleteChallenge')
 
 // generic route handler
@@ -97,6 +98,8 @@ router.post('/api/submit', isUserAuthenticated, solveChallengeHandler)
 // For admins only
 router.get('/api/users', isUserAdmin, usersHandler)
 
+router.get('/api/tokens', isUserAdmin, getTokensHandler)
+
 router.post('/api/changeUserType', isUserAdmin, changeUserTypeHandler)
 
 router.post('/api/changeUsersType', isUserAdmin, changeUsersTypeHandler)
@@ -108,6 +111,7 @@ router.post('/api/changeVisibility', isUserAdmin, changeVisibilityHandler)
 router.post('/api/deleteUser', isUserAdmin, deleteUserHandler)
 
 router.post('/api/deleteChallenge', isUserAdmin, deleteChallengeHandler)
+
 
 router.post(
   '/api/changeVisibilityForAll',
