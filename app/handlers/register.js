@@ -45,7 +45,7 @@ module.exports = (req, res, next) => {
       .error(err => 'Gender is required.'),
     password: Joi.string()
       .required()
-      .min(8)
+      .min(1)
       // .regex(/\w*[a-zA-Z]\w*/i)
       // .regex(/\w*[0-9]\w*/i)
       .regex(/^[A-Za-z\d@$!%*#?&\(\)-]*$/i)
@@ -75,8 +75,8 @@ module.exports = (req, res, next) => {
       }),
     token: Joi.string()
       .required()
-      .min(32)
-      .max(32)
+      .min(1)
+      .max(33)
       .error(err => {
         switch(err[0].type) {
           case 'string.min':
