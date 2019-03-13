@@ -11,7 +11,8 @@ const CHANGE_CHALLENGES_TYPE = 'UPDATE "challenge" SET type=$1::int;'
 const DELETE_CHALLENGE = 'DELETE FROM "challenge" WHERE id=$1::int;'
 
 const ADD_USER =
-  'WITH user_insert AS ( INSERT INTO "user" (name, username, email, phone_number, password, gender) SELECT $1::text, $2::text, $3::text, $4::text, $5::text, $6::boolean WHERE EXISTS (SELECT string FROM "token" where string=$7::text AND NOT is_used) RETURNING id) UPDATE "token" SET is_used=TRUE, user_id=(SELECT id FROM user_insert) WHERE string=$7::text AND NOT is_used;'
+  'WITH user_insert AS ( INSERT INTO "user" (name, username, email, phone_number, password, gender) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text, $6::boolean);'
+  // WHERE EXISTS (SELECT string FROM "token" where string=$7::text AND TRUE) RETURNING id) UPDATE "token" SET is_used=TRUE, user_id=(SELECT id FROM user_insert) WHERE string=$7::text AND TRUE;'
 const GET_USER = 'SELECT * FROM "user" WHERE id=$1::int;'
 const GET_USER_DATA =
   'SELECT *  FROM "user" u  JOIN (SELECT SUM(score) score, player_id, COUNT(is_solved) solved FROM "submission" where player_id=$1::int group by player_id) AS s ON u.id=s.player_id WHERE u.id=$1::int;'
