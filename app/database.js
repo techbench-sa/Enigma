@@ -11,7 +11,7 @@ const CHANGE_CHALLENGES_TYPE = 'UPDATE "challenge" SET type=$1::int;'
 const DELETE_CHALLENGE = 'DELETE FROM "challenge" WHERE id=$1::int;'
 
 const ADD_USER =
-  'INSERT INTO "user" (name, username, email, phone_number, password) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text);'
+  'WITH user_insert AS ( INSERT INTO "user" (name, username, email, phone_number, password, gender) SELECT $1::text, $2::text, $3::text, $4::text, $5::text, $6::boolean WHERE EXISTS (SELECT string FROM "token" where string=$7::text AND NOT is_used) RETURNING id) UPDATE "token" SET is_used=TRUE, user_id=(SELECT id FROM user_insert) WHERE string=$7::text AND NOT is_used;'
 const GET_USER = 'SELECT * FROM "user" WHERE id=$1::int;'
 const GET_USER_DATA =
   'SELECT *  FROM "user" u  JOIN (SELECT SUM(score) score, player_id, COUNT(is_solved) solved FROM "submission" where player_id=$1::int group by player_id) AS s ON u.id=s.player_id WHERE u.id=$1::int;'
@@ -155,7 +155,12 @@ module.exports = {
   },
 
   registerUser: ({ name, username, email, phoneNumber, password, gender, token }) => {
-    return pool.query(ADD_USER, [name, username, email, phoneNumber, password, 1, 'xxx'])
+    console.log(name, username, email, phoneNumber, password, gender, token)
+    // if (res.rowCount === 0)
+    //   Faild
+    // else
+    //   Success
+    return pool.query(ADD_USER, [name, username, email, phoneNumber, password, gender, token])
   },
 
   deleteUser: ({ id }) => {
