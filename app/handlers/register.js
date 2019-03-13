@@ -40,6 +40,9 @@ module.exports = (req, res, next) => {
           default: return 'Username is required'
         }
       }),
+    gender: Joi.valid('String', ['male', 'female'])
+      .required()
+      .error(err => 'Gender is required.'),
     password: Joi.string()
       .required()
       .min(8)
@@ -69,6 +72,17 @@ module.exports = (req, res, next) => {
           case 'any.allowOnly': return 'Password and Password verification does not match'
           default: return err[0].type
         }
+      }),
+    token: Joi.string()
+      .required()
+      .min(32)
+      .max(32)
+      .error(err => {
+        switch(err[0].type) {
+          case 'string.min':
+          case 'string.max': return 'Token has to be exactly 32 characters long'
+          default: return 'Token is required'
+        }
       })
   })
 
@@ -76,20 +90,27 @@ module.exports = (req, res, next) => {
     if (err) {
       res.redirect(303, '/register?type=error&message=' + err.details[0].message)
     } else {
-      const { name, email, phoneNumber, username, password } = value
+      const { name, email, phoneNumber, username, password, gender, token } = value
       const hashed = crypto.createHash('sha256').update(password).digest('base64')
       database
         .getUserByUsername(username)
         .then(user => {
+          console.log(user)
           if (user.id) {
             res.redirect(303, '/register?type=error&message=Username is already taken')
           } else {
-            return database.registerUser({ name, email, phoneNumber, username, password: hashed }).then(result => {
-              res.redirect(303, '/register?type=success&message=You have been registered!')
+            return database.registerUser({
+              name, email, phoneNumber, username, password: hashed, gender: gender == 'male', token
+            }).then(result => {
+              if (result.rowCount === 0)
+                res.redirect(303, '/register?type=error&message=Token is already used!')
+              else
+                res.redirect(303, '/register?type=success&message=You have been registered!')
             })
           }
         })
         .catch(err => {
+          console.log(err)
           res.redirect(303, '/register?type=error&message=Failed to connect to the server.')
         })
     }
