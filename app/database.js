@@ -11,7 +11,7 @@ const CHANGE_CHALLENGES_TYPE = 'UPDATE "challenge" SET type=$1::int;'
 const DELETE_CHALLENGE = 'DELETE FROM "challenge" WHERE id=$1::int;'
 
 const ADD_USER =
-  'WITH user_insert AS ( INSERT INTO "user" (name, username, email, phone_number, password, gender) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text, $6::boolean);'
+  'INSERT INTO "user" (name, username, email, phone_number, password, gender) VALUES ($1::text, $2::text, $3::text, $4::text, $5::text, $6::boolean);'
   // WHERE EXISTS (SELECT string FROM "token" where string=$7::text AND TRUE) RETURNING id) UPDATE "token" SET is_used=TRUE, user_id=(SELECT id FROM user_insert) WHERE string=$7::text AND TRUE;'
 const GET_USER = 'SELECT * FROM "user" WHERE id=$1::int;'
 const GET_USER_DATA =
@@ -162,7 +162,7 @@ module.exports = {
     //   Faild
     // else
     //   Success
-    return pool.query(ADD_USER, [name, username, email, phoneNumber, password, gender, token])
+    return pool.query(ADD_USER, [name, username, email, phoneNumber, password, gender])
   },
 
   deleteUser: (id) => {
