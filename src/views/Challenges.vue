@@ -1,8 +1,8 @@
 <template lang="pug">
 #Challenges
   .container
-    Button.float-right.red.center(@click="changeVisibilityForAll(3)") Disable All
-    Button.float-right.center(@click="changeVisibilityForAll(1)") Activate All
+    Button.float-right.red.center(@click="changeVisibilityForAll(3)") Hide All
+    Button.float-right.center(@click="changeVisibilityForAll(1)") Show All
     table
       colgroup
         col(width="0%")

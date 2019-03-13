@@ -24,8 +24,8 @@
           .column.column-33
             label Gender
             select(type="text" placeholder="johnSmith" name="gender" required)
-              option(value="male") male
-              option(value="female") female
+              option(value="male") Male
+              option(value="female") Female
         .row
           .column
             label Password
@@ -36,7 +36,7 @@
         .row
           .column
             label Token
-            input(type="text" placeholder="234A2174B2142FEADE35E3C1337D3ACE" minlength="32" maxlength="32" name="token" required)
+            input(type="text" placeholder="234A2174B2142FEADE35E3C1337D3ACE" minlength="12" maxlength="32" name="token" required)
         br
         br
         br

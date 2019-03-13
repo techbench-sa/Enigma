@@ -11,6 +11,9 @@ const api = axios.create({
 })
 
 export default {
+  getTokens () {
+    return api('/tokens')
+  },
   getUser () {
     return api('/user')
   },

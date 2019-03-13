@@ -33,8 +33,7 @@ const ADD_SUBMISSION =
 const UPDATE_SUBMISSION =
   'UPDATE "submission" SET code=$3::text, language=$5::text, is_solved=$6::boolean, score=(SELECT CASE WHEN count(challenge_id) < 10 AND $6::boolean THEN 10-count(challenge_id) ELSE 0 END+$4::INT*CASE WHEN $6::boolean THEN 2 ELSE 1 END from "submission" WHERE challenge_id = $2::int AND is_solved) WHERE player_id = $1::int AND challenge_id = $2::int;'
 
-const GET_TOKENS = 'SELECT * FROM "token"'
-
+const GET_TOKENS = 'SELECT * FROM "token" ORDER BY user_id'
 
 // const START_TIME = new Date('2019-03-10T13:00:00')
 

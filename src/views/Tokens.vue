@@ -11,15 +11,15 @@
           thead
             tr
               th Token
-              th User
+              th User ID
               th.center Used
           tbody
             tr(v-for="token in tokens")
               td.center {{token.string}}
               td {{token.user_id}}
               td.center
-                Button.red(v-if="token.is_used" disabled) True
-                Button(v-if="!token.is_used" disabled) False
+                Button.red(v-if="token.is_used" disabled) Yes
+                Button(v-if="!token.is_used" disabled) No
 </template>
 
 <script>
@@ -34,7 +34,7 @@ export default {
   methods: {
     getTokens () {
       api.getTokens().then(res => {
-        this.tokens = res.data.sort((a, b) => a.id - b.id)
+        this.tokens = res.data //.sort((a, b) => a.id - b.id)
       })
       this.timeout = setTimeout(this.getTokens, 1000)
     }

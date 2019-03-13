@@ -81,6 +81,7 @@ INSERT INTO "user" ("name", "username", "password", "type")
         VALUES ('Mohammed Alobaidi', 'mohalobaidi', 'HO5G7VT6BfPPBKop6EXSA+g+Xe/7GJ6EFVfkLdlILdo=', 0), -- qwertyqwerty
         ('Hadi Albinsaad', 'hadi', 'fntZQTUb/h4j43/7BmWhBBpoLs0sgYkFTMyUsW06Ic0=', 0), -- hadi
         ('Admin', 'admin', 'fntZQTUb/h4j43/7BmWhBBpoLs0sgYkFTMyUsW06Ic0=', 0), -- hadi
+        ('Sami Zhioua', 'sami', 'KsQaGUwkDmIvE0E8IHNyEWGbuRM59mwlrsFi4zJEDBw=', 0), -- zhioua
         ('Active Player', 'active', 'X+zrZv/IbzjZUnhsbWlsecLbwjndTpG0ZynXOif7V+k=', 1), -- 0
         ('No Active Player', 'noactive', 'X+zrZv/IbzjZUnhsbWlsecLbwjndTpG0ZynXOif7V+k=', 2) -- 0
 ;
