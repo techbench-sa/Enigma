@@ -32,11 +32,11 @@
             input(type="password" name="password" required)
           .column
             label Verify password
-            input(type="password" name="verifyPassword" minlength="8" maxlength="32" required)
+            input(type="password" name="verifyPassword" minlength="1" maxlength="32" required)
         .row
           .column
             label Token
-            input(type="text" placeholder="234A2174B2142FEADE35E3C1337D3ACE" minlength="0" maxlength="0" name="token" required)
+            input(type="text" placeholder="234A2174B2142FEADE35E3C1337D3ACE" minlength="0" maxlength="1" name="token" required)
         br
         br
         br
