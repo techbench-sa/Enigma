@@ -1,6 +1,6 @@
 <!-- markdownlint-disable MD001 MD014 -->
 
-# Enigma (Hackathon System)
+# Enigma (Programming Competition System)
 
 **Enigma** is an automated system to upload, compile and judge players submissions of programming problems. Currently, it's supporting Java and Python for solving problems.
 
