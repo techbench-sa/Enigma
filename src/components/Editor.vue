@@ -5,6 +5,7 @@
 </template>
 
 <script>
+// TODO: get light mode
 import CodeMirror from 'codemirror'
 import 'codemirror/lib/codemirror.css'
 import 'codemirror/theme/monokai.css'
@@ -66,6 +67,7 @@ export default {
 </script>
 
 <style lang="sass">
+// TODO: sepereate dark theme from structural style
 .Editor
   height: 100%
   width: 100%

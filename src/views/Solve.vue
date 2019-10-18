@@ -1,9 +1,12 @@
 <template lang="pug">
+//- TODO: WRITE A REAL TODO, or just fix the code.
+//- TODO: split console to another component.
 #Solve(:class="{solved}")
   .container
     .wrapper(:style="!((results.length || error) && !isConsoleHidden) ? 'grid-template-rows: 100% 0' : ''")
       Editor(:value="value" v-on:update:value="value = $event")
-      Icon.hide(v-if="results.length || error" :class="{isConsoleHidden}" @click="toggleConsole") {{ isConsoleHidden ? 'expand_less' : 'expand_more' }}
+      Icon.hide(v-if="results.length || error" :class="{isConsoleHidden}" @click="toggleConsole")
+        | {{ isConsoleHidden ? 'expand_less' : 'expand_more' }}
       .console(v-if="(results.length || error) && !isConsoleHidden")
         .result.wrong(v-if="error")
           .content {{ error }}
@@ -14,13 +17,15 @@
       .panel
           .title {{ challenge.name }}
           .body(v-html="challenge.description.replace(/\\n/g, '<br />')")
-          Button(@click="submit" :disabled="checking || solved") {{ solved ? 'solved' : checking ? 'checking...' : 'submit' }}
+          Button(@click="submit" :disabled="checking || solved")
+            | {{ solved ? 'solved' : checking ? 'checking...' : 'submit' }}
 </template>
 
 <script>
 import api from '@/api'
 import { mapGetters } from 'vuex'
 
+// TODO: WRITE A REAL TODO, or just fix the code.
 export default {
   name: 'Challenge',
   data () {
@@ -35,21 +40,7 @@ export default {
   },
   watch: {
     challenge ({ name, signatures }) {
-      switch (this.$route.params.lang) {
-        case 'java':
-          this.value = `class ${name.replace(/ /g, '')} {\n\n` +
-            `\t${signatures.java} {\n\n` +
-            '\t\t/* write your code here */\n\n' +
-            '\t}\n\n' +
-            '}'
-          break
-        case 'python':
-          this.value = `# ${name.replace(/ /g, '')}.py\n\n` +
-            `${signatures.python}:\n\n` +
-            '\t# write your code here #\n\n' +
-            '#### please write above this line ####\n\n'
-          break
-      }
+      this.generateTemplate(name, signatures)
     },
     results (results) {
       const errors = results.filter(res => res.type === 'warning' || res.type === 'wrong').length
@@ -71,6 +62,23 @@ export default {
     }
   },
   methods: {
+    generateTemplate (name, signatures = {}) {
+      switch (this.$route.params.lang) {
+        case 'java':
+          this.value = `class ${name.replace(/ /g, '')} {\n\n` +
+            `\t${signatures.java} {\n\n` +
+            '\t\t/* write your code here */\n\n' +
+            '\t}\n\n' +
+            '}'
+          break
+        case 'python':
+          this.value = `# ${name.replace(/ /g, '')}.py\n\n` +
+            `${signatures.python}:\n\n` +
+            '\t# write your code here #\n\n' +
+            '#### please write above this line ####\n\n'
+          break
+      }
+    },
     toggleConsole () {
       this.isConsoleHidden = !this.isConsoleHidden
     },
@@ -83,74 +91,32 @@ export default {
       const submission = this.value.split('\n').slice(3, -3).join('\n')
       api.submit(id, lang, submission).then(res => {
         this.checking = false
-        const { error, results, code } = res.data
-        if (code === 0) {
-          this.results = results.map(({ type, payload }) => {
-            switch (type) {
-              case 'test':
-                const { method_name: method, method_type: outputType } = this.challenge
-                const parameters = JSON.parse(this.challenge.parameters)
-                const { inputs, outputs } = this.tests
-                const { test, result, value } = payload
-                const t = i => parameters[i].type
-                const args = inputs.map((v, i) => {
-                  if (t(i).indexOf('Array') != -1)
-                    return `<span class="${t(i)}">${v[test]}</span>`
-                  const isString = t(i).indexOf('String') != -1
-                  const isChar = t(i).indexOf('char') != -1
-                  const hasQoutes = v[test].length >= 2 && (v[test][0] == '"' || v[test][0] == "'")
-                  if (isString && !hasQoutes)
-                    return `<span class="${t(i)}">"${v[test]}"</span>`
-                  if (isChar && !hasQoutes)
-                    return `<span class="${t(i)}">'${v[test]}'</span>`
-                  return `<span class="${t(i)}">${v[test]}</span>`
-                })
-                const out = val => {
-                  if (outputType.indexOf('Array') != -1)
-                    return `<span class="${outputType}">${val}</span>`
-                  const isString = outputType.indexOf('String') != -1
-                  const isChar = outputType.indexOf('Char') != -1
-                  const hasQoutes = val.length >= 2 && (val[0] == '"' || val[0] == "'")
-                      if (isString && !hasQoutes)
-                        return `<span class="${outputType}">"${val}"</span>`
-                      if (isChar && !hasQoutes)
-                        return `<span class="${outputType}">'${val}'</span>`
-                      return `<span class="${outputType}">${val}</span>`
-                }
-                if (value) {
-                  return {
-                    message: `${method}(${args.join(', ')}) <i>returns</i> ${out(result)}`,
-                    type: 'correct'
-                  }
-                } else {
-                  return {
-                    message: `${method}(${args.join(', ')}) <i>should return</i> ${out(outputs[test])} <i>but it returns</i> ${out(result)}`,
-                    type: 'wrong'
-                  }
-                }
-              default:
-                return {
-                  message: payload.message,
-                  type: 'warning'
-                }
-            }
-          })
-        }
-        if (code === 1) {
-          this.error = error
-          console.warn('Error: Please print a presentable message here!')
+        const { code, payload } = res.data
+        switch (code) {
+          case 0:
+            this.results = payload
+            break
+          case 1:
+            this.error = payload
+            console.warn('Error: Please print a presentable message here!')
         }
       })
     }
   },
   mounted () {
     const id = this.$route.params.id
-    this.$store.dispatch('fetchChallenge', id)
+    if (this.value === '') {
+      let name = this.challenge.name || 'Challenge_' + id
+      let signatures = this.challenge.signatures || {}
+      this.generateTemplate(name, signatures)
+    }
+    // this.$store.dispatch('fetchChallenge', id)
   }
 }
 </script>
 
 <style lang="sass">
+// TODO: sepereate dark theme from structural style
 #Solve
   height: 100%
   padding-bottom: 24px

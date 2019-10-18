@@ -3,21 +3,12 @@
     Navbar
     transition(name="fade")
       router-view.view(:key="$route.fullPath")
-    tb-footer
 </template>
 
 <script>
 
 export default {
-  name: 'app',
-  mounted () {
-    this.$store.dispatch('fetchUser').then(res => {
-      const meta = this.$router.history.meta
-      if ((meta && meta.requiresAuth) || res.id) {
-        this.$router.history.push(`/`)
-      }
-    })
-  }
+  name: 'app'
 }
 </script>
 

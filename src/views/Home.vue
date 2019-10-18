@@ -1,20 +1,23 @@
 <template lang="pug">
+//- TODO: WRITE A REAL TODO, or just fix the code.
 #Home
   .container
-    header
-      h1  Welcome, {{ user.name }}
-      h3 Your current score is
-        span {{ user.score }}
-        | points
-      .row
-        .column.column-33.column-offset-33
-    Grid(:cols="4")
-      Card( v-for="(challenge, i) in challenges" :key="i" v-bind="challenge")
+    Header
+    Pane(title="Continue Solving")
+      Grid(:cols="4")
+        ChallengeCard( v-for="(challenge, i) in challenges.slice(0, 3)" :key="i" v-bind="challenge")
+    Pane(title="All Challenges")
+      Grid(:cols="4")
+        ChallengeCard( v-for="(challenge, i) in challenges.slice(3)" :key="i" v-bind="challenge")
+    Pane(title="Solved Challenges")
+      Grid(:cols="4")
+        ChallengeCard( v-for="(challenge, i) in challenges.slice(0, 6)" :key="i" v-bind="challenge")
 </template>
 
 <script>
 import { mapGetters } from 'vuex'
 
+// TODO: WRITE A REAL TODO, or just fix the code.
 export default {
   name: 'Home',
   computed: { ...mapGetters(['challenges', 'user']) },
@@ -28,14 +31,5 @@ export default {
 <style lang="sass" scoped>
 #Home
   .container
-    padding: 64px 36px
-  header
-    text-align: center
-    padding: 64px 0
-    h3
-      color: rgba(#fff, .7)
-      span
-        color: #fff
-        padding: 0 12px
-
+    padding: 6.4rem 3.6rem
 </style>

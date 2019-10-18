@@ -4,9 +4,9 @@ import router from '@/router'
 import store from '@/store'
 import components from '@/components'
 
-Vue.config.productionTip = false
-
 Vue.use(components)
+
+Vue.config.productionTip = false
 
 new Vue({
   router,

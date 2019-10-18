@@ -1,9 +1,7 @@
-.vscode
-.eslintrc.json
 .DS_Store
 node_modules
 /dist
-/app/users
+
 # local env files
 .env.local
 .env.*.local
@@ -20,6 +18,4 @@ yarn-error.log*
 *.ntvs*
 *.njsproj
 *.sln
-*.sw*
-
-package-lock.json
+*.sw?

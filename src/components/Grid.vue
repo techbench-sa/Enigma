@@ -6,12 +6,12 @@ transition-group.Grid(:style="style" tag="div")
 <script>
 export default {
   name: 'Grid',
-  props: ['cols', 'rows', 'limit'],
+  props: ['cols', 'rows'],
   computed: {
     style () {
       let style = '--cols:' + (this.cols || 6)
       if (this.rows) {
-        style += ';grid-template-rows: repeat(' + this.rows + ', 1fr)'
+        style += `;grid-template-rows: repeat(${this.rows}, 1fr)`
       }
       return style
     }
@@ -19,7 +19,6 @@ export default {
 }
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style lang="sass" scoped>
 .Grid
   display: grid

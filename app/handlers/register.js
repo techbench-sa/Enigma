@@ -6,26 +6,28 @@ module.exports = (req, res, next) => {
   const schema = Joi.object().keys({
     name: Joi.string()
       .required()
-      .regex(/^[a-z\d\s\-\.\,']*$/i)
+      .regex(/^[a-z\d\s\-.,']*$/i)
       .min(4)
       .max(25)
       .error(err => {
-        switch(err[0].type) {
-          case 'string.min': return 'Name should be longer than 4 letters'
-          case 'string.max': return 'Name should not be longer than 25 letters'
-          case 'string.regex.base': return 'Name should only contain letters'
-          default: return 'Name is required'
+        switch (err[0].type) {
+          case 'string.min': return 'Full name should be 4 letters or longer.'
+          case 'string.max': return 'Full name should not be longer than 25 letters'
+          case 'string.regex.base': return 'Full name should only contain letters'
+          default: return 'Full name is required'
         }
       }),
     email: Joi.string()
       .email()
       .required()
+      /* eslint-disable-next-line */
       .error(err => 'Email is required.'),
     phoneNumber: Joi.string()
-      .regex(/^[a-z\d\s\-\.\,']*$/i)
+      .regex(/^[a-z\d\s\-.,']*$/i)
       .min(9)
       .max(21)
       .required()
+      /* eslint-disable-next-line */
       .error(err => 'Phone number is required.'),
     username: Joi.string()
       .required()
@@ -33,7 +35,7 @@ module.exports = (req, res, next) => {
       .min(4)
       .max(16)
       .error(err => {
-        switch(err[0].type) {
+        switch (err[0].type) {
           case 'string.min': return 'Username should be longer than 4 letters'
           case 'string.max': return 'Username should not be longer than 16 letters'
           case 'string.alphanum': return 'Username should only contain letters and numbers'
@@ -42,24 +44,18 @@ module.exports = (req, res, next) => {
       }),
     gender: Joi.valid('String', ['male', 'female'])
       .required()
+      /* eslint-disable-next-line */
       .error(err => 'Gender is required.'),
     password: Joi.string()
       .required()
-      .min(1)
-      // .regex(/\w*[a-zA-Z]\w*/i)
-      // .regex(/\w*[0-9]\w*/i)
-      .regex(/^[A-Za-z\d@$!%*#?&\(\)-]*$/i)
+      .min(8)
       .max(32)
+      .regex(/^[A-Za-z\d@$!%*#?&()-]*$/i)
       .error(err => {
-        switch(err[0].type) {
+        switch (err[0].type) {
           case 'string.min': return 'Password should be longer than 8 characters'
-          case 'string.max': return 'Username should not be longer than 32 characters'
+          case 'string.max': return 'Password should not be longer than 32 characters'
           case 'string.regex.base': return 'Password should not contain invalid special characters'
-          // case 'string.regex.base': switch (String(err[0].context.pattern)) {
-          //   case '/\\w*[a-zA-Z]\\w*/i': return 'Password should contain at least one letter'
-          //   case '/\\w*[0-9]\\w*/i': return 'Password should contain at least one number'
-          //   case '/^[A-Za-z\\d@$!%*#?&\\(\\)-]*$/i': return 'Password should not contain invalid special characters'
-          // }
           default: return 'Password is required'
         }
       }),
@@ -67,7 +63,7 @@ module.exports = (req, res, next) => {
       .valid(Joi.ref('password'))
       .required()
       .error(err => {
-        switch(err[0].type) {
+        switch (err[0].type) {
           case 'any.empty': return 'Password verification is required'
           case 'any.allowOnly': return 'Password and Password verification does not match'
           default: return err[0].type
@@ -75,10 +71,10 @@ module.exports = (req, res, next) => {
       }),
     token: Joi.string()
       .required()
-      .min(1)
-      .max(33)
+      .min(32)
+      .max(32)
       .error(err => {
-        switch(err[0].type) {
+        switch (err[0].type) {
           case 'string.min':
           case 'string.max': return 'Token has to be exactly 32 characters long'
           default: return 'Token is required'
@@ -91,28 +87,26 @@ module.exports = (req, res, next) => {
       res.redirect(303, '/register?type=error&message=' + err.details[0].message)
     } else {
       const { name, email, phoneNumber, username, password, gender, token } = value
-      const hashed = crypto.createHash('sha256').update(password).digest('base64')
-      database
-        .getUserByUsername(username)
-        .then(user => {
-          console.log(user)
-          if (user.id) {
-            res.redirect(303, '/register?type=error&message=Username is already taken')
-          } else {
-            return database.registerUser({
-              name, email, phoneNumber, username, password: hashed, gender: gender == 'male', token
-            }).then(result => {
-              if (result.rowCount === 0)
-                res.redirect(303, '/register?type=error&message=Token is already used!')
-              else
-                res.redirect(303, '/register?type=success&message=You have been registered!')
-            })
-          }
-        })
-        .catch(err => {
-          console.log(err)
-          res.redirect(303, '/register?type=error&message=Failed to connect to the server.')
-        })
+      const hashedPassword = crypto.createHash('sha256').update(password).digest('base64')
+      database.getUserByUsername(username).then(user => {
+        if (user.id) {
+          res.redirect(303, '/register?type=error&message=Username is already taken')
+        } else {
+          return database.registerUser({
+            name, email, phoneNumber, username, password: hashedPassword, gender: gender === 'male', token
+          }).then(result => {
+            if (result.rowCount === 0) {
+              res.redirect(303, '/register?type=error&message=Token is already used!')
+            } else {
+              res.redirect(303, '/register?type=success&message=You have been registered!')
+            }
+          })
+        }
+      /* eslint-disable-next-line */
+      }).catch(err => {
+        console.log('\x1B[0;31m' + `[ERR] Unexpected error caught in "./handlers/register.js:103"` + '\x1B[0m')
+        res.redirect(303, '/register?type=error&message=Failed to connect to the server.')
+      })
     }
   })
 }
